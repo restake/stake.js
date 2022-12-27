@@ -21,7 +21,6 @@ export enum NearStakingMethods {
     unstakeAll =  'unstake_all',
     withdrawAll = 'withdraw_all'
 };
-
 function getBN(nearAmount: number): BN {
     const yoctoAmount: string | null = nearAPI.utils.format.parseNearAmount(nearAmount.toString());
     if (!yoctoAmount) {
@@ -32,7 +31,7 @@ function getBN(nearAmount: number): BN {
 }
 
 export class NearProtocol extends Protocol {
-    near: Near | undefined = undefined;
+    near: Near | undefined;
     
     constructor(network: Network) {
         super(network);
@@ -52,7 +51,7 @@ export class NearProtocol extends Protocol {
         return this.near as Near;
     }
 
-    buildStakingAction(method: NearStakingMethods, amount?: number): Action {
+    buildAction(method: NearStakingMethods, amount?: number): Action {
         let action: Action;
 
         switch (method) {
@@ -95,7 +94,7 @@ export class NearProtocol extends Protocol {
 
         const nonce: BN = fullAccessKey.access_key.nonce.add(new BN(1));
 
-        const actions: Array<Action> = [this.buildStakingAction(method, amount)]
+        const actions: Array<Action> = [this.buildAction(method, amount)]
 
         const accessKey = await near.connection.provider.query(`access_key/${ accountId }/${ publicKey.toString() }`, '');
         const recentBlockHash = nearAPI.utils.serialize.base_decode(accessKey.block_hash);
