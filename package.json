@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "@types/bn.js": "^5.1.1",
+    "@types/node": "^18.11.17",
+    "near-api-js": "^1.1.0",
+    "typescript": "^4.9.4"
+  },
+  "name": "staking-sdk",
+  "version": "0.0.1",
+  "description": "A Staking SDK to build, sign and broadcast staking transactions",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "repository": "git@github.com:restake/staking-sdk.git",
+  "author": "Maxime Rutagarama <mr@restake.net>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc"
+  },
+  "files": [
+    "/dist"
+  ]
+}
