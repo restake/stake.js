@@ -1,3 +1,14 @@
+import { Network } from "../networks";
+import { Protocol } from "../protocols/protocol";
+
+export interface Vault {};
+
 export abstract class Wallet {
-    abstract signTxHash(txHash:  Uint8Array, protocol: string, vault: string): Uint8Array;
+    vaults: Array<Vault>;
+
+    constructor(vaults: Array<Vault>) {
+      this.vaults = vaults;
+    }
+    abstract getAddress(vaultId: string, protocol: Protocol, network: string): string | Promise<string>;
+    abstract signTxHash(txHash: Uint8Array, vaultId: string, protocol: Protocol, network: Network): Uint8Array | Promise<Uint8Array>;
 }

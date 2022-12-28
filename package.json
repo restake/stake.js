@@ -2,6 +2,7 @@
   "dependencies": {
     "@types/bn.js": "^5.1.1",
     "@types/node": "^18.11.17",
+    "fireblocks-sdk": "^2.5.3",
     "near-api-js": "^1.1.0",
     "typescript": "^4.9.4"
   },

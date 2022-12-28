@@ -1,0 +1,20 @@
+{
+  "name": "examples",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.4",
+    "staking-sdk": "./.."
+  },
+  "scripts": {
+    "clean": "rm -rf node_modules",
+    "build": "tsc",
+    "start-near": "node --es-module-specifier-resolution=node ./dist/near-example.js"
+  },
+  "files": [
+    "/dist"
+  ]
+}

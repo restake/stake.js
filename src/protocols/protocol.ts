@@ -1,13 +1,17 @@
 import { Network } from '../networks';
 import { Wallet } from '../wallets/wallet';
 
-export abstract class Protocol {
+export type Protocol = 'near-protocol' | 'solana' | 'ethereum' | 'avalanche'
+
+export abstract class ProtocolSDK {
+    protocol: Protocol;
     network: Network;
 
-    constructor(network: Network) {
+    constructor(protocol: Protocol, network: Network) {
+        this.protocol = protocol;
         this.network = network;
     }
 
-    abstract signTransaction(rawTx: any, wallet: Wallet, vault: string): any;
+    abstract signTransaction(wallet: Wallet, vaultId: string, rawTx: any): any;
     abstract broadcastTransaction(signedTx: any): Promise<string>;
 }

@@ -1,5 +1,5 @@
 import { Network } from '../networks';
-import { Protocol } from './protocol';
+import { ProtocolSDK } from './protocol';
 import { Wallet } from '../wallets/wallet';
 
 import { sha256 } from 'js-sha256'; 
@@ -30,11 +30,11 @@ function getBN(nearAmount: number): BN {
     return bnAmount;
 }
 
-export class NearProtocol extends Protocol {
+export class NearProtocol extends ProtocolSDK {
     near: Near | undefined;
     
     constructor(network: Network) {
-        super(network);
+        super('near-protocol', network);
     }
 
     async init() {
@@ -51,7 +51,7 @@ export class NearProtocol extends Protocol {
         return this.near as Near;
     }
 
-    buildAction(method: NearStakingMethods, amount?: number): Action {
+    private buildAction(method: NearStakingMethods, amount?: number): Action {
         let action: Action;
 
         switch (method) {
@@ -104,11 +104,13 @@ export class NearProtocol extends Protocol {
         return rawTx;
     }
 
-    async buildStakeTransaction(accountId: string, validator: string, amount: number): Promise<Transaction> {
+    public async buildStakeTransaction(wallet: Wallet, vaultId: string, validator: string, amount: number): Promise<Transaction> {
+        const accountId = await wallet.getAddress(vaultId, this.protocol, this.network);
         return await this.buildTransaction(NearStakingMethods.stake, accountId, validator, amount);
     }
 
-    async buildUnstakeTransaction(accountId: string, validator: string, amount?: number): Promise<Transaction> {
+    public async buildUnstakeTransaction(wallet: Wallet, vaultId: string, validator: string, amount?: number): Promise<Transaction> {
+        const accountId = await wallet.getAddress(vaultId, this.protocol, this.network);
         if (!amount) {
             return await this.buildTransaction(NearStakingMethods.unstakeAll, accountId, validator);
         } else {
@@ -116,7 +118,8 @@ export class NearProtocol extends Protocol {
         }
     }
 
-    async buildWithdrawTransaction(accountId: string, validator: string, amount?: number): Promise<Transaction> {
+    public async buildWithdrawTransaction(wallet: Wallet, vaultId: string, validator: string, amount?: number): Promise<Transaction> {
+        const accountId = await wallet.getAddress(vaultId, this.protocol, this.network);
         if (!amount) {
             return await this.buildTransaction(NearStakingMethods.withdrawAll, accountId, validator);
         } else {
@@ -124,13 +127,13 @@ export class NearProtocol extends Protocol {
         }
     }
 
-    getTxHash(rawTx: Transaction): Uint8Array {
+    private getTxHash(rawTx: Transaction): Uint8Array {
         const serializedTx: Uint8Array = nearAPI.utils.serialize.serialize(transactions.SCHEMA, rawTx);
         const txHash: Uint8Array = new Uint8Array(sha256.array(serializedTx));
         return txHash;
     }
 
-    buildSignedTransaction(rawTx: Transaction, signature: Signature): SignedTransaction {
+    private buildSignedTransaction(rawTx: Transaction, signature: Signature): SignedTransaction {
         const signedTx: SignedTransaction = new nearAPI.transactions.SignedTransaction({
             transaction: rawTx,
             signature: signature
@@ -138,10 +141,10 @@ export class NearProtocol extends Protocol {
         return signedTx;
     }
 
-    signTransaction(rawTx: Transaction, wallet: Wallet, vault: string): SignedTransaction {
+    public async signTransaction(wallet: Wallet, vaultId: string, rawTx: Transaction): Promise<SignedTransaction> {
         const txHash: Uint8Array = this.getTxHash(rawTx);
 
-        const signatureArray: Uint8Array = wallet.signTxHash(txHash, 'near', vault);
+        const signatureArray: Uint8Array = await wallet.signTxHash(txHash, vaultId, this.protocol, this.network);
         const signature = new nearAPI.transactions.Signature({
             keyType: rawTx.publicKey.keyType,
             data: signatureArray
@@ -152,7 +155,7 @@ export class NearProtocol extends Protocol {
         return signedTx;
     }
 
-    async broadcastTransaction(signedTx: SignedTransaction): Promise<string> {
+    public async broadcastTransaction(signedTx: SignedTransaction): Promise<string> {
         try {
             const near: Near = await this.getNear();
             const result: FinalExecutionOutcome = await near.connection.provider.sendTransaction(signedTx);
