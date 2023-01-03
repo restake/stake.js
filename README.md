@@ -11,20 +11,37 @@ The following example shows how to build, sign and broadcast a NEAR staking tran
 ```
 import { StringWallet, StakingService } from 'staking-sdk'; 
 
-const stk = new StakingService('testnet');
+const network = 'testnet';
+const stk = new StakingService(network);
 
-const wallet = new StringWallet();
+const stringWallet = new StringWallet([{
+    id: 'near-staking-sdk-testnet',
+    address: 'staking-sdk.testnet',
+    privateKeyVarname: 'NEAR_PRIVATE_KEY',
+    protocol: 'near-protocol',
+    network: 'testnet'
+}]);
 
-const accountId = 'maxrutag.testnet';
+const wallet = stringWallet;
+const vaultId = 'near-staking-sdk-testnet'
+
 const validator = 'shurik.pool.f863973.m0';
 const amount = 0.5;
 
-const tx = await stk.near.buildStakeTransaction(accountId, validator, amount);
+const tx = await stk.near.buildStakeTransaction(wallet, vaultId, validator, amount);
 console.log(tx);
 
-const txSigned = stk.near.signTransaction(tx, wallet, 'NEAR_PRIVATE_KEY');
+const txSigned = await stk.near.signTransaction(wallet, vaultId, tx);
 console.log(txSigned);
 
 const txId = await stk.near.broadcastTransaction(txSigned);
 console.log(txId);
+```
+
+Examples can be found in the *examples* folder and can be run with the following commands:
+
+```
+yarn install
+yarn run build
+yarn run start-${protocol}
 ```

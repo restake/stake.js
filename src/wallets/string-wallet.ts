@@ -1,5 +1,4 @@
-import { Network } from "../networks";
-import { Protocol } from "../protocols/protocol";
+import { Network, Protocol } from "../types/global";
 import { Vault, Wallet } from "./wallet";
 
 import { KeyPair } from "near-api-js";

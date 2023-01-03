@@ -1,5 +1,5 @@
-import { Network } from './networks'; 
-import { NearProtocol } from './protocols/near';
+import { Network } from './types/global'; 
+import { NearProtocol } from './protocols/near-protocol';
 
 export { StringWallet } from './wallets/string-wallet';
 export { Fireblocks } from './wallets/fireblocks';

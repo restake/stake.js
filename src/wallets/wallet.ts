@@ -1,5 +1,4 @@
-import { Network } from "../networks";
-import { Protocol } from "../protocols/protocol";
+import { Network, Protocol } from "../types/global";
 
 export interface Vault {};
 

@@ -2,7 +2,6 @@ import { StringWallet, Fireblocks, StakingService } from 'staking-sdk';
 import * as fs from 'fs';
 
 const network = 'testnet';
-
 const stk = new StakingService(network);
 
 const stringWallet = new StringWallet([{

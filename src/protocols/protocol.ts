@@ -1,7 +1,5 @@
-import { Network } from '../networks';
+import { Network, Protocol } from '../types/global';
 import { Wallet } from '../wallets/wallet';
-
-export type Protocol = 'near-protocol' | 'solana' | 'ethereum' | 'avalanche'
 
 export abstract class ProtocolSDK {
     protocol: Protocol;

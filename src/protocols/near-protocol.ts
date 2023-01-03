@@ -21,6 +21,7 @@ export enum NearStakingMethods {
     unstakeAll =  'unstake_all',
     withdrawAll = 'withdraw_all'
 };
+
 function getBN(nearAmount: number): BN {
     const yoctoAmount: string | null = nearAPI.utils.format.parseNearAmount(nearAmount.toString());
     if (!yoctoAmount) {

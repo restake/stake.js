@@ -1,11 +1,13 @@
 import { Vault, Wallet } from "./wallet";
 import { DepositAddressResponse, FireblocksSDK, PeerType, TransactionOperation, TransactionResponse, TransactionStatus } from "fireblocks-sdk";
 import { setTimeout } from "timers/promises";
-import { Network } from "../networks";
+import { Network } from "../types/global";
 
 const PROTOCOL_MAPPING: Map<string, string> = new Map([
-    ['nea-protocol-mainnet', 'NEAR'],
+    ['near-protocol-mainnet', 'NEAR'],
     ['near-protocol-testnet', 'NEAR_TEST'],
+    ['ethereum-testnet', 'ETH_TEST3'],
+    ['ethereum-mainnet', 'ETH']
 ]);
 
 interface FireblocksVault extends Vault {
