@@ -1,5 +1,4 @@
-import { Network } from '../networks';
-import { ProtocolSDK } from './protocol';
+import { ProtocolSDK } from './protocol-sdk';
 import { Wallet } from '../wallets/wallet';
 
 import { sha256 } from 'js-sha256'; 
@@ -9,7 +8,7 @@ import BN from 'bn.js';
 import * as nearAPI from 'near-api-js';
 import { Action, functionCall, Signature, SignedTransaction, Transaction } from 'near-api-js/lib/transaction';
 import { PublicKey } from 'near-api-js/lib/utils';
-import { AccessKeyInfoView, FinalExecutionOutcome } from 'near-api-js/lib/providers/provider';
+import { AccessKeyInfoView, FinalExecutionOutcome, FinalExecutionStatus, FinalExecutionStatusBasic } from 'near-api-js/lib/providers/provider';
 import { Account, connect, Near, transactions } from 'near-api-js';
 
 const MAX_GAS: number = 300e12;
@@ -31,17 +30,17 @@ function getBN(nearAmount: number): BN {
     return bnAmount;
 }
 
-export class NearProtocol extends ProtocolSDK {
+export class NearProtocolSDK extends ProtocolSDK {
     near: Near | undefined;
     
-    constructor(network: Network) {
-        super('near-protocol', network);
+    constructor(wallet: Wallet) {
+        super('near-protocol', wallet);
     }
 
     async init() {
         this.near = await connect({
-            networkId: this.network,
-            nodeUrl: `https://rpc.${this.network}.near.org`
+            networkId: this.wallet.network,
+            nodeUrl: `https://rpc.${this.wallet.network}.near.org`
         });
     }
 
@@ -105,13 +104,13 @@ export class NearProtocol extends ProtocolSDK {
         return rawTx;
     }
 
-    public async buildStakeTransaction(wallet: Wallet, vaultId: string, validator: string, amount: number): Promise<Transaction> {
-        const accountId = await wallet.getAddress(vaultId, this.protocol, this.network);
+    public async buildStakeTransaction(validator: string, amount: number, keyPairId?: string): Promise<Transaction> {
+        const accountId = await this.wallet.getAddress(this.protocol, keyPairId);
         return await this.buildTransaction(NearStakingMethods.stake, accountId, validator, amount);
     }
 
-    public async buildUnstakeTransaction(wallet: Wallet, vaultId: string, validator: string, amount?: number): Promise<Transaction> {
-        const accountId = await wallet.getAddress(vaultId, this.protocol, this.network);
+    public async buildUnstakeTransaction(validator: string, amount?: number, keyPairId?: string): Promise<Transaction> {
+        const accountId = await this.wallet.getAddress(this.protocol, keyPairId);
         if (!amount) {
             return await this.buildTransaction(NearStakingMethods.unstakeAll, accountId, validator);
         } else {
@@ -119,8 +118,8 @@ export class NearProtocol extends ProtocolSDK {
         }
     }
 
-    public async buildWithdrawTransaction(wallet: Wallet, vaultId: string, validator: string, amount?: number): Promise<Transaction> {
-        const accountId = await wallet.getAddress(vaultId, this.protocol, this.network);
+    public async buildWithdrawTransaction(validator: string, amount?: number, keyPairId?: string): Promise<Transaction> {
+        const accountId = await this.wallet.getAddress(this.protocol, keyPairId);
         if (!amount) {
             return await this.buildTransaction(NearStakingMethods.withdrawAll, accountId, validator);
         } else {
@@ -142,10 +141,10 @@ export class NearProtocol extends ProtocolSDK {
         return signedTx;
     }
 
-    public async signTransaction(wallet: Wallet, vaultId: string, rawTx: Transaction): Promise<SignedTransaction> {
+    public async signTransaction(rawTx: Transaction, keyPairId?: string): Promise<SignedTransaction> {
         const txHash: Uint8Array = this.getTxHash(rawTx);
 
-        const signatureArray: Uint8Array = await wallet.signTxHash(txHash, vaultId, this.protocol, this.network);
+        const signatureArray: Uint8Array = await this.wallet.signTxHash(this.protocol, txHash, keyPairId);
         const signature = new nearAPI.transactions.Signature({
             keyType: rawTx.publicKey.keyType,
             data: signatureArray
@@ -163,7 +162,7 @@ export class NearProtocol extends ProtocolSDK {
             console.log('Transaction Results: ', result.transaction);
             console.log('--------------------------------------------------------------------------------------------');
             console.log('OPEN LINK BELOW to see transaction in NEAR Explorer!');
-            console.log(`$https://explorer.${this.network}.near.org/transactions/${result.transaction.hash}`);
+            console.log(`$https://explorer.${this.wallet.network}.near.org/transactions/${result.transaction.hash}`);
             console.log('--------------------------------------------------------------------------------------------');
 
             return result.transaction.hash;
@@ -171,5 +170,54 @@ export class NearProtocol extends ProtocolSDK {
             console.log('An error occurred while trying to broadcast the transaction.');
             throw error;
         }
+    }
+
+    public async stake(validator: string, amount: number, keyPairId?: string): Promise<string> {
+        let txId: string;
+
+        if (typeof (this.wallet as any).stake === 'function') {
+            txId = (this.wallet as any).stake('near-protocol', validator, amount, keyPairId);
+        } else {
+            const rawTx: Transaction = await this.buildStakeTransaction(validator, amount, keyPairId);
+            const signedTx: SignedTransaction = await this.signTransaction(rawTx, keyPairId);
+            txId = await this.broadcastTransaction(signedTx);
+        }
+        
+        return txId;
+    }
+
+    public async unstake(validator: string, amount?: number, keyPairId?: string): Promise<string> {
+        let txId: string;
+
+        if (typeof (this.wallet as any).unstake === 'function') {
+            txId = await (this.wallet as any).unstake('near-protocol', validator, amount, keyPairId);
+        } else {
+            const rawTx: Transaction = await this.buildUnstakeTransaction(validator, amount, keyPairId);
+            const signedTx: SignedTransaction = await this.signTransaction(rawTx, keyPairId);
+            txId = await this.broadcastTransaction(signedTx);
+        }
+
+        return txId;
+    }
+
+    public async withdraw(validator: string, amount?: number, keyPairId?: string): Promise<string> {
+        let txId: string;
+
+        if (typeof (this.wallet as any).withdraw === 'function') {
+            txId = await (this.wallet as any).withdraw('near-protocol', validator, amount, keyPairId);
+        } else {
+            const rawTx: Transaction = await this.buildWithdrawTransaction(validator, amount, keyPairId);
+            const signedTx: SignedTransaction = await this.signTransaction(rawTx, keyPairId);
+            txId = await this.broadcastTransaction(signedTx);
+        }
+
+        return txId;
+    }
+
+    public async getTransactionStatus(txId: string, keyPairId?: string): Promise<FinalExecutionStatus | FinalExecutionStatusBasic> {
+        const near: Near = await this.getNear();
+        const accountId = await this.wallet.getAddress(this.protocol, keyPairId);
+        const response = await near.connection.provider.txStatus(txId, accountId);
+        return response!.status;
     }
 }

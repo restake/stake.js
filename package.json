@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "dependencies": {
     "@ethereumjs/tx": "^4.0.2",
     "@types/bn.js": "^5.1.1",
