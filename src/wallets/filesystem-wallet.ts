@@ -16,7 +16,7 @@ export class FileSystemWallet extends Wallet {
     getKeyPair(protocol: Protocol, keyPairId?: string): FileSystemKeyPair {
         let keyPair: FileSystemKeyPair | undefined;
 
-        if (keyPairId) {
+        if (keyPairId != undefined) {
             keyPair = this.fileSystemProvider.wallet.find(kp => (kp.id == keyPairId));
             if (!keyPair) {
                 throw new Error(`KeyPair with id ${keyPairId} not found.`);
@@ -27,12 +27,12 @@ export class FileSystemWallet extends Wallet {
             }
 
             if (keyPair.network != this.network) {
-                throw new Error(`Keypair with id ${keyPairId} id configured for ${keyPair.network}, not ${this.network}`)
+                throw new Error(`Keypair with id ${keyPairId} id configured for ${keyPair.network}, not ${this.network}`);
             }
         } else {
             keyPair = this.fileSystemProvider.wallet.find(kp => (kp.protocol == protocol) && (kp.network == this.network));
 
-            if (!keyPair) {
+            if (keyPair === undefined) {
                 throw new Error(`KeyPair not found for ${protocol} on ${this.network}.`);
             }
         }

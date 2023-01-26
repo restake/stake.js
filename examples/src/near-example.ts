@@ -7,8 +7,3 @@ const amount = 1.;
 
 const txId = await fsWallet.near.stake(validator, amount);
 console.log(txId);
-
-setInterval(async () => {
-    const txStatus = await fsWallet.near.getTransactionStatus(txId);
-    console.log(txStatus);
-}, 5000);
