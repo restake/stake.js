@@ -1,8 +1,9 @@
 import { Wallet } from "./wallet";
 import { DepositAddressResponse, FireblocksSDK, PeerType, TransactionOperation, TransactionResponse, TransactionStatus } from "fireblocks-sdk";
 import { setTimeout } from "timers/promises";
-import { Network } from "../types/global";
+import { Network, Protocol } from "../types/global";
 import { FireblocksProvider } from "../providers/fireblocks-provider";
+import { UnsignedTx, Tx } from "avalanche/dist/apis/platformvm";
 
 const PROTOCOL_MAPPING: Map<string, string> = new Map([
     ['near-protocol-mainnet', 'NEAR'],
@@ -75,5 +76,9 @@ export class FireblocksWallet extends Wallet {
         const signature: Uint8Array = Uint8Array.from(Buffer.from(tx.signedMessages![0].signature.fullSig, 'hex'));
 
         return signature;
+    }
+
+    async signAvaTx(protocol: Protocol, rawTx: UnsignedTx, keypairId?: string | undefined): Promise<Tx> {
+        throw new Error();
     }
 }

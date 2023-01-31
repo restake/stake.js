@@ -1,8 +1,12 @@
 import { Network, Protocol } from "../types/global";
 import { Wallet } from "./wallet";
 
-import { KeyPair } from "near-api-js";
+import { Avalanche, Buffer, BinTools } from "avalanche";
+import { KeyPair as NearKeyPair} from "near-api-js";
 import { FileSystemKeyPair, FileSystemProvider } from "../providers/filesystem-provider";
+import { MessageChannel } from "worker_threads";
+import { Tx, UnsignedTx } from "avalanche/dist/apis/platformvm";
+import { cb58EncodedPayload } from "avalanche/dist/utils";
 
 export class FileSystemWallet extends Wallet {
 
@@ -54,13 +58,40 @@ export class FileSystemWallet extends Wallet {
 
         switch (protocol) {
             case 'near-protocol': 
-                const keyPair: KeyPair = KeyPair.fromString(privateKey);
+                const keyPair: NearKeyPair = NearKeyPair.fromString(privateKey);
                 signature =  keyPair.sign(txHash).signature;
+                break;
+            case 'avalanche': 
+                const avalanche: Avalanche = new Avalanche("localhost", 9650, "http", 5);
+                const pChain = avalanche.PChain();
+                const pKeyChain = pChain.keyChain();
+                const pKeypair = pKeyChain.importKey(privateKey);
+                let message = Buffer.from(txHash);
+                signature= pKeypair.sign(message);
                 break;
             default: 
                 throw new Error(`Protocol ${protocol} not supported.`)
         }
         
         return signature;
+    }
+
+    signAvaTx(protocol: Protocol, rawTx: UnsignedTx, keyPairId?: string): Tx{
+        const binTools = BinTools.getInstance();
+
+        const keyPair: FileSystemKeyPair = this.getKeyPair(protocol, keyPairId);
+        const bufPrivatekey: Buffer = Buffer.from(keyPair.privateKey);
+        const cb58Privatekey: string = binTools.cb58Encode(bufPrivatekey)
+        //const b64PrivateKey: string = keyPair.privateKey;
+        //const privateKey: string = Buffer.from(b64PrivateKey, 'base64').toString('utf8');
+
+        let signedTx: Tx;
+
+        const avalanche: Avalanche = new Avalanche("localhost", 9650, "http", 5);
+        const pChain = avalanche.PChain();
+        const pKeyChain = pChain.keyChain();
+        const pKeypair = pKeyChain.importKey(cb58Privatekey);
+
+        return rawTx.sign(pKeyChain)
     }
 }
