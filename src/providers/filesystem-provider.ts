@@ -15,14 +15,16 @@ export class FileSystemProvider {
     wallet: FileSystemWallet;
 
     constructor(filePath: string) {
+        /*
         let BASE_PATH: string;
         if (process.env.BASE_PATH) {
             BASE_PATH = process.env.BASE_PATH;
         } else {
             BASE_PATH = '.';
         }
+        */
 
-        const fullPath: string = BASE_PATH + filePath;
+        const fullPath: string = filePath; //BASE_PATH + filePath;
         const walletData: Buffer = fs.readFileSync(fullPath);
         this.wallet = JSON.parse(walletData.toString());
     }

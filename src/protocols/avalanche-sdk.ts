@@ -40,20 +40,32 @@ export class AvalancheProtocol extends ProtocolSDK {
           parseInt(url.port),
           url.protocol.replace(':', ''),
           AVALANCHE_NETWORK_ID,
-          'X',
-          'C',
+          undefined, //'X',
+          undefined, //'C',
           network,
         );
+
+        // @ts-ignore
+        client.setRequestConfig("validateStatus", (status) => {
+            return true;
+        });
+
         return client;
     }
 
-    public async buildStakeTransaction(validator: string, amount: number, keyPairId?: string): Promise<UnsignedTx> {
-        
-        const pChain = this.client.PChain();
-        const chainId = await this.client.Info().getBlockchainID('P');
+    public async buildStakeTransaction(validator: string, amount: string, keyPairId?: string): Promise<UnsignedTx> {
+        const client = AvalancheProtocol.getClient("fuji");
+        const pChain = client.PChain();
+        const chainId = pChain.getBlockchainID();
         const pAddress = await this.wallet.getAddress(this.protocol, keyPairId);
-    
-        const {utxos} = await pChain.getUTXOs(pAddress, chainId);
+
+        console.log("address: %s, chainId: %s", pAddress, chainId, pChain);
+
+        const { utxos } = await pChain.getUTXOs(pAddress, chainId).catch((err: Error) => {
+            // @ts-ignore
+            console.error("failed to get utxos", err.response);
+            throw err;
+        });
         const dateStart = new Date(new Date().getTime()+10000);
         const dateEnd = new Date(dateStart.getTime()+1209600000)
         
