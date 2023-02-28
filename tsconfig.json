@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "moduleResolution": "bundler",
+        "target": "ESNext",
+        "declaration": true,
+        "strict": true,
+        "noImplicitAny": true,
+
+        "allowImportingTsExtensions": false,
+        "emitDeclarationOnly": false,
+        "noEmit": false
+    }
+}
