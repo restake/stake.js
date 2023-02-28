@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "include": ["src", "types"],
     "compilerOptions": {
         "rootDir": "src",
@@ -7,10 +8,16 @@
         "module": "nodenext",
         "target": "ESNext",
         "lib": ["dom", "esnext"],
+=======
+    "compilerOptions": {
+        "moduleResolution": "bundler",
+        "target": "ESNext",
+>>>>>>> b0cd9af (Initial commit)
         "declaration": true,
         "strict": true,
         "noImplicitAny": true,
 
+<<<<<<< HEAD
         "allowImportingTsExtensions": true,
         "emitDeclarationOnly": true,
         "noEmit": false,
@@ -20,3 +27,10 @@
         "skipLibCheck": true
     }
 }
+=======
+        "allowImportingTsExtensions": false,
+        "emitDeclarationOnly": false,
+        "noEmit": false
+    }
+}
+>>>>>>> b0cd9af (Initial commit)

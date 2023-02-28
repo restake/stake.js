@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "name": "@restake/stake.js",
   "version": "0.0.4",
   "description": "Restake staking SDK",
@@ -151,5 +152,38 @@
     "ethers": "6.4.0",
     "near-api-js": "1.1.0",
     "zod": "3.21.4"
+=======
+  "name": "staking-sdk",
+  "version": "0.0.1",
+  "description": "Restake staking SDK",
+  "private": true,
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:cjs_old": "tsc -p tsconfig.cjs.json && esbuild --tsconfig=tsconfig.cjs.json --bundle --sourcemap --platform=node    --outdir=dist/cjs src/index.ts",
+    "build:esm_old": "tsc -p tsconfig.esm.json && esbuild --tsconfig=tsconfig.esm.json --bundle --sourcemap --platform=browser --outdir=dist/esm src/index.ts",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build": "npm run build:cjs && npm run build:esm"
+  },
+  "author": "",
+  "license": "Proprietary",
+  "devDependencies": {
+    "@types/bn.js": "5.1.1",
+    "@types/node": "18.14.2",
+    "typescript": "5.0.0-beta"
+  },
+  "dependencies": {
+    "@noble/curves": "0.7.3",
+    "bn.js": "5.2.1",
+    "near-api-js": "1.1.0"
+>>>>>>> b0cd9af (Initial commit)
   }
 }
