@@ -42,7 +42,13 @@
       "default": "./dist/esm/core/signer/provider/index.js",
       "require": "./dist/cjs/core/signer/provider/index.js",
       "types": "./dist/esm/core/signer/provider/index.d.ts"
-    }
+    },
+    "./core/signer/provider/codec": {
+        "import": "./dist/esm/core/signer/provider/codec/index.js",
+        "default": "./dist/esm/core/signer/provider/codec/index.js",
+        "require": "./dist/cjs/core/signer/provider/codec/index.js",
+        "types": "./dist/esm/core/signer/provider/codec/index.d.ts"
+      }
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
