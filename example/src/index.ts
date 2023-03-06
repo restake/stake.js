@@ -1,10 +1,10 @@
-import { ntoy } from "../../src/protocol/near/NEARProtocol.js";
-import { NEARProtocol } from "../../src/protocol/near/NEARProtocol.js";
-import { NEARSigner } from "../../src/protocol/near/NEARSigner.js";
-import { networks } from "../../src/protocol/near/network.js";
-import { ed25519PrivateKey, ed25519Signer } from "../../src/signer/ed25519Signer.js";
-import { FilesystemSignerProvider } from "../../src/signer/provider/FilesystemSignerProvider.js";
-import { FireblocksSignerProvider } from "../../src/signer/provider/FireblocksSignerProvider.js";
+import { ntoy } from "@restake/staking-sdk/midlevel/protocol/near/NEARProtocol.js";
+import { NEARProtocol } from "@restake/staking-sdk/midlevel/protocol/near/NEARProtocol.js";
+import { NEARSigner } from "@restake/staking-sdk/midlevel/protocol/near/NEARSigner.js";
+import { networks } from "@restake/staking-sdk/midlevel/protocol/near/network.js";
+import { ed25519PrivateKey, ed25519Signer } from "@restake/staking-sdk/midlevel/signer/ed25519Signer.js";
+import { FilesystemSignerProvider } from "@restake/staking-sdk/midlevel/signer/provider/FilesystemSignerProvider.js";
+import { FireblocksSignerProvider } from "@restake/staking-sdk/midlevel/signer/provider/FireblocksSignerProvider.js";
 
 const provider = new FilesystemSignerProvider<ed25519Signer>("/Users/mark/.near-credentials/testnet", (identifier, bytes) => {
     const privateKey = new ed25519PrivateKey(bytes);

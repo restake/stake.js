@@ -1,1 +1,3 @@
-export * from "./signer/signer.js";
+export default {
+    foo: "bar",
+};
