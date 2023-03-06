@@ -1,5 +1,6 @@
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
   "name": "@restake/stake.js",
   "version": "0.0.4",
   "description": "Restake staking SDK",
@@ -154,6 +155,9 @@
     "zod": "3.21.4"
 =======
   "name": "staking-sdk",
+=======
+  "name": "@restake/staking-sdk",
+>>>>>>> c6fd319 (Update package name)
   "version": "0.0.1",
   "description": "Restake staking SDK",
   "private": true,
