@@ -1,12 +1,8 @@
+import { AvalancheSigner } from "./AvalancheSigner.js";
+import { SignedTransaction, TransactionBroadcaster } from "../../network/broadcaster.js";
+
 import { Avalanche, BinTools, Buffer, BN } from "avalanche";
 import { UnsignedTx, Tx } from "avalanche/dist/apis/platformvm";
-import { networks, AvalancheNetwork } from "./network";
-import { AvalancheSigner } from "./AvalancheSigner";
-import { createHash } from "crypto";
-import { SignedTransaction, TransactionBroadcaster } from "../../network/broadcaster";
-
-
-const networkName = 'testnet';
 
 export class AvalancheProtocol implements TransactionBroadcaster<SignedTransaction, unknown> {
     static INSTANCE = new AvalancheProtocol();
