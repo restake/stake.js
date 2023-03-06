@@ -9,6 +9,10 @@
     ".": {
       "import": "./dist/esm/index.js",
       "require": "./dist/cjs/index.js"
+    },
+    "midlevel": {
+      "import": "./dist/esm/midlevel/index.js",
+      "require": "./dist/cjs/midlevel/index.js"
     }
   },
   "scripts": {
@@ -23,7 +27,9 @@
   "license": "Proprietary",
   "devDependencies": {
     "@types/bn.js": "5.1.1",
+    "@types/elliptic": "6.4.14",
     "@types/node": "18.14.2",
+    "@types/ws": "8.5.4",
     "typescript": "5.0.0-beta"
   },
   "dependencies": {
