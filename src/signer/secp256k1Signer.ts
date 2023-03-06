@@ -2,7 +2,7 @@ import { bytesToHex } from "@noble/curves/abstract/utils";
 import type { KeyPair, PrivateKey, PublicKey } from "../keypair/keypair.js";
 import type { Signer } from "./signer.js";
 
-import { secp256k1 } from "@noble/curves/secp256k1";
+import { secp256k1, schnorr } from "@noble/curves/secp256k1";
 
 export class secp256k1PublicKey implements PublicKey {
     // TODO
@@ -71,7 +71,7 @@ export class secp256k1Signer implements Signer<Uint8Array> {
     }
 
     async sign(payload: Uint8Array): Promise<Uint8Array> {
-        const result = secp256k1.sign(payload, this.#privateKey.getPrivateBytes());
+        const result = schnorr.sign(payload, this.#privateKey.getPrivateBytes());
         return Promise.resolve(result);
     }
 
