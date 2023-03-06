@@ -12,6 +12,12 @@ const ZERO = new BN(0);
 const STAKING_GAS = new BN(300e12);
 
 export class NEARProtocol implements TransactionBroadcaster<SignedTransaction, unknown> {
+    static INSTANCE = new NEARProtocol();
+
+    private constructor() {
+        // no-op
+    }
+
     /**
      * Constructs a staking transaction
      *
