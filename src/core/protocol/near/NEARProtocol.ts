@@ -1,7 +1,7 @@
 import { NEAR_NOMINATION } from "near-api-js/lib/utils/format.js";
 import { TransactionBroadcaster } from "../../network/broadcaster.js";
 import { NEARSigner } from "./NEARSigner.js";
-import { BlockFinality, NEARNetwork } from "./network.js";
+import { BlockFinality } from "./network.js";
 import { BNFromBigInt } from "../../utils/bigint.js";
 
 import BN from "bn.js";
@@ -111,6 +111,8 @@ export class NEARProtocol implements TransactionBroadcaster<SignedTransaction, u
  * @param amount Amount to convert
  * @returns Amount in yoctoNEAR
  */
-export function ntoy(amount: string | number | BN | BigInt): BN {
-    return new BN(amount instanceof BigInt ? BNFromBigInt(amount) : amount).mul(NEAR_NOMINATION);
+export function ntoy(amount: string | number | BN | BigInt): BigInt {
+    // TODO: drop BN
+    const bn = new BN(amount instanceof BigInt ? BNFromBigInt(amount) : amount).mul(NEAR_NOMINATION);
+    return BigInt(bn.toString());
 }
