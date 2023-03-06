@@ -8,11 +8,15 @@
   "exports": {
     ".": {
       "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js"
+      "default": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/esm/index.d.ts"
     },
-    "midlevel": {
+    "./midlevel": {
       "import": "./dist/esm/midlevel/index.js",
-      "require": "./dist/cjs/midlevel/index.js"
+      "default": "./dist/esm/midlevel/index.js",
+      "require": "./dist/cjs/midlevel/index.js",
+      "types": "./dist/esm/midlevel/index.d.ts"
     }
   },
   "scripts": {
