@@ -2,10 +2,25 @@ import { NEARProtocol, NEARSigner, networks, ntoy } from "@restake/staking-sdk/c
 import { ed25519PrivateKey, ed25519Signer } from "@restake/staking-sdk/core/signer";
 import { FilesystemSignerProvider, FireblocksSignerProvider } from "@restake/staking-sdk/core/signer/provider";
 
+import { Codec, JSONHexEncodedKeyCodec } from "@restake/staking-sdk/core/signer/provider/codec";
+import { hexToBytes } from "@noble/curves/abstract/utils";
+
+const nearCodec: Codec = {
+    ...JSONHexEncodedKeyCodec,
+    async loadPrivateKey(_identifier: string, buffer: Uint8Array): Promise<Uint8Array> {
+        const bytes = new TextDecoder().decode(buffer);
+
+        const parsed = JSON.parse(bytes) as { private_key: string };
+        const decoded = hexToBytes(parsed.private_key);
+
+        return decoded;
+    },
+};
+
 const provider = new FilesystemSignerProvider<ed25519Signer>("/Users/mark/.near-credentials/testnet", (identifier, bytes) => {
     const privateKey = new ed25519PrivateKey(bytes);
     return new ed25519Signer(privateKey);
-});
+}, nearCodec);
 
 //const provider = new FireblocksSignerProvider(apiKey, apiSecret, vaultId);
 
