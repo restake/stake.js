@@ -1,6 +1,7 @@
 import { Codec } from "./Codec.js";
 
 import { hexToBytes } from "@noble/curves/abstract/utils";
+import { basename } from "node:path";
 
 /**
  * Codec which handles reading JSON object with key `privateKey` containing hex encoded private key bytes
@@ -13,5 +14,8 @@ export const JSONHexEncodedKeyCodec: Codec = {
         const decoded = hexToBytes(parsed.privateKey);
 
         return decoded;
+    },
+    async determineFilename(identifier: string): Promise<string> {
+        return basename(identifier + ".json");
     },
 }
