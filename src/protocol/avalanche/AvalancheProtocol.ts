@@ -9,6 +9,11 @@ import { SignedTransaction, TransactionBroadcaster } from "../../network/broadca
 const networkName = 'testnet';
 
 export class AvalancheProtocol implements TransactionBroadcaster<SignedTransaction, unknown> {
+    static INSTANCE = new AvalancheProtocol();
+
+    private constructor() {
+        // no-op
+    }
 
     broadcast(signedTransaction: unknown): Promise<unknown> {
         throw new Error("Method not implemented.");
