@@ -1,6 +1,6 @@
-import { NEARProtocol, NEARSigner, networks, ntoy } from "@restake/staking-sdk/midlevel/protocol/near";
-import { ed25519PrivateKey, ed25519Signer } from "@restake/staking-sdk/midlevel/signer";
-import { FilesystemSignerProvider, FireblocksSignerProvider } from "@restake/staking-sdk/midlevel/signer/provider";
+import { NEARProtocol, NEARSigner, networks, ntoy } from "@restake/staking-sdk/core/protocol/near";
+import { ed25519PrivateKey, ed25519Signer } from "@restake/staking-sdk/core/signer";
+import { FilesystemSignerProvider, FireblocksSignerProvider } from "@restake/staking-sdk/core/signer/provider";
 
 const provider = new FilesystemSignerProvider<ed25519Signer>("/Users/mark/.near-credentials/testnet", (identifier, bytes) => {
     const privateKey = new ed25519PrivateKey(bytes);

@@ -13,35 +13,35 @@
       "require": "./dist/cjs/index.js",
       "types": "./dist/esm/index.d.ts"
     },
-    "./midlevel": {
-      "import": "./dist/esm/midlevel/index.js",
-      "default": "./dist/esm/midlevel/index.js",
-      "require": "./dist/cjs/midlevel/index.js",
-      "types": "./dist/esm/midlevel/index.d.ts"
+    "./core": {
+      "import": "./dist/esm/core/index.js",
+      "default": "./dist/esm/core/index.js",
+      "require": "./dist/cjs/core/index.js",
+      "types": "./dist/esm/core/index.d.ts"
     },
-    "./midlevel/protocol/avalanche": {
-      "import": "./dist/esm/midlevel/protocol/avalanche/index.js",
-      "default": "./dist/esm/midlevel/protocol/avalanche/index.js",
-      "require": "./dist/cjs/midlevel/protocol/avalanche/index.js",
-      "types": "./dist/esm/midlevel/protocol/avalanche/index.d.ts"
+    "./core/protocol/avalanche": {
+      "import": "./dist/esm/core/protocol/avalanche/index.js",
+      "default": "./dist/esm/core/protocol/avalanche/index.js",
+      "require": "./dist/cjs/core/protocol/avalanche/index.js",
+      "types": "./dist/esm/core/protocol/avalanche/index.d.ts"
     },
-    "./midlevel/protocol/near": {
-      "import": "./dist/esm/midlevel/protocol/near/index.js",
-      "default": "./dist/esm/midlevel/protocol/near/index.js",
-      "require": "./dist/cjs/midlevel/protocol/near/index.js",
-      "types": "./dist/esm/midlevel/protocol/near/index.d.ts"
+    "./core/protocol/near": {
+      "import": "./dist/esm/core/protocol/near/index.js",
+      "default": "./dist/esm/core/protocol/near/index.js",
+      "require": "./dist/cjs/core/protocol/near/index.js",
+      "types": "./dist/esm/core/protocol/near/index.d.ts"
     },
-    "./midlevel/signer": {
-      "import": "./dist/esm/midlevel/signer/index.js",
-      "default": "./dist/esm/midlevel/signer/index.js",
-      "require": "./dist/cjs/midlevel/signer/index.js",
-      "types": "./dist/esm/midlevel/signer/index.d.ts"
+    "./core/signer": {
+      "import": "./dist/esm/core/signer/index.js",
+      "default": "./dist/esm/core/signer/index.js",
+      "require": "./dist/cjs/core/signer/index.js",
+      "types": "./dist/esm/core/signer/index.d.ts"
     },
-    "./midlevel/signer/provider": {
-      "import": "./dist/esm/midlevel/signer/provider/index.js",
-      "default": "./dist/esm/midlevel/signer/provider/index.js",
-      "require": "./dist/cjs/midlevel/signer/provider/index.js",
-      "types": "./dist/esm/midlevel/signer/provider/index.d.ts"
+    "./core/signer/provider": {
+      "import": "./dist/esm/core/signer/provider/index.js",
+      "default": "./dist/esm/core/signer/provider/index.js",
+      "require": "./dist/cjs/core/signer/provider/index.js",
+      "types": "./dist/esm/core/signer/provider/index.d.ts"
     }
   },
   "scripts": {
