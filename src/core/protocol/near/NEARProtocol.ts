@@ -3,6 +3,8 @@ import { SignedTransaction, Transaction } from "./NEARTransaction.js";
 import { TransactionBroadcaster } from "../../network/broadcaster.js";
 import { BlockFinality } from "./network.js";
 import { BNFromBigInt } from "../../utils/bigint.js";
+import { encode as b64Encode } from "../../utils/base64.js";
+import { jsonrpc } from "../../utils/http.js";
 
 import BN from "bn.js";
 import { transactions } from "near-api-js";
@@ -15,9 +17,7 @@ const STAKING_GAS = new BN(300e12);
 /**
  *
  */
-export type NEARBroadcastResponse = {
-
-};
+export type NEARBroadcastResponse = string;
 
 export class NEARProtocol implements TransactionBroadcaster<SignedTransaction, NEARBroadcastResponse> {
     static INSTANCE = new NEARProtocol();
@@ -155,14 +155,21 @@ export class NEARProtocol implements TransactionBroadcaster<SignedTransaction, N
     }
 
     async broadcast(signedTransaction: SignedTransaction): Promise<NEARBroadcastResponse> {
-        throw new Error("Method not implemented.");
+        // https://docs.near.org/api/rpc/transactions#send-transaction-async
+
+        const endpoint = new URL(signedTransaction.transaction.network.rpcUrl);
+        const encodedPayload = b64Encode(signedTransaction.payload.encode());
+
+        const response = await jsonrpc<string>(endpoint, "broadcast_tx_async", [
+            encodedPayload
+        ]);
+
+        return response;
     }
 
     async broadcastSimple(signedTransaction: SignedTransaction): Promise<string> {
         const response = await this.broadcast(signedTransaction);
-
-        // TODO: extract transaction hash from NEARBroadcastResponse
-        throw new Error("Method not implemented.");
+        return response;
     }
 }
 
