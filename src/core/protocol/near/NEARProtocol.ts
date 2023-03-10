@@ -1,21 +1,56 @@
-import { NEAR_NOMINATION } from "near-api-js/lib/utils/format.js";
-import { TransactionBroadcaster } from "../../network/broadcaster.js";
 import { NEARSigner } from "./NEARSigner.js";
+import { SignedTransaction, Transaction } from "./NEARTransaction.js";
+import { TransactionBroadcaster } from "../../network/broadcaster.js";
 import { BlockFinality } from "./network.js";
 import { BNFromBigInt } from "../../utils/bigint.js";
 
 import BN from "bn.js";
 import { transactions } from "near-api-js";
-import { SignedTransaction, Transaction, functionCall } from "near-api-js/lib/transaction.js";
+import { functionCall } from "near-api-js/lib/transaction.js";
+import { NEAR_NOMINATION } from "near-api-js/lib/utils/format.js";
 
 const ZERO = new BN(0);
 const STAKING_GAS = new BN(300e12);
 
-export class NEARProtocol implements TransactionBroadcaster<SignedTransaction, unknown> {
+/**
+ *
+ */
+export type NEARBroadcastResponse = {
+
+};
+
+export class NEARProtocol implements TransactionBroadcaster<SignedTransaction, NEARBroadcastResponse> {
     static INSTANCE = new NEARProtocol();
 
     private constructor() {
         // no-op
+    }
+
+    private async buildFunctionCallTransaction(
+        signer: NEARSigner,
+        contact: string,
+        methodName: string,
+        args: Record<string, unknown>,
+        gas: BN,
+        block: BlockFinality | string,
+        depositAmount?: BigInt,
+    ): Promise<Transaction> {
+        const blockHash = ["final", "optimistic"].includes(block) ? await signer.fetchBlockHash(block as BlockFinality) : block;
+        const nonce = await signer.fetchNonce();
+
+        // TODO
+        const nonceBN = BNFromBigInt(0n);
+        const blockHashRaw = new Uint8Array();
+
+        const publicKey = await signer.nearPublicKey();
+
+        const action = functionCall(methodName, args, gas, depositAmount ? BNFromBigInt(depositAmount) : ZERO);
+        const payload = transactions.createTransaction(signer.accountId, publicKey, contact, nonceBN, [action], blockHashRaw);
+
+        return {
+            payload,
+            network: signer.network,
+        };
     }
 
     /**
@@ -35,16 +70,6 @@ export class NEARProtocol implements TransactionBroadcaster<SignedTransaction, u
         stakeAmount: BigInt | "all" = "all",
         block: BlockFinality | string = "final",
     ): Promise<Transaction> {
-        const signerId = signer.accountId();
-        const nearPublicKey = await signer.nearPublicKey();
-        const nonce = await signer.fetchNonce();
-        const blockHash = ["final", "optimistic"].includes(block) ? await signer.fetchBlockHash(block as BlockFinality) : block;
-
-
-        // TODO
-        const nonceBN = BNFromBigInt(nonce);
-        const blockHashRaw = new Uint8Array();
-
         let methodName: string;
         let args: Record<string, unknown> = {};
         if (stakeAmount === "all") {
@@ -60,46 +85,83 @@ export class NEARProtocol implements TransactionBroadcaster<SignedTransaction, u
             }
         }
 
-        const action = functionCall(methodName, args, STAKING_GAS, depositAmount ? BNFromBigInt(depositAmount) : ZERO);
-        return transactions.createTransaction(signerId, nearPublicKey, stakingPoolAccountId, nonceBN, [action], blockHashRaw);
+        return this.buildFunctionCallTransaction(signer, stakingPoolAccountId, methodName, args, STAKING_GAS, block, depositAmount);
     }
 
+    /**
+     *
+     * @param signer
+     * @param stakingPoolAccountId
+     * @param amount
+     * @param block
+     * @returns
+     */
     async createUnstakeTransaction(
         signer: NEARSigner,
         stakingPoolAccountId: string,
         amount: BigInt | "all" = "all",
-    ): Promise<Uint8Array> {
-
-        const methodName = amount ? "unstake" : "unstake_all";
+        block: BlockFinality | string = "final",
+    ): Promise<Transaction> {
+        const methodName = amount !== "all" ? "unstake" : "unstake_all";
         let args: Record<string, unknown> = {};
         if (amount !== "all") {
             args.amount = amount.toString()
         }
 
-        throw new Error("Not implemented");
+        return this.buildFunctionCallTransaction(signer, stakingPoolAccountId, methodName, args, STAKING_GAS, block, 0n);
     }
 
+    /**
+     *
+     * @param signer
+     * @param stakingPoolAccountId
+     * @param depositAmount
+     * @param block
+     * @returns
+     */
     async createDepositTransaction(
         signer: NEARSigner,
         stakingPoolAccountId: string,
-        depositAmount: BigInt | "all" = "all",
-    ): Promise<Uint8Array> {
-        throw new Error("Not implemented");
+        depositAmount: BigInt,
+        block: BlockFinality | string = "final",
+    ): Promise<Transaction> {
+        const methodName = "deposit";
+        let args: Record<string, unknown> = {};
+
+        return this.buildFunctionCallTransaction(signer, stakingPoolAccountId, methodName, args, STAKING_GAS, block, depositAmount);
     }
 
+    /**
+     *
+     * @param signer
+     * @param stakingPoolAccountId
+     * @param withdrawAmount
+     * @param block
+     * @returns
+     */
     async createWithdrawTransaction(
         signer: NEARSigner,
         stakingPoolAccountId: string,
         withdrawAmount: BigInt | "all" = "all",
-    ): Promise<Uint8Array> {
-        throw new Error("Not implemented");
+        block: BlockFinality | string = "final",
+    ): Promise<Transaction> {
+        const methodName = withdrawAmount !== "all" ? "withdraw" : "withdraw_all";
+        let args: Record<string, unknown> = {};
+        if (withdrawAmount !== "all") {
+            args.amount = withdrawAmount.toString();
+        }
+
+        return this.buildFunctionCallTransaction(signer, stakingPoolAccountId, methodName, args, STAKING_GAS, block, 0n);
     }
 
-    async broadcast(signedTransaction: unknown): Promise<undefined> {
+    async broadcast(signedTransaction: SignedTransaction): Promise<NEARBroadcastResponse> {
         throw new Error("Method not implemented.");
     }
 
-    async broadcastSimple(signedTransaction: unknown): Promise<string> {
+    async broadcastSimple(signedTransaction: SignedTransaction): Promise<string> {
+        const response = await this.broadcast(signedTransaction);
+
+        // TODO: extract transaction hash from NEARBroadcastResponse
         throw new Error("Method not implemented.");
     }
 }

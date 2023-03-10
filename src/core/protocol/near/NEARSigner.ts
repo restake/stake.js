@@ -1,13 +1,15 @@
-import { SignedTransaction, Transaction, signTransaction } from "near-api-js/lib/transaction.js";
-import { ed25519KeyPair, ed25519PrivateKey, ed25519PublicKey, ed25519Signer } from "../../signer/ed25519Signer.js";
-import type { Signer } from "../../signer/signer.js";
+import { Transaction as NEARTransaction, signTransaction } from "near-api-js/lib/transaction.js";
 import { BlockFinality, NEARNetwork } from "./network.js";
+import { SignedTransaction, Transaction } from "./NEARTransaction.js";
+import { TransactionSigner } from "../../signer/TransactionSigner.js";
+import type { Signer } from "../../signer/signer.js";
+import { ed25519Signer } from "../../signer/ed25519Signer.js";
 import { encode as b64encode } from "../../utils/base64.js";
 
 import { Near, Signer as NearAPISigner } from "near-api-js";
-import { KeyType, PublicKey as NEARPublicKey, Signature } from "near-api-js/lib/utils/key_pair.js";
+import { PublicKey as NEARPublicKey, Signature } from "near-api-js/lib/utils/key_pair.js";
 
-export class NEARSigner extends NearAPISigner implements Signer<Uint8Array | Transaction, Uint8Array> {
+export class NEARSigner extends NearAPISigner implements Signer<Uint8Array, Uint8Array>, TransactionSigner<Transaction, SignedTransaction> {
     #parent: ed25519Signer;
     #network: NEARNetwork;
     #accountId: string;
@@ -29,8 +31,8 @@ export class NEARSigner extends NearAPISigner implements Signer<Uint8Array | Tra
         });
     }
 
-    async sign(payload: Uint8Array | Transaction): Promise<Uint8Array> {
-        if (payload instanceof Transaction) {
+    async sign(payload: Uint8Array | NEARTransaction): Promise<Uint8Array> {
+        if (payload instanceof NEARTransaction) {
             this.#currentNonce = await this.fetchNonce();
             const [_, signedTxn] = await signTransaction(payload, this, this.#accountId, this.#network.id);
             // don't need to set #dirtyState here - signTransaction calls this function eventually
@@ -42,14 +44,16 @@ export class NEARSigner extends NearAPISigner implements Signer<Uint8Array | Tra
         }
     }
 
-    verify(payload: Uint8Array | Transaction, signature: Uint8Array): Promise<boolean> {
-        const rawPayload = payload instanceof Transaction ? payload.encode() : payload;
-        return this.#parent.verify(rawPayload, signature);
+    verify(payload: Uint8Array, signature: Uint8Array): Promise<boolean> {
+        return this.#parent.verify(payload, signature);
     }
 
     async signTransaction(transaction: Transaction): Promise<SignedTransaction> {
-        const [raw, signedTxn] = await signTransaction(transaction, this);
-        return signedTxn;
+        const [_raw, signedTxn] = await signTransaction(transaction.payload, this);
+        return {
+            transaction,
+            payload: signedTxn,
+        };
     }
 
     async fetchNonce(): Promise<BigInt> {
@@ -67,8 +71,12 @@ export class NEARSigner extends NearAPISigner implements Signer<Uint8Array | Tra
         return "";
     }
 
-    accountId(): string {
+    get accountId(): string {
         return this.#accountId;
+    }
+
+    get network(): NEARNetwork {
+        return this.#network;
     }
 
     async nearPublicKey(): Promise<NEARPublicKey> {
