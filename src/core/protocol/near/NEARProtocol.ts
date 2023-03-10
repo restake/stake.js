@@ -1,7 +1,7 @@
 import { NEARSigner } from "./NEARSigner.js";
 import { SignedTransaction, Transaction } from "./NEARTransaction.js";
 import { TransactionBroadcaster } from "../../network/broadcaster.js";
-import { BlockFinality } from "./network.js";
+import { BlockFinality, isFinality } from "./network.js";
 import { BNFromBigInt } from "../../utils/bigint.js";
 import { encode as b64Encode } from "../../utils/base64.js";
 import { jsonrpc } from "../../utils/http.js";
@@ -35,7 +35,7 @@ export class NEARProtocol implements TransactionBroadcaster<SignedTransaction, N
         block: BlockFinality | string,
         depositAmount?: BigInt,
     ): Promise<Transaction> {
-        const blockHash = ["final", "optimistic"].includes(block) ? await signer.fetchBlockHash(block as BlockFinality) : block;
+        const blockHash = isFinality(block) ? await signer.fetchBlockHash(block) : block;
         const nonce = await signer.fetchNonce();
 
         // TODO

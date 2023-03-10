@@ -15,3 +15,7 @@ export const networks: { [id: string]: NEARNetwork } = {
 };
 
 export type BlockFinality = "optimistic" | "final";
+
+export function isFinality(block: BlockFinality | string): block is BlockFinality {
+    return block === "final" || block === "optimistic";
+}
