@@ -1,5 +1,5 @@
 import { Transaction as NEARTransaction, signTransaction } from "near-api-js/lib/transaction.js";
-import { BlockFinality, NEARNetwork } from "./network.js";
+import { BlockFinality, NEARNetwork, isFinality } from "./network.js";
 import { SignedTransaction, Transaction } from "./NEARTransaction.js";
 import { TransactionSigner } from "../../signer/TransactionSigner.js";
 import type { Signer } from "../../signer/signer.js";
@@ -8,6 +8,7 @@ import { encode as b64encode } from "../../utils/base64.js";
 
 import { Near, Signer as NearAPISigner } from "near-api-js";
 import { PublicKey as NEARPublicKey, Signature } from "near-api-js/lib/utils/key_pair.js";
+import { jsonrpc } from "../../utils/http.js";
 
 export class NEARSigner extends NearAPISigner implements Signer<Uint8Array, Uint8Array>, TransactionSigner<Transaction, SignedTransaction> {
     #parent: ed25519Signer;
@@ -56,19 +57,46 @@ export class NEARSigner extends NearAPISigner implements Signer<Uint8Array, Uint
         };
     }
 
-    async fetchNonce(): Promise<BigInt> {
+    async fetchNonce(block: BlockFinality | string = "final"): Promise<BigInt> {
+        type AccessKeyResponse = {
+            nonce: number;
+        };
+
+        let nonce: BigInt;
+
         let currentNonce = this.#currentNonce;
         if (this.#dirtyState || !currentNonce) {
-            // TODO: fetch
-            currentNonce = this.#currentNonce = -1n;
+            const publicKey = await this.nearPublicKey();
+
+            this.#currentNonce = nonce = await jsonrpc<AccessKeyResponse>(this.#network.rpcUrl, "view_access_key", {
+                finality: isFinality(block) ? block : undefined,
+                block_id: !isFinality(block) ? block : undefined,
+                account_id: this.#accountId,
+                public_key: publicKey.toString(),
+            }).then((response) => {
+                return BigInt(response.nonce);
+            });
             this.#dirtyState = false;
+        } else {
+            nonce = currentNonce;
         }
 
-        return currentNonce;
+        return nonce;
     }
 
-    async fetchBlockHash(type: BlockFinality): Promise<string> {
-        return "";
+    async fetchBlockHash(block: BlockFinality | string = "final"): Promise<string> {
+        type BlockResponse = {
+            header: {
+                hash: string;
+            };
+        };
+
+        return await jsonrpc<BlockResponse>(this.#network.rpcUrl, "block", {
+            finality: isFinality(block) ? block : undefined,
+            block_id: !isFinality(block) ? block : undefined,
+        }).then((response) => {
+            return response.header.hash;
+        });
     }
 
     get accountId(): string {
