@@ -32,17 +32,8 @@ export class NEARSigner extends NearAPISigner implements Signer<Uint8Array, Uint
         });
     }
 
-    async sign(payload: Uint8Array | NEARTransaction): Promise<Uint8Array> {
-        if (payload instanceof NEARTransaction) {
-            this.#currentNonce = await this.fetchNonce();
-            const [_, signedTxn] = await signTransaction(payload, this, this.#accountId, this.#network.id);
-            // don't need to set #dirtyState here - signTransaction calls this function eventually
-            return signedTxn.signature.data;
-        } else {
-            const signature = await this.#parent.sign(payload);
-            this.#dirtyState = true;
-            return signature;
-        }
+    async sign(payload: Uint8Array): Promise<Uint8Array> {
+        return this.#parent.sign(payload);
     }
 
     verify(payload: Uint8Array, signature: Uint8Array): Promise<boolean> {
@@ -51,6 +42,7 @@ export class NEARSigner extends NearAPISigner implements Signer<Uint8Array, Uint
 
     async signTransaction(transaction: Transaction): Promise<SignedTransaction> {
         const [_raw, signedTxn] = await signTransaction(transaction.payload, this);
+        this.#dirtyState = true;
         return {
             transaction,
             payload: signedTxn,
