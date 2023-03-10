@@ -33,7 +33,7 @@ const nearSigner = new NEARSigner(testnetSigner, accountId, networks["testnet"])
 const protocol = NEARProtocol.INSTANCE;
 
 const txid = protocol.createStakeTransaction(nearSigner, stakingPoolAccount, ntoy(10n)).then(async (rawTxn) => {
-    const stxn = await nearSigner.sign(rawTxn);
+    const stxn = await nearSigner.signTransaction(rawTxn);
     return await protocol.broadcastSimple(stxn);
 });
 
