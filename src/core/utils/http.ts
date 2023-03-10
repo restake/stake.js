@@ -21,7 +21,7 @@ export type JSONRPCResponse<T, E> = {
     error: E;
 };
 
-export async function jsonrpc<T>(endpoint: URL, method: string, params: unknown): Promise<T> {
+export async function jsonrpc<T>(endpoint: URL | string, method: string, params: unknown): Promise<T> {
     const body: JSONRPCRequest = {
         jsonrpc: "2.0",
         id: "123",
