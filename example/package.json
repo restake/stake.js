@@ -9,7 +9,8 @@
   "author": "",
   "license": "Proprietary",
   "dependencies": {
-    "@restake/staking-sdk": "../"
+    "@restake/staking-sdk": "../",
+    "buffer": "6.0.3"
   },
   "type": "module"
 }

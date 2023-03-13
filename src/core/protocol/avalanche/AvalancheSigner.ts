@@ -3,11 +3,11 @@ import { bech32 } from "bech32";
 import type { Signer } from "../../signer/signer.js";
 import { AvalancheNetwork } from "./network.js";
 import { Avalanche } from "avalanche";
-import { encode as b64encode } from "../../utils/base64.js";
+import { Transaction, SignedTransaction } from "./AvalancheTransaction.js";
+import { Buffer } from "buffer/";
+import { TransactionSigner } from "../../signer/TransactionSigner.js";
 
-const AVALANCHE_NETWORK_ID = 5;
-
-export class AvalancheSigner implements Signer<Uint8Array, Uint8Array> {
+export class AvalancheSigner implements Signer<Uint8Array, Uint8Array>, TransactionSigner<Transaction, SignedTransaction>  {
     #parent: secp256k1Signer;
     #network: AvalancheNetwork;
     #avalanche: Avalanche;
@@ -16,11 +16,12 @@ export class AvalancheSigner implements Signer<Uint8Array, Uint8Array> {
     #dirtyState: boolean = false;
 
     constructor(parent: secp256k1Signer, network: AvalancheNetwork) {
-
         this.#parent = parent;
         this.#network = network;
-        this.#avalanche = AvalancheSigner.getClient(network.id, network.rpcUrl);
+        this.#avalanche = AvalancheSigner.getClient(network.id, network.rpcUrl, network.networkId);
 
+        const pKeyChain = this.#avalanche.PChain().keyChain();
+        pKeyChain.importKey(Buffer.from(this.#parent.getPrivateBytes()));
     }
 
     async deriveAddress(chainID: string): Promise<string> {
@@ -30,33 +31,42 @@ export class AvalancheSigner implements Signer<Uint8Array, Uint8Array> {
     }
 
     async sign(payload: Uint8Array): Promise<Uint8Array> {
-
         return this.#parent.sign(payload);
     }
 
+    async signTransaction(transaction: Transaction): Promise <SignedTransaction>{
+        const pKeyChain = this.#avalanche.PChain().keyChain();
+        const signedTxn = transaction.payload.sign(pKeyChain)
+
+        return {
+            transaction,
+            payload: signedTxn
+        };
+    }
+
     verify(payload: Uint8Array, signature: Uint8Array): Promise<boolean> {
-
         return this.#parent.verify(payload, signature);
-
     }
 
     get client(): Avalanche {
-
-        return this.#avalanche
-
+        return this.#avalanche;
     }
 
-    private static getClient(rpcUrl: string, network: string): Avalanche {
+    get network(): AvalancheNetwork {
+        return this.#network;
+    }
+
+    private static getClient(rpcUrl: string, network: string, networkId: number): Avalanche {
         const url = new URL(rpcUrl);
 
         const client = new Avalanche(
-          url.hostname,
-          parseInt(url.port),
-          url.protocol.replace(':', ''),
-          AVALANCHE_NETWORK_ID,
-          undefined,
-          undefined,
-          network,
+            url.hostname,
+            parseInt(url.port),
+            url.protocol.replace(':', ''),
+            networkId,
+            undefined,
+            undefined,
+            network,
         );
 
         // @ts-ignore
