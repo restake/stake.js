@@ -7,7 +7,11 @@ import { UnsignedTx, Tx } from "avalanche/dist/apis/platformvm";
 import { hexToBytes } from "@noble/curves/abstract/utils";
 import { jsonrpc } from "../../utils/http.js";
 
-export class AvalancheProtocol implements TransactionBroadcaster<SignedTransaction, unknown> {
+export type AvalancheBroadcastResponse = {
+    txID: string;
+};
+
+export class AvalancheProtocol implements TransactionBroadcaster<SignedTransaction, AvalancheBroadcastResponse> {
     static INSTANCE = new AvalancheProtocol();
 
     private constructor() {
@@ -24,9 +28,6 @@ export class AvalancheProtocol implements TransactionBroadcaster<SignedTransacti
      * @param dateEnd Starting time date-time object of the validation process
      * @returns Unsigned transaction
      */
-
-
-
     async buildStakeTransaction(
         signer: AvalancheSigner,
         validator: string,
@@ -34,7 +35,6 @@ export class AvalancheProtocol implements TransactionBroadcaster<SignedTransacti
         dateStart: Date,
         dateEnd: Date,
     ): Promise<Transaction> {
-
         const pAddress: string = await signer.deriveAddress("P");
         const pChain = signer.client.PChain();
         const chainId = pChain.getBlockchainID();
@@ -69,15 +69,12 @@ export class AvalancheProtocol implements TransactionBroadcaster<SignedTransacti
         };
     }
 
-
-
     /**
      * Gets all reward UTXOs of a specified P-Chain address
      *
      * @param signer Avalanche signer.
      * @returns Array of all the UTXOs
      */
-
     private async getAllUTXOs (
         signer: AvalancheSigner
     ): Promise<string[]> {
@@ -97,13 +94,11 @@ export class AvalancheProtocol implements TransactionBroadcaster<SignedTransacti
      * @param txID The ID of a staking transaction
      * @returns The reward amount
      */
-
-    private async getAmount (
+    private async getAmount(
         txID: string,
         signer: AvalancheSigner
     ): Promise<number | null> {
         const pChain = signer.client.PChain();
-
         const rewardUTXO = await pChain.getRewardUTXOs(txID);
 
         if (rewardUTXO.utxos.length <= 0) {
@@ -122,7 +117,6 @@ export class AvalancheProtocol implements TransactionBroadcaster<SignedTransacti
      * @param txIDCB58 CB58 encoded string of a transactionID
      * @returns Decoded trsansactionID
      */
-
     private async getTxID (
         txIDCB58: string,
     ): Promise<string> {
@@ -132,12 +126,23 @@ export class AvalancheProtocol implements TransactionBroadcaster<SignedTransacti
         return txID;
     };
 
-    async broadcast(signedTransaction: SignedTransaction): Promise<string> {
-        throw new Error();
+    async broadcast(signedTransaction: SignedTransaction): Promise<AvalancheBroadcastResponse> {
+        // https://docs.avax.network/apis/avalanchego/apis/p-chain#platformissuetx
+
+        const endpoint = new URL("/ext/bc/P", signedTransaction.transaction.network.rpcUrl);
+        const encodedPayload = signedTransaction.payload.toStringHex()
+
+        const response = await jsonrpc<AvalancheBroadcastResponse>(endpoint, "platform.issueTx", {
+            tx: encodedPayload,
+            encoding: "hex",
+        });
+
+        return response;
     }
 
     async broadcastSimple(signedTransaction: SignedTransaction): Promise<string> {
-        throw new Error();
+        const response = await this.broadcast(signedTransaction);
+        return response.txID;
     }
 
 }
