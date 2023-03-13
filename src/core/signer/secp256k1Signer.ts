@@ -85,4 +85,9 @@ export class secp256k1Signer implements Signer<Uint8Array> {
     async getPublicKey(): Promise<secp256k1PublicKey> {
         return this.#privateKey.getPublicKey();
     }
+
+    //TODO Remove
+    getPrivateBytes(): Uint8Array {
+        return this.#privateKey.getPrivateBytes();
+    }
 }

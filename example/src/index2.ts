@@ -16,7 +16,7 @@ const dateStart = new Date(new Date().getTime()+10000)
 const dateEnd = new Date(dateStart.getTime()+1209600000);
 
 const txid = protocol.buildStakeTransaction(avalancheSigner, "", "100000", dateStart, dateEnd).then(async (rawTx) =>{
-    const stx = await avalancheSigner.sign(rawTx);
+    const stx = await avalancheSigner.signTransaction(rawTx);
     return await protocol.broadcastSimple(stx);
 })
 
