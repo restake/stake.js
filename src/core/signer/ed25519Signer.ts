@@ -9,8 +9,8 @@ export class ed25519PublicKey implements PublicKey {
     #bytes: Uint8Array;
 
     constructor(bytes: Uint8Array) {
-        if (bytes.byteLength !== 16) {
-            throw new Error("Expected 16 bytes");
+        if (bytes.byteLength !== 32) {
+            throw new Error("Expected 32 bytes, got " + bytes.byteLength);
         }
 
         this.#bytes = bytes;
