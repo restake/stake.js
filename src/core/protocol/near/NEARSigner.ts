@@ -1,14 +1,14 @@
-import { Transaction as NEARTransaction, signTransaction } from "near-api-js/lib/transaction.js";
 import { BlockFinality, NEARNetwork, isFinality } from "./network.js";
-import { SignedTransaction, Transaction } from "./NEARTransaction.js";
-import { TransactionSigner } from "../../signer/TransactionSigner.js";
-import type { Signer } from "../../signer/signer.js";
 import { ed25519Signer } from "../../signer/ed25519Signer.js";
 import { encode as b64encode } from "../../utils/base64.js";
+import { jsonrpc } from "../../utils/http.js";
+import { SignedTransaction, Transaction } from "./NEARTransaction.js";
+import { signTransaction } from "near-api-js/lib/transaction.js";
+import { TransactionSigner } from "../../signer/TransactionSigner.js";
+import type { Signer } from "../../signer/signer.js";
 
 import { Near, Signer as NearAPISigner } from "near-api-js";
 import { PublicKey as NEARPublicKey, Signature } from "near-api-js/lib/utils/key_pair.js";
-import { jsonrpc } from "../../utils/http.js";
 
 export class NEARSigner extends NearAPISigner implements Signer<Uint8Array, Uint8Array>, TransactionSigner<Transaction, SignedTransaction> {
     #parent: ed25519Signer;

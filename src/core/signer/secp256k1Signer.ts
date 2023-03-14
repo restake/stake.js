@@ -1,7 +1,7 @@
-import { bytesToHex } from "@noble/curves/abstract/utils";
 import type { KeyPair, PrivateKey, PublicKey } from "../keypair/keypair.js";
 import type { Signer } from "./signer.js";
 
+import { bytesToHex } from "@noble/curves/abstract/utils";
 import { secp256k1, schnorr } from "@noble/curves/secp256k1";
 
 export class secp256k1PublicKey implements PublicKey {
@@ -86,7 +86,7 @@ export class secp256k1Signer implements Signer<Uint8Array> {
         return this.#privateKey.getPublicKey();
     }
 
-    //TODO Remove
+    // TODO: Remove
     getPrivateBytes(): Uint8Array {
         return this.#privateKey.getPrivateBytes();
     }

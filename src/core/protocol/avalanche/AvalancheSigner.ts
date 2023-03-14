@@ -1,19 +1,17 @@
-import { secp256k1KeyPair, secp256k1PrivateKey, secp256k1PublicKey, secp256k1Signer } from "../../signer/secp256k1Signer.js";
-import { bech32 } from "bech32";
-import type { Signer } from "../../signer/signer.js";
 import { AvalancheNetwork } from "./network.js";
-import { Avalanche } from "avalanche";
+import { secp256k1Signer } from "../../signer/secp256k1Signer.js";
 import { Transaction, SignedTransaction } from "./AvalancheTransaction.js";
-import { Buffer } from "buffer/";
 import { TransactionSigner } from "../../signer/TransactionSigner.js";
+import type { Signer } from "../../signer/signer.js";
+
+import { Avalanche } from "avalanche";
+import { bech32 } from "bech32";
+import { Buffer } from "buffer/";
 
 export class AvalancheSigner implements Signer<Uint8Array, Uint8Array>, TransactionSigner<Transaction, SignedTransaction>  {
     #parent: secp256k1Signer;
     #network: AvalancheNetwork;
     #avalanche: Avalanche;
-
-    // Flag to update nonce
-    #dirtyState: boolean = false;
 
     constructor(parent: secp256k1Signer, network: AvalancheNetwork) {
         this.#parent = parent;
