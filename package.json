@@ -44,11 +44,11 @@
       "types": "./dist/esm/core/signer/provider/index.d.ts"
     },
     "./core/signer/provider/codec": {
-        "import": "./dist/esm/core/signer/provider/codec/index.js",
-        "default": "./dist/esm/core/signer/provider/codec/index.js",
-        "require": "./dist/cjs/core/signer/provider/codec/index.js",
-        "types": "./dist/esm/core/signer/provider/codec/index.d.ts"
-      }
+      "import": "./dist/esm/core/signer/provider/codec/index.js",
+      "default": "./dist/esm/core/signer/provider/codec/index.js",
+      "require": "./dist/cjs/core/signer/provider/codec/index.js",
+      "types": "./dist/esm/core/signer/provider/codec/index.d.ts"
+    }
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -72,6 +72,7 @@
     "avalanche": "3.16.0",
     "bech32": "2.0.0",
     "bn.js": "5.2.1",
+    "bs58": "5.0.0",
     "near-api-js": "1.1.0"
   }
 }
