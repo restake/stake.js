@@ -1,12 +1,12 @@
 import { BlockFinality, NEARNetwork, isFinality } from "./network.js";
 import { ed25519Signer } from "../../signer/ed25519Signer.js";
-import { encode as b64encode } from "../../utils/base64.js";
 import { jsonrpc } from "../../utils/http.js";
 import { SignedTransaction, Transaction } from "./NEARTransaction.js";
 import { signTransaction } from "near-api-js/lib/transaction.js";
 import { TransactionSigner } from "../../signer/TransactionSigner.js";
 import type { Signer } from "../../signer/signer.js";
 
+import bs58 from "bs58";
 import { Near, Signer as NearAPISigner } from "near-api-js";
 import { PublicKey as NEARPublicKey, Signature } from "near-api-js/lib/utils/key_pair.js";
 
@@ -101,7 +101,7 @@ export class NEARSigner extends NearAPISigner implements Signer<Uint8Array, Uint
 
     async nearPublicKey(): Promise<NEARPublicKey> {
         const publicKey = await this.#parent.getPublicKey();
-        const np = NEARPublicKey.fromString("ed25519:" + b64encode(publicKey.getBytes()));
+        const np = NEARPublicKey.fromString("ed25519:" + bs58.encode(publicKey.getBytes()));
         return np;
     }
 
