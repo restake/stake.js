@@ -51,7 +51,8 @@ export class NEARSigner extends NearAPISigner implements Signer<Uint8Array, Uint
 
     async fetchNonce(block: BlockFinality | string = "final"): Promise<BigInt> {
         type AccessKeyResponse = {
-            nonce: number;
+            error?: string;
+            nonce?: number;
         };
 
         let nonce: BigInt;
@@ -67,7 +68,11 @@ export class NEARSigner extends NearAPISigner implements Signer<Uint8Array, Uint
                 account_id: this.#accountId,
                 public_key: publicKey.toString(),
             }).then((response) => {
-                return BigInt(response.nonce);
+                if (response.error) {
+                    throw new Error(response.error);
+                }
+
+                return BigInt(response.nonce!);
             });
             this.#dirtyState = false;
         } else {
