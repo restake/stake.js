@@ -1,7 +1,7 @@
-import { bytesToHex } from "@noble/curves/abstract/utils";
 import type { KeyPair, PrivateKey, PublicKey } from "../keypair/keypair.js";
 import type { Signer } from "./signer.js";
 
+import { bytesToHex } from "@noble/curves/abstract/utils";
 import { ed25519 } from "@noble/curves/ed25519";
 
 export class ed25519PublicKey implements PublicKey {

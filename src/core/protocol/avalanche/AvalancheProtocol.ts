@@ -1,11 +1,9 @@
 import { AvalancheSigner } from "./AvalancheSigner.js";
+import { jsonrpc } from "../../utils/http.js";
 import { SignedTransaction, Transaction } from "./AvalancheTransaction.js";
 import { TransactionBroadcaster } from "../../network/broadcaster.js";
 
-import { Avalanche, BinTools, Buffer, BN } from "avalanche";
-import { UnsignedTx, Tx } from "avalanche/dist/apis/platformvm";
-import { hexToBytes } from "@noble/curves/abstract/utils";
-import { jsonrpc } from "../../utils/http.js";
+import { BinTools, BN } from "avalanche";
 
 export type AvalancheBroadcastResponse = {
     txID: string;
@@ -75,13 +73,13 @@ export class AvalancheProtocol implements TransactionBroadcaster<SignedTransacti
      * @param signer Avalanche signer.
      * @returns Array of all the UTXOs
      */
-    private async getAllUTXOs (
+    private async getAllUTXOs(
         signer: AvalancheSigner
     ): Promise<string[]> {
         const pAddress: string = await signer.deriveAddress("P");
         const pChain = signer.client.PChain();
         const chainId = pChain.getBlockchainID();
-        const {utxos} = await pChain.getUTXOs(pAddress, chainId);
+        const { utxos } = await pChain.getUTXOs(pAddress, chainId);
         const array = utxos.getAllUTXOStrings();
 
         return array;
@@ -104,8 +102,9 @@ export class AvalancheProtocol implements TransactionBroadcaster<SignedTransacti
         if (rewardUTXO.utxos.length <= 0) {
             return null;
         }
-        const amountOne = parseInt(rewardUTXO.utxos[0].slice(150,166), 16);
-        const amountTwo = parseInt(rewardUTXO.utxos[1].slice(150,166), 16);
+
+        const amountOne = parseInt(rewardUTXO.utxos[0].slice(150, 166), 16);
+        const amountTwo = parseInt(rewardUTXO.utxos[1].slice(150, 166), 16);
 
         if (amountOne < amountTwo) {return amountTwo}
         else {return amountOne};
@@ -121,9 +120,8 @@ export class AvalancheProtocol implements TransactionBroadcaster<SignedTransacti
         txIDCB58: string,
     ): Promise<string> {
         const binTools = BinTools.getInstance();
-        const dekodeeritud = binTools.cb58Decode(txIDCB58);
-        const txID = binTools.cb58Encode(dekodeeritud.slice(2,34));
-        return txID;
+        const decoded = binTools.cb58Decode(txIDCB58);
+        return binTools.cb58Encode(decoded.slice(2, 34));
     };
 
     async broadcast(signedTransaction: SignedTransaction): Promise<AvalancheBroadcastResponse> {
@@ -144,5 +142,4 @@ export class AvalancheProtocol implements TransactionBroadcaster<SignedTransacti
         const response = await this.broadcast(signedTransaction);
         return response.txID;
     }
-
 }

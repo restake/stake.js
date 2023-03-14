@@ -2,8 +2,8 @@ import { Codec } from "./codec/Codec.js";
 import { JSONHexEncodedKeyCodec } from "./codec/JSONHexEncodedKeyCodec.js";
 import { SignerProvider } from "./provider.js";
 
-import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { readFile } from "node:fs/promises";
 
 /**
  * Function type for constructing a signer from private key bytes

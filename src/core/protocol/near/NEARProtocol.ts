@@ -1,15 +1,15 @@
-import { NEARSigner } from "./NEARSigner.js";
-import { SignedTransaction, Transaction } from "./NEARTransaction.js";
-import { TransactionBroadcaster } from "../../network/broadcaster.js";
 import { BlockFinality, isFinality } from "./network.js";
 import { BNFromBigInt } from "../../utils/bigint.js";
 import { encode as b64Encode } from "../../utils/base64.js";
 import { jsonrpc } from "../../utils/http.js";
+import { NEARSigner } from "./NEARSigner.js";
+import { SignedTransaction, Transaction } from "./NEARTransaction.js";
+import { TransactionBroadcaster } from "../../network/broadcaster.js";
 
-import BN from "bn.js";
-import { transactions } from "near-api-js";
 import { functionCall } from "near-api-js/lib/transaction.js";
 import { NEAR_NOMINATION } from "near-api-js/lib/utils/format.js";
+import { transactions } from "near-api-js";
+import BN from "bn.js";
 
 const ZERO = new BN(0);
 const STAKING_GAS = new BN(300e12);

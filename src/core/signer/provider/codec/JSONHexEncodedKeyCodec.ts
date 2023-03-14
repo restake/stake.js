@@ -1,7 +1,7 @@
 import { Codec } from "./Codec.js";
 
-import { hexToBytes } from "@noble/curves/abstract/utils";
 import { basename } from "node:path";
+import { hexToBytes } from "@noble/curves/abstract/utils";
 
 /**
  * Codec which handles reading JSON object with key `privateKey` containing hex encoded private key bytes
