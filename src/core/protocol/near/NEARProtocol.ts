@@ -1,6 +1,6 @@
 import { BlockFinality, isFinality } from "./network.js";
 import { BNFromBigInt } from "../../utils/bigint.js";
-import { encode as b64Encode } from "../../utils/base64.js";
+import { encode as b64Encode, decode as b64Decode } from "../../utils/base64.js";
 import { jsonrpc } from "../../utils/http.js";
 import { NEARSigner } from "./NEARSigner.js";
 import { SignedTransaction, Transaction } from "./NEARTransaction.js";
@@ -10,7 +10,6 @@ import { functionCall } from "near-api-js/lib/transaction.js";
 import { NEAR_NOMINATION } from "near-api-js/lib/utils/format.js";
 import { transactions } from "near-api-js";
 import BN from "bn.js";
-import * as bs58 from "bs58";
 
 const ZERO = new BN(0);
 const STAKING_GAS = new BN(300e12);
@@ -173,7 +172,7 @@ export class NEARProtocol implements TransactionBroadcaster<SignedTransaction, N
 }
 
 function decodeBlockHash(blockHash: string): Uint8Array {
-    const decoded = bs58.decode(blockHash);
+    const decoded = b64Decode(blockHash);
 
     // 32 = sha256 in bytes
     if (decoded.byteLength !== 32) {
