@@ -60,7 +60,8 @@ export class NEARSigner extends NearAPISigner implements Signer<Uint8Array, Uint
         if (this.#dirtyState || !currentNonce) {
             const publicKey = await this.nearPublicKey();
 
-            this.#currentNonce = nonce = await jsonrpc<AccessKeyResponse>(this.#network.rpcUrl, "view_access_key", {
+            this.#currentNonce = nonce = await jsonrpc<AccessKeyResponse>(this.#network.rpcUrl, "query", {
+                request_type: "view_access_key",
                 finality: isFinality(block) ? block : undefined,
                 block_id: !isFinality(block) ? block : undefined,
                 account_id: this.#accountId,
