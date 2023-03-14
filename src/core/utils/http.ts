@@ -17,8 +17,8 @@ export type JSONRPCRequest = {
 export type JSONRPCResponse<T, E> = {
     jsonrpc: string;
     id: string | number;
-    result: T;
-    error: E;
+    result?: T;
+    error?: E;
 };
 
 export async function jsonrpc<T>(endpoint: URL | string, method: string, params: unknown): Promise<T> {
@@ -44,12 +44,20 @@ export async function jsonrpc<T>(endpoint: URL | string, method: string, params:
         // throw new HTTPError();
     }
 
-    const responseBody = await request.json() as JSONRPCResponse<T, unknown>;
+    const responseBody = await request.json() as JSONRPCResponse<T, string>;
     if (request.status !== 200) {
         // throw new HTTPError();
     }
 
     // TODO: proper error handling
+    const { error, result } = responseBody;
+    if (error) {
+        throw new Error(error);
+    }
 
-    return responseBody.result;
+    if (!result) {
+        // XXX: if result is not present, then remote is not following JSON-RPC specification
+        throw new Error("No result");
+    }
+    return result;
 }
