@@ -6,7 +6,7 @@ import type { Signer } from "../../signer/signer.js";
 
 import { Avalanche } from "avalanche";
 import { bech32 } from "bech32";
-import { Buffer } from "buffer/";
+import { Buffer } from "buffer/index.js";
 
 export class AvalancheSigner implements Signer<Uint8Array, Uint8Array>, TransactionSigner<Transaction, SignedTransaction>  {
     #parent: secp256k1Signer;
