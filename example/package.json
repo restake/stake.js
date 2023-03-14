@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "ts-node": "ts-node --esm",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -12,5 +13,8 @@
     "@restake/staking-sdk": "../",
     "buffer": "6.0.3"
   },
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "ts-node": "10.9.1"
+  }
 }
