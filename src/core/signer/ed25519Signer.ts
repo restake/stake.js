@@ -9,7 +9,7 @@ export class ed25519PublicKey implements PublicKey {
     #bytes: Uint8Array;
 
     constructor(bytes: Uint8Array) {
-        if (bytes.length !== 16) {
+        if (bytes.byteLength !== 16) {
             throw new Error("Expected 16 bytes");
         }
 
@@ -30,7 +30,7 @@ export class ed25519PrivateKey implements PrivateKey<ed25519PublicKey> {
     #publicKey: ed25519PublicKey;
 
     constructor(bytes: Uint8Array) {
-        if (bytes.length !== 32) {
+        if (bytes.byteLength !== 32) {
             throw new Error("Expected 32 bytes");
         }
 
