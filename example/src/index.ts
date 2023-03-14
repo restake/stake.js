@@ -3,7 +3,7 @@ import { ed25519PrivateKey, ed25519Signer } from "@restake/staking-sdk/core/sign
 import { FilesystemSignerProvider, FireblocksSignerProvider } from "@restake/staking-sdk/core/signer/provider";
 
 import { Codec, JSONHexEncodedKeyCodec } from "@restake/staking-sdk/core/signer/provider/codec";
-import { hexToBytes } from "@noble/curves/abstract/utils";
+import bs58 from "bs58";
 
 const nearCodec: Codec = {
     ...JSONHexEncodedKeyCodec,
@@ -11,9 +11,13 @@ const nearCodec: Codec = {
         const bytes = new TextDecoder().decode(buffer);
 
         const parsed = JSON.parse(bytes) as { private_key: string };
-        const decoded = hexToBytes(parsed.private_key);
+        const [ keyType, privateKeyEncoded ] = parsed.private_key.split(":", 2);
+        if (keyType !== "ed25519") {
+            throw new Error("Unsupported key type " + keyType);
+        }
 
-        return decoded;
+        const decoded = bs58.decode(privateKeyEncoded);
+        return decoded.slice(32);
     },
 };
 
@@ -24,7 +28,7 @@ const provider = new FilesystemSignerProvider<ed25519Signer>("/Users/mark/.near-
 
 //const provider = new FireblocksSignerProvider(apiKey, apiSecret, vaultId);
 
-const accountId = "testing.testnet";
+const accountId = "testing2.testnet";
 const stakingPoolAccount = "restake.near";
 
 const testnetSigner = await provider.getSigner(accountId);
@@ -32,7 +36,7 @@ const testnetSigner = await provider.getSigner(accountId);
 const nearSigner = new NEARSigner(testnetSigner, accountId, networks["testnet"]);
 const protocol = NEARProtocol.INSTANCE;
 
-const txid = protocol.createStakeTransaction(nearSigner, stakingPoolAccount, ntoy(10n)).then(async (rawTxn) => {
+const txid = await protocol.createStakeTransaction(nearSigner, stakingPoolAccount, ntoy(10n)).then(async (rawTxn) => {
     const stxn = await nearSigner.signTransaction(rawTxn);
     return await protocol.broadcastSimple(stxn);
 });
