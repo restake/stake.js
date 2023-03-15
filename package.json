@@ -25,6 +25,12 @@
       "require": "./dist/cjs/core/protocol/avalanche/index.js",
       "types": "./dist/esm/core/protocol/avalanche/index.d.ts"
     },
+    "./core/protocol/ethereum": {
+        "import": "./dist/esm/core/protocol/ethereum/index.js",
+        "default": "./dist/esm/core/protocol/ethereum/index.js",
+        "require": "./dist/cjs/core/protocol/ethereum/index.js",
+        "types": "./dist/esm/core/protocol/ethereum/index.d.ts"
+      },
     "./core/protocol/near": {
       "import": "./dist/esm/core/protocol/near/index.js",
       "default": "./dist/esm/core/protocol/near/index.js",
@@ -73,6 +79,7 @@
     "bech32": "2.0.0",
     "bn.js": "5.2.1",
     "bs58": "5.0.0",
-    "near-api-js": "1.1.0"
+    "near-api-js": "1.1.0",
+    "web3": "^1.8.2"
   }
 }
