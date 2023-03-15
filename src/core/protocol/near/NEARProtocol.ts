@@ -87,12 +87,13 @@ export class NEARProtocol implements TransactionBroadcaster<SignedTransaction, N
     }
 
     /**
+     * Create NEAR unstaking transaction
      *
-     * @param signer
-     * @param stakingPoolAccountId
-     * @param amount
-     * @param block
-     * @returns
+     * @param signer NEAR signer. Needed to determine access key nonce and block hash
+     * @param stakingPoolAccountId Staking pool account ID
+     * @param amount Amount of tokens to unstake from the staking pool
+     * @param block Block to attach this transaction to
+     * @returns Unsigned transaction
      */
     async createUnstakeTransaction(
         signer: NEARSigner,
@@ -110,12 +111,13 @@ export class NEARProtocol implements TransactionBroadcaster<SignedTransaction, N
     }
 
     /**
+     * Create NEAR deposit transaction
      *
-     * @param signer
-     * @param stakingPoolAccountId
-     * @param depositAmount
-     * @param block
-     * @returns
+     * @param signer NEAR signer. Needed to determine access key nonce and block hash
+     * @param stakingPoolAccountId Staking pool account ID
+     * @param depositAmount Amount to deposit to the staking pool
+     * @param block Block to attach this transaction to
+     * @returns Unisigned transaction
      */
     async createDepositTransaction(
         signer: NEARSigner,
@@ -130,12 +132,13 @@ export class NEARProtocol implements TransactionBroadcaster<SignedTransaction, N
     }
 
     /**
+     * Create NEAR withdraw transaction
      *
-     * @param signer
-     * @param stakingPoolAccountId
-     * @param withdrawAmount
-     * @param block
-     * @returns
+     * @param signer NEAR signer. Needed to determine access key nonce and block hash
+     * @param stakingPoolAccountId Staking pool account ID
+     * @param withdrawAmount Amount to withdraw from the staking pool
+     * @param block Block to attach this transaction to
+     * @returns Unsigned transaction
      */
     async createWithdrawTransaction(
         signer: NEARSigner,
@@ -171,6 +174,11 @@ export class NEARProtocol implements TransactionBroadcaster<SignedTransaction, N
     }
 }
 
+/**
+ *
+ * @param blockHash
+ * @returns
+ */
 function decodeBlockHash(blockHash: string): Uint8Array {
     const decoded = b64Decode(blockHash);
 

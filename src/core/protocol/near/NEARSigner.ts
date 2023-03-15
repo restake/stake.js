@@ -97,10 +97,16 @@ export class NEARSigner extends NearAPISigner implements Signer<Uint8Array, Uint
         });
     }
 
+    /**
+     * Gets current accountId
+     */
     get accountId(): string {
         return this.#accountId;
     }
 
+    /**
+     * Gets current NEAR network
+     */
     get network(): NEARNetwork {
         return this.#network;
     }
