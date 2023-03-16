@@ -8,6 +8,9 @@
 
         "allowImportingTsExtensions": false,
         "emitDeclarationOnly": false,
-        "noEmit": false
+        "noEmit": false,
+
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
     }
 }
