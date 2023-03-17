@@ -1,14 +1,13 @@
 import { EthereumNetwork } from "./network.js";
-import Web3 from "web3";
-import { Transaction as UnsignedTx } from "web3-core";
-import { Transaction as Tx } from "web3-core"; //TO-DO Look into unsigned and signed transaction imports
+import { Transaction as EthTransaction } from "@ethereumjs/tx";
 
 export type Transaction = {
     network: EthereumNetwork;
-    payload: UnsignedTx;
+    payload: EthTransaction;
 };
 
 export type SignedTransaction = {
     transaction: Transaction;
-    payload: Tx;
+    // Has fields v, r, s set
+    payload: EthTransaction;
 }
