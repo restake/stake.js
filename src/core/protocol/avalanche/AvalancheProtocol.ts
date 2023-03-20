@@ -17,13 +17,16 @@ export class AvalancheProtocol implements TransactionBroadcaster<SignedTransacti
     }
 
     /**
-     * Constructs a staking transaction
+     * Constructs a staking transaction.
+     *
+     * See https://docs.avax.network/nodes/validate/staking for staking parameters
      *
      * @param signer Avalanche signer.
      * @param validator Validator account ID
      * @param amount Amount to delegate to the validator
      * @param dateStart Starting time date-time object of the validation process
      * @param dateEnd Starting time date-time object of the validation process
+     * @param rewardLockTime The locktime field created in the resulting reward outputs
      * @returns Unsigned transaction
      */
     async buildStakeTransaction(
@@ -32,6 +35,7 @@ export class AvalancheProtocol implements TransactionBroadcaster<SignedTransacti
         amount: string,
         dateStart: Date,
         dateEnd: Date,
+        rewardLockTime?: BigInt,
     ): Promise<Transaction> {
         const pAddress: string = await signer.deriveAddress("P");
         const pChain = signer.client.PChain();
@@ -43,7 +47,6 @@ export class AvalancheProtocol implements TransactionBroadcaster<SignedTransacti
         const utxoFeeAddress =[pAddress];
         const utxoFeeLeftoverAddress = [pAddress];
         const rewardAddress = [pAddress];
-        const locktime = new BN("2");
 
         const tx = await pChain.buildAddDelegatorTx(
             utxos,
@@ -51,11 +54,11 @@ export class AvalancheProtocol implements TransactionBroadcaster<SignedTransacti
             utxoFeeAddress,
             utxoFeeLeftoverAddress,
             validator,
-            new BN(dateStart.getTime()/1000),
-            new BN(dateEnd.getTime()/1000),
+            new BN(dateStart.getTime() / 1000),
+            new BN(dateEnd.getTime() / 1000),
             new BN(amount),
             rewardAddress,
-            locktime,
+            rewardLockTime ? new BN(rewardLockTime.toString()) : undefined,
             undefined,
             undefined,
             undefined,
