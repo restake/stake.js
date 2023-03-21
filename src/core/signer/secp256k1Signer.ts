@@ -3,6 +3,7 @@ import type { Signer } from "./signer.js";
 
 import { bytesToHex } from "@noble/curves/abstract/utils";
 import { secp256k1, schnorr } from "@noble/curves/secp256k1";
+import type { SignOpts } from "@noble/curves/abstract/weierstrass";
 
 export class secp256k1PublicKey implements PublicKey {
     // TODO
@@ -73,6 +74,10 @@ export class secp256k1Signer implements Signer<Uint8Array> {
     async sign(payload: Uint8Array): Promise<Uint8Array> {
         const result = schnorr.sign(payload, this.#privateKey.getPrivateBytes());
         return Promise.resolve(result);
+    }
+
+    async edSign(payload: Uint8Array, opts?: SignOpts): Promise<{ r: bigint, s: bigint, recovery?: number }> {
+        return secp256k1.sign(payload, this.#privateKey.getPrivateBytes(), opts);
     }
 
     async verify(payload: Uint8Array, signature: Uint8Array): Promise<boolean> {
