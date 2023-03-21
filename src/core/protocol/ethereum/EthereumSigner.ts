@@ -2,21 +2,18 @@ import { EthereumNetwork } from "./network.js";
 import { secp256k1Signer } from "../../signer/secp256k1Signer.js";
 import { Transaction, SignedTransaction } from "./EthereumTransaction.js";
 import { TransactionSigner } from "../../signer/TransactionSigner.js";
-import type { Signer } from "../../signer/signer.js";
+import { jsonrpc } from "../../utils/http.js";
 
-import Web3 from "web3";
-import { BlockTransactionString } from "web3-eth";
-import { Account } from "web3-core";
+export type EthereumFetchResponse = string;
+export type EthereumBlockResponse = {gasLimit: string};
 
 export class EthereumSigner implements TransactionSigner<Transaction, SignedTransaction>  {
     #parent: secp256k1Signer;
     #network: EthereumNetwork;
-    #ethereum: Web3
 
     constructor(parent: secp256k1Signer, network: EthereumNetwork) {
         this.#parent = parent;
         this.#network = network;
-        this.#ethereum = new Web3(network.rpcUrl);
     }
 
     async signTransaction(transaction: Transaction): Promise<SignedTransaction> {
@@ -33,22 +30,34 @@ export class EthereumSigner implements TransactionSigner<Transaction, SignedTran
         return this.#network;
     }
 
-    async fetchNonce(): Promise<number> {
-        const address = await this.getAddress();
-        const nonce = await this.#ethereum.eth.getTransactionCount(address);
+    async fetchNonce(senderAddress: string): Promise<BigInt> {
+        const endpoint = new URL(this.#network.rpcUrl);
+        const nonce = await jsonrpc<EthereumFetchResponse>(endpoint, "eth_getTransactionCount", [
+            senderAddress,
+            "latest",
+        ]);
 
-        return nonce;
+        return BigInt(nonce);
     }
 
-    async fetchBlockHash(): Promise<BlockTransactionString> {
-        const block = await this.#ethereum.eth.getBlock("latest");
-        return block;
+    async fetchGasPrice(): Promise<BigInt> {
+        const endpoint = new URL(this.#network.rpcUrl);
+        const gasPrice = await jsonrpc<EthereumFetchResponse>(endpoint, "eth_gasPrice", []);
+
+        return BigInt(gasPrice);
+    }
+
+    async fetchBlockHash(blockNumber: string): Promise<EthereumBlockResponse> {
+        const endpoint = new URL(this.#network.rpcUrl);
+        return jsonrpc<EthereumBlockResponse>(endpoint, "eth_getBlockByNumber", [
+            blockNumber,
+            true,
+        ]);
     }
 
     async getAddress(): Promise<string> {
-        const privateKey = new TextDecoder("utf-8").decode(this.#parent.getPrivateBytes());
-        const address = this.#ethereum.eth.accounts.privateKeyToAccount(privateKey);
-
-        return address.address;
+        return this.#parent.getPublicKey()
+            .then((publicKey) => publicKey.address())
+            .then((addr) => "0x" + addr);
     }
 }
