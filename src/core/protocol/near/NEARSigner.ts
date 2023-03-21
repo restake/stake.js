@@ -4,13 +4,12 @@ import { jsonrpc } from "../../utils/http.js";
 import { SignedTransaction, Transaction } from "./NEARTransaction.js";
 import { signTransaction } from "near-api-js/lib/transaction.js";
 import { TransactionSigner } from "../../signer/TransactionSigner.js";
-import type { Signer } from "../../signer/signer.js";
 
 import bs58 from "bs58";
 import { Near, Signer as NearAPISigner } from "near-api-js";
 import { PublicKey as NEARPublicKey, Signature } from "near-api-js/lib/utils/key_pair.js";
 
-export class NEARSigner extends NearAPISigner implements Signer<Uint8Array, Uint8Array>, TransactionSigner<Transaction, SignedTransaction> {
+export class NEARSigner extends NearAPISigner implements TransactionSigner<Transaction, SignedTransaction> {
     #parent: ed25519Signer;
     #network: NEARNetwork;
     #accountId: string;
@@ -30,14 +29,6 @@ export class NEARSigner extends NearAPISigner implements Signer<Uint8Array, Uint
             networkId: network.id,
             nodeUrl: network.rpcUrl,
         });
-    }
-
-    async sign(payload: Uint8Array): Promise<Uint8Array> {
-        return this.#parent.sign(payload);
-    }
-
-    verify(payload: Uint8Array, signature: Uint8Array): Promise<boolean> {
-        return this.#parent.verify(payload, signature);
     }
 
     async signTransaction(transaction: Transaction): Promise<SignedTransaction> {
