@@ -46,7 +46,6 @@ export class AvalancheSigner implements TransactionSigner<Transaction, SignedTra
 
     private static getClient(rpcUrl: string, network: string, networkId: number): Avalanche {
         const url = new URL(rpcUrl);
-
         const client = new Avalanche(
             url.hostname,
             parseInt(url.port),
@@ -56,11 +55,6 @@ export class AvalancheSigner implements TransactionSigner<Transaction, SignedTra
             undefined,
             network,
         );
-
-        // @ts-ignore
-        client.setRequestConfig("validateStatus", (status) => {
-            return true;
-        });
 
         return client;
     }
