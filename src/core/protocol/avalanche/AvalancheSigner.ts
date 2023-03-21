@@ -3,9 +3,8 @@ import { secp256k1Signer } from "../../signer/secp256k1Signer.js";
 import { Transaction, SignedTransaction } from "./AvalancheTransaction.js";
 import { TransactionSigner } from "../../signer/TransactionSigner.js";
 
-import { Avalanche } from "avalanche";
+import { Avalanche, Buffer } from "avalanche";
 import { bech32 } from "bech32";
-import { Buffer } from "buffer/index.js";
 
 export class AvalancheSigner implements TransactionSigner<Transaction, SignedTransaction>  {
     #parent: secp256k1Signer;
@@ -29,7 +28,7 @@ export class AvalancheSigner implements TransactionSigner<Transaction, SignedTra
 
     async signTransaction(transaction: Transaction): Promise <SignedTransaction>{
         const pKeyChain = this.#avalanche.PChain().keyChain();
-        const signedTxn = transaction.payload.sign(pKeyChain)
+        const signedTxn = transaction.payload.sign(pKeyChain);
 
         return {
             transaction,
