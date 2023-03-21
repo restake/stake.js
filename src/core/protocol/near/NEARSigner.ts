@@ -6,7 +6,7 @@ import { signTransaction } from "near-api-js/lib/transaction.js";
 import { TransactionSigner } from "../../signer/TransactionSigner.js";
 
 import bs58 from "bs58";
-import { Near, Signer as NearAPISigner } from "near-api-js";
+import { Signer as NearAPISigner } from "near-api-js";
 import { PublicKey as NEARPublicKey, Signature } from "near-api-js/lib/utils/key_pair.js";
 
 export class NEARSigner extends NearAPISigner implements TransactionSigner<Transaction, SignedTransaction> {
@@ -14,7 +14,6 @@ export class NEARSigner extends NearAPISigner implements TransactionSigner<Trans
     #network: NEARNetwork;
     #accountId: string;
     #currentNonce: BigInt | null = null;
-    #near: Near;
 
     // Flag to update nonce
     #dirtyState: boolean = false;
@@ -25,10 +24,6 @@ export class NEARSigner extends NearAPISigner implements TransactionSigner<Trans
         this.#parent = parent;
         this.#accountId = accountId;
         this.#network = network;
-        this.#near = new Near({
-            networkId: network.id,
-            nodeUrl: network.rpcUrl,
-        });
     }
 
     async signTransaction(transaction: Transaction): Promise<SignedTransaction> {
