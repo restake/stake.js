@@ -23,7 +23,7 @@ export class AvalancheSigner implements TransactionSigner<Transaction, SignedTra
     }
 
     async deriveAddress(chainID: string): Promise<string> {
-        const publicKey = await this.#parent.getPublicKey();
+        const publicKey = this.#parent.getPublicKey();
         const networkID = this.#network.id;
         return `${chainID}-${bech32.encode(networkID, publicKey.getBytes())}`;
     }

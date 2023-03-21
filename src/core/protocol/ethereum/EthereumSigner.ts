@@ -83,8 +83,6 @@ export class EthereumSigner implements TransactionSigner<Transaction, SignedTran
     }
 
     async getAddress(): Promise<string> {
-        return this.#parent.getPublicKey()
-            .then((publicKey) => publicKey.address())
-            .then((addr) => "0x" + addr);
+        return "0x" + this.#parent.getPublicKey().address();
     }
 }

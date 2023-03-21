@@ -1,19 +1,19 @@
 export interface PublicKey {
-    address(): Promise<string>;
+    address(): string;
 }
 
 export interface PublicKeyContainer<P = PublicKey> {
-    getPublicKey(): Promise<P>;
+    getPublicKey(): P;
 }
 
 export interface PrivateKey<P = PublicKey> extends PublicKeyContainer<P> {
-    
+
 }
 
 export interface PrivateKeyContainer<K = PrivateKey<unknown>> {
-    getPrivateKey(): Promise<K>;
+    getPrivateKey(): K;
 }
 
 export interface KeyPair<P = PublicKey, K = PrivateKey<P>> extends PublicKeyContainer<P>, PrivateKeyContainer<K> {
-    
+
 }

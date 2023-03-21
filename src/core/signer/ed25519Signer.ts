@@ -20,8 +20,8 @@ export class ed25519PublicKey implements PublicKey {
         return this.#bytes;
     }
 
-    address(): Promise<string> {
-        return Promise.resolve(bytesToHex(this.#bytes));
+    address(): string {
+        return bytesToHex(this.#bytes);
     }
 }
 
@@ -38,8 +38,8 @@ export class ed25519PrivateKey implements PrivateKey<ed25519PublicKey> {
         this.#publicKey = new ed25519PublicKey(ed25519.getPublicKey(this.#bytes));
     }
 
-    getPublicKey(): Promise<ed25519PublicKey> {
-        return Promise.resolve(this.#publicKey);
+    getPublicKey(): ed25519PublicKey {
+        return this.#publicKey;
     }
 
     getPrivateBytes(): Uint8Array {
@@ -54,12 +54,12 @@ export class ed25519KeyPair implements KeyPair<ed25519PublicKey, ed25519PrivateK
         this.#privateKey = privateKey;
     }
 
-    getPublicKey(): Promise<ed25519PublicKey> {
+    getPublicKey(): ed25519PublicKey {
         return this.#privateKey.getPublicKey();
     }
 
-    getPrivateKey(): Promise<ed25519PrivateKey> {
-        return Promise.resolve(this.#privateKey);
+    getPrivateKey(): ed25519PrivateKey {
+        return this.#privateKey;
     }
 }
 
@@ -82,7 +82,7 @@ export class ed25519Signer implements Signer<Uint8Array> {
         return Promise.resolve(result);
     }
 
-    async getPublicKey(): Promise<ed25519PublicKey> {
+    getPublicKey(): ed25519PublicKey {
         return this.#privateKey.getPublicKey();
     }
 }
