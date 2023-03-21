@@ -4,8 +4,9 @@ import { Transaction, SignedTransaction } from "./EthereumTransaction.js";
 import { TransactionSigner } from "../../signer/TransactionSigner.js";
 import { jsonrpc } from "../../utils/http.js";
 
-export type EthereumFetchResponse = string;
-export type EthereumBlockResponse = {gasLimit: string};
+export type EthereumBlockResponse = {
+    gasLimit: string;
+};
 
 export class EthereumSigner implements TransactionSigner<Transaction, SignedTransaction>  {
     #parent: secp256k1Signer;
@@ -30,11 +31,11 @@ export class EthereumSigner implements TransactionSigner<Transaction, SignedTran
         return this.#network;
     }
 
-    async fetchNonce(senderAddress: string): Promise<BigInt> {
+    async fetchNonce(senderAddress: string, block: number | "latest" | "earliest" | "pending" = "latest"): Promise<BigInt> {
         const endpoint = new URL(this.#network.rpcUrl);
-        const nonce = await jsonrpc<EthereumFetchResponse>(endpoint, "eth_getTransactionCount", [
+        const nonce = await jsonrpc<string>(endpoint, "eth_getTransactionCount", [
             senderAddress,
-            "latest",
+            block,
         ]);
 
         return BigInt(nonce);
@@ -42,7 +43,7 @@ export class EthereumSigner implements TransactionSigner<Transaction, SignedTran
 
     async fetchGasPrice(): Promise<BigInt> {
         const endpoint = new URL(this.#network.rpcUrl);
-        const gasPrice = await jsonrpc<EthereumFetchResponse>(endpoint, "eth_gasPrice", []);
+        const gasPrice = await jsonrpc<string>(endpoint, "eth_gasPrice", []);
 
         return BigInt(gasPrice);
     }
