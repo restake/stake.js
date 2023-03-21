@@ -9,8 +9,8 @@ export class secp256k1PublicKey implements PublicKey {
     #bytes: Uint8Array;
 
     constructor(bytes: Uint8Array) {
-        if (bytes.byteLength !== 32) {
-            throw new Error("Expected 32 bytes, got " + bytes.byteLength);
+        if (bytes.byteLength !== 33) {
+            throw new Error("Expected 33 bytes, got " + bytes.byteLength);
         }
 
         this.#bytes = bytes;
