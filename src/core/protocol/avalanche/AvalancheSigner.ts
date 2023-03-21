@@ -6,7 +6,6 @@ import { TransactionSigner } from "../../signer/TransactionSigner.js";
 import { Avalanche, Buffer } from "avalanche";
 import { bech32 } from "bech32";
 import { sha256 } from "@noble/hashes/sha256";
-import { bytesToHex } from "@noble/curves/abstract/utils";
 
 export class AvalancheSigner implements TransactionSigner<Transaction, SignedTransaction>  {
     #parent: secp256k1Signer;
@@ -34,7 +33,7 @@ export class AvalancheSigner implements TransactionSigner<Transaction, SignedTra
 
         /*
         const txBuffer = transaction.payload.toBuffer();
-        const message = bytesToHex(sha256(txBuffer));
+        const message = sha256(txBuffer);
         */
 
         return {
