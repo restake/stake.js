@@ -2,32 +2,33 @@ import { BlockFinality, NEARNetwork, isFinality } from "./network.js";
 import { ed25519Signer } from "../../signer/ed25519Signer.js";
 import { jsonrpc } from "../../utils/http.js";
 import { SignedTransaction, Transaction } from "./NEARTransaction.js";
-import { signTransaction } from "near-api-js/lib/transaction.js";
 import { TransactionSigner } from "../../signer/TransactionSigner.js";
 
 import bs58 from "bs58";
 import { Signer as NearAPISigner } from "near-api-js";
+import { signTransaction as nearSignTransaction } from "near-api-js/lib/transaction.js";
 import { PublicKey as NEARPublicKey, Signature } from "near-api-js/lib/utils/key_pair.js";
 
-export class NEARSigner extends NearAPISigner implements TransactionSigner<Transaction, SignedTransaction> {
+export class NEARSigner implements TransactionSigner<Transaction, SignedTransaction> {
     #parent: ed25519Signer;
     #network: NEARNetwork;
     #accountId: string;
     #currentNonce: BigInt | null = null;
+    #signerImpl: NearAPISignerImpl;
+    #nPublicKey: NEARPublicKey | undefined;
 
     // Flag to update nonce
     #dirtyState: boolean = false;
 
     constructor(parent: ed25519Signer, accountId: string, network: NEARNetwork) {
-        super();
-
         this.#parent = parent;
         this.#accountId = accountId;
         this.#network = network;
+        this.#signerImpl = new NearAPISignerImpl(this, this.nearPublicKey, this.#parent.sign);
     }
 
     async signTransaction(transaction: Transaction): Promise<SignedTransaction> {
-        const [_raw, signedTxn] = await signTransaction(transaction.payload, this);
+        const [_raw, signedTxn] = await nearSignTransaction(transaction.payload, this.#signerImpl);
         this.#dirtyState = true;
         return {
             transaction,
@@ -98,9 +99,28 @@ export class NEARSigner extends NearAPISigner implements TransactionSigner<Trans
     }
 
     async nearPublicKey(): Promise<NEARPublicKey> {
-        const publicKey = await this.#parent.getPublicKey();
-        const np = NEARPublicKey.fromString("ed25519:" + bs58.encode(publicKey.getBytes()));
-        return np;
+        let np: NEARPublicKey | undefined;
+        if ((np = this.#nPublicKey) === undefined) {
+            const publicKey = await this.#parent.getPublicKey();
+            np = this.#nPublicKey = NEARPublicKey.fromString("ed25519:" + bs58.encode(publicKey.getBytes()));
+        }
+
+        return np!;
+    }
+}
+
+class NearAPISignerImpl extends NearAPISigner {
+    #getPublicKeyFn: () => Promise<NEARPublicKey>;
+    #signFn: (msg: Uint8Array) => Promise<Uint8Array>;
+
+    constructor(
+        delegate: NEARSigner,
+        getPublicKeyFn: () => Promise<NEARPublicKey>,
+        signFn: (msg: Uint8Array) => Promise<Uint8Array>,
+    ) {
+        super();
+        this.#getPublicKeyFn = getPublicKeyFn;
+        this.#signFn = signFn;
     }
 
     createKey(accountId: string, networkId?: string | undefined): Promise<NEARPublicKey> {
@@ -108,12 +128,12 @@ export class NEARSigner extends NearAPISigner implements TransactionSigner<Trans
     }
 
     getPublicKey(accountId?: string | undefined, networkId?: string | undefined): Promise<NEARPublicKey> {
-        return this.nearPublicKey();
+        return this.#getPublicKeyFn();
     }
 
     async signMessage(message: Uint8Array, accountId?: string | undefined, networkId?: string | undefined): Promise<Signature> {
-        const publicKey = await this.nearPublicKey();
-        const signature = await this.#parent.sign(message);
+        const publicKey = await this.#getPublicKeyFn();
+        const signature = await this.#signFn(message);
 
         return {
             signature,
