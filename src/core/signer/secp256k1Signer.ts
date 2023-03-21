@@ -21,8 +21,8 @@ export class secp256k1PublicKey implements PublicKey {
         return this.#bytes;
     }
 
-    address(): Promise<string> {
-        return Promise.resolve(bytesToHex(this.#bytes));
+    address(): string {
+        return bytesToHex(this.#bytes);
     }
 }
 
@@ -39,8 +39,8 @@ export class secp256k1PrivateKey implements PrivateKey<secp256k1PublicKey> {
         this.#publicKey = new secp256k1PublicKey(secp256k1.getPublicKey(this.#bytes));
     }
 
-    getPublicKey(): Promise<secp256k1PublicKey> {
-        return Promise.resolve(this.#publicKey);
+    getPublicKey(): secp256k1PublicKey {
+        return this.#publicKey;
     }
 
     getPrivateBytes(): Uint8Array {
@@ -55,12 +55,12 @@ export class secp256k1KeyPair implements KeyPair<secp256k1PublicKey, secp256k1Pr
         this.#privateKey = privateKey;
     }
 
-    getPublicKey(): Promise<secp256k1PublicKey> {
+    getPublicKey(): secp256k1PublicKey {
         return this.#privateKey.getPublicKey();
     }
 
-    getPrivateKey(): Promise<secp256k1PrivateKey> {
-        return Promise.resolve(this.#privateKey);
+    getPrivateKey(): secp256k1PrivateKey {
+        return this.#privateKey;
     }
 }
 
@@ -87,7 +87,7 @@ export class secp256k1Signer implements Signer<Uint8Array> {
         return Promise.resolve(result);
     }
 
-    async getPublicKey(): Promise<secp256k1PublicKey> {
+    getPublicKey(): secp256k1PublicKey {
         return this.#privateKey.getPublicKey();
     }
 

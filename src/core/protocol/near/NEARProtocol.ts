@@ -40,10 +40,9 @@ export class NEARProtocol implements TransactionBroadcaster<SignedTransaction, N
 
         const blockHashRaw = decodeBlockHash(blockHash);
         const nonceBN = BNFromBigInt(nonce);
-        const publicKey = await signer.nearPublicKey();
 
         const action = functionCall(methodName, args, gas, depositAmount ? BNFromBigInt(depositAmount) : ZERO);
-        const payload = transactions.createTransaction(signer.accountId, publicKey, contact, nonceBN, [action], blockHashRaw);
+        const payload = transactions.createTransaction(signer.accountId, signer.nearPublicKey, contact, nonceBN, [action], blockHashRaw);
 
         return {
             payload,
