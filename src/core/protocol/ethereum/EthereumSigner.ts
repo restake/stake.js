@@ -4,8 +4,6 @@ import { Transaction, SignedTransaction } from "./EthereumTransaction.js";
 import { TransactionSigner } from "../../signer/TransactionSigner.js";
 import { jsonrpc } from "../../utils/http.js";
 
-import { Transaction as EthTransaction } from "@ethereumjs/tx";
-
 export type EthereumBlockResponse = {
     gasLimit: string;
 };
@@ -20,32 +18,8 @@ export class EthereumSigner implements TransactionSigner<Transaction, SignedTran
     }
 
     async signTransaction(transaction: Transaction): Promise<SignedTransaction> {
-        const chainId = BigInt(transaction.network.chainId);
-
-        const msg = transaction.payload.getMessageToSign(true);
-        const { r, s, recovery } = await this.#parent.edSign(msg, {});
-        if (!recovery) {
-            throw new Error("No recovery value obtained from signature");
-        }
-
-        const bRecovery = BigInt(recovery);
-        const v = (chainId === undefined || chainId === null)
-            ? bRecovery + 27n
-            : bRecovery + 35n + (chainId * 2n);
-
-
-        const { nonce, gasLimit, to, value, data, type } = transaction.payload;
-        const signedTxn = EthTransaction.fromTxData({
-            nonce,
-            gasLimit,
-            to,
-            value,
-            data,
-            v: v - 27n,
-            r,
-            s,
-            type,
-        });
+        const privateKey = Buffer.from(this.#parent.getPrivateBytes());
+        const signedTxn = transaction.payload.sign(privateKey);
 
         return {
             transaction,
