@@ -4,7 +4,7 @@ import { FilesystemSignerProvider, FireblocksSignerProvider } from "@restake/sta
 import { EthereumProtocol, EthereumSigner, networks } from "@restake/staking-sdk/core/protocol/ethereum";
 import { EthereumBroadcastResponse } from "@restake/staking-sdk/core/protocol/ethereum";
 
-const receiveAddress = "0x80E44E1562e2Df92bB6ae08f7c1c5721Ce8d3B24"
+const receiveAddress = "0x233D6D1515ca00233c27d736Fe752FF7744A3691"
 const amount = 5000000000000000000n
 
 
