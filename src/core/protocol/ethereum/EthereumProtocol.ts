@@ -5,6 +5,8 @@ import { TransactionBroadcaster } from "../../network/broadcaster.js";
 import { Transaction as EthTransaction } from "@ethereumjs/tx";
 import { Common }  from "@ethereumjs/common";
 import { encode as b64Encode, decode as b64Decode } from "../../utils/base64.js";
+import { ethers } from "ethers";
+import { Contract } from "ethers";
 
 
 export type EthereumBroadcastResponse = string;
@@ -52,6 +54,90 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
             network: signer.network,
         };
     };
+
+    async stake(
+        signer: EthereumSigner,
+        validatorPublickey: string,
+        amount: BigInt,
+        withdrawalCredentials: string,
+        validatorSignature: string,
+    ): Promise<Transaction> {
+        const senderAddress = await signer.getAddress();
+        const gasPrice = await signer.fetchGasPrice();
+        const block = await signer.fetchBlockHash("latest");
+        const nonce = await signer.fetchNonce(senderAddress);
+        const chainId = signer.network.chainId;
+        const ethProvider = new ethers.providers.JsonRpcProvider(signer.network.rpcUrl);
+
+        const chainParams = {
+            name: signer.network.id,
+            networkId: chainId,
+            chainId: chainId,
+            url: signer.network.rpcUrl,
+        };
+
+        const customCommon = Common.custom(chainParams);
+
+        const depositAbi = [
+            {
+            "inputs": [
+                {
+                "internalType": "bytes",
+                "name": "pubkey",
+                "type": "bytes"
+                },
+                {
+                "internalType": "bytes",
+                "name": "withdrawal_credentials",
+                "type": "bytes"
+                },
+                {
+                "internalType": "bytes",
+                "name": "signature",
+                "type": "bytes"
+                },
+                {
+                "internalType": "bytes32",
+                "name": "data_root_value",
+                "type": "bytes32"
+                }
+            ],
+            "name": "deposit",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+            }
+        ];
+
+        const contractAddress = "0x00000000219ab540356cBB839Cbe05303d7705Fa";
+        const contract = new Contract(contractAddress, depositAbi, ethProvider);
+        const data_root_value = "dataroot" // WHAT IS THIS
+
+        const txParams = {
+            nonce: "0x" + nonce.toString(16),
+            gasPrice: "0x" + gasPrice.toString(16),
+            gasLimit: block.gasLimit,
+            to: contractAddress,
+            value: amount.toString(16),
+            data: contract.interface.encodeFunctionData(
+            "deposit",
+            [
+                validatorPublickey,
+                withdrawalCredentials,
+                validatorSignature,
+                data_root_value, // WHAT IS THIS
+            ]
+            )
+        };
+
+        const payload = EthTransaction.fromTxData(txParams, { common: customCommon });
+
+        return {
+            payload,
+            network: signer.network,
+        };
+    }
+
 
 
 
