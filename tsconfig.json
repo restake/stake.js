@@ -11,6 +11,7 @@
 =======
     "compilerOptions": {
         "moduleResolution": "bundler",
+        "module": "ESNext",
         "target": "ESNext",
 >>>>>>> b0cd9af (Initial commit)
         "declaration": true,
