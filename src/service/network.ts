@@ -1,5 +1,7 @@
 import type { StakingService } from "./staking.js";
 
+export type NetworkName = "mainnet" | "testnet";
+
 export type RawRPCNetworkConfig = {
     rpcEndpoint: string;
 };
@@ -9,7 +11,7 @@ export function isRawRPCNetworkConfig(t: NetworkConfig[keyof StakingService]): t
 }
 
 export type NamedNetworkConfig = {
-    networkName: string;
+    networkName: NetworkName;
 };
 
 export function isNamedNetworkConfig(t: NetworkConfig[keyof StakingService]): t is NamedNetworkConfig {

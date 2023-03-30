@@ -1,4 +1,4 @@
-import { NetworkConfig } from "./network.js";
+import { NetworkName, NetworkConfig } from "./network.js";
 import { createProxy } from "./staking.proxy.js";
 import { AvalancheStakingProtocol, NEARStakingProtocol, EthereumStakingProtocol } from "../protocol/interfaces/index.js";
 
@@ -9,8 +9,26 @@ export class StakingService {
     #ethereum: EthereumStakingProtocol;
     #near: NEARStakingProtocol;
 
-    constructor(networkConfig?: NetworkConfig) {
-        this.#networkConfig = networkConfig ?? {};
+    constructor(
+        networkConfigOrNetworkName?: NetworkConfig | NetworkName,
+        networkConfig?: NetworkConfig,
+    ) {
+        // Don't allow users to pass network config twice
+        if (typeof networkConfigOrNetworkName === "object" && networkConfig) {
+            throw new Error("Pass network config object only once");
+        }
+
+        const hasNetworkName = typeof networkConfigOrNetworkName === "string";
+        const networkName = hasNetworkName ? networkConfigOrNetworkName : "mainnet";
+        if (hasNetworkName) {
+            this.#networkConfig = {
+                avalanche: networkConfig?.avalanche ?? hasNetworkName ? { networkName } : undefined,
+                ethereum: networkConfig?.ethereum ?? hasNetworkName ? { networkName } : undefined,
+                near: networkConfig?.near ?? hasNetworkName ? { networkName } : undefined,
+            };
+        } else {
+            this.#networkConfig = networkConfigOrNetworkName ?? {};
+        }
 
         this.#avalanche = createProxy<AvalancheStakingProtocol>("@restake/staking-sdk/protocol/avalanche", [
             this.#networkConfig
