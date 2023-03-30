@@ -73,11 +73,11 @@
       "require": "./dist/cjs/protocol/near/index.js",
       "types": "./dist/esm/protocol/near/index.d.ts"
     },
-    "./wallet/provider/filesystem": {
-      "import": "./dist/esm/wallet/provider/filesystem/index.js",
-      "default": "./dist/esm/wallet/provider/filesystem/index.js",
-      "require": "./dist/cjs/wallet/provider/filesystem/index.js",
-      "types": "./dist/esm/wallet/provider/filesystem/index.d.ts"
+    "./wallet/filesystem": {
+      "import": "./dist/esm/wallet/filesystem/index.js",
+      "default": "./dist/esm/wallet/filesystem/index.js",
+      "require": "./dist/cjs/wallet/filesystem/index.js",
+      "types": "./dist/esm/wallet/filesystem/index.d.ts"
     }
   },
   "scripts": {
