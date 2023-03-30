@@ -62,10 +62,10 @@ export class EthereumSigner implements TransactionSigner<Transaction, SignedTran
     getAddress(checksum: boolean = true): string {
         // Ethereum address derivation requires the removal of the first x04 byte
         const publicKeyBytes = this.#parent.getPublicKey().getBytes().slice(1);
-        const keccakHash = keccak_256(publicKeyBytes);
+        const keccakBytes = keccak_256(publicKeyBytes);
 
         // Ethereum specification outlines that last 20 bytes of keccak256 hash are used for address derivation
-        const hexAddress = bytesToHex(keccakHash.slice(12));
+        const hexAddress = bytesToHex(keccakBytes.slice(12));
 
         return checksum ? toChecksumAddress(hexAddress) : "0x" + hexAddress;
     }
