@@ -1,4 +1,8 @@
-export function createProxy<T extends object>(importPath: string, methods: Array<keyof T>): T {
+export function createProxy<T extends object>(
+    importPath: string,
+    constructorArgs: Array<unknown>,
+    methods: Array<keyof T>,
+): T {
     const methodSet = new Set<keyof T>(methods);
 
     let instancePromise: Promise<T> | undefined;
@@ -32,7 +36,7 @@ export function createProxy<T extends object>(importPath: string, methods: Array
                         throw new Error(`Expected module '${importPath}' default export to be a class`);
                     }
 
-                    constructedInstance = new ctor() as T;
+                    constructedInstance = new ctor(...constructorArgs) as T;
                     if (Object.hasOwn(constructedInstance as object, "init")) {
                         // @ts-ignore
                         await constructedInstance.init();

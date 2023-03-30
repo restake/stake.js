@@ -79,8 +79,8 @@ class StakingService {
     }
 }
 
-const fireblocksWallet = new FilesystemWallet("~/.near-credentials") //FireblocksWallet(apiKey, apiSecret, vaultId)
+const fireblocksWallet = new FilesystemWallet("~/keys/mikroskeem.json") //FireblocksWallet(apiKey, apiSecret, vaultId)
 const rstk = new StakingService();
-const txId = rstk.near.stake(fireblocksWallet, 1000n, "mikroskeem.testnet", "restake")
+const txId = rstk.near.stake(fireblocksWallet, 1000n, "restake.poolv1.near")
 
 "https://validator.restake.net/api/v1/${vid}" // ->
