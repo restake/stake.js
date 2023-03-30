@@ -1,20 +1,30 @@
+import { NetworkConfig } from "./network.js";
 import { createProxy } from "./staking.proxy.js";
 import { AvalancheStakingProtocol, NEARStakingProtocol, EthereumStakingProtocol } from "../protocol/interfaces/index.js";
 
 export class StakingService {
-    //#identifier: string;
+    #networkConfig: NetworkConfig;
+
     #avalanche: AvalancheStakingProtocol;
     #ethereum: EthereumStakingProtocol;
     #near: NEARStakingProtocol;
 
-    constructor() {
+    constructor(networkConfig?: NetworkConfig) {
+        this.#networkConfig = networkConfig ?? {};
+
         this.#avalanche = createProxy<AvalancheStakingProtocol>("@restake/staking-sdk/protocol/avalanche", [
+            this.#networkConfig
+        ], [
             "stake",
         ]);
         this.#ethereum = createProxy<EthereumStakingProtocol>("@restake/staking-sdk/protocol/ethereum", [
+            this.#networkConfig
+        ], [
             "stake",
         ]);
         this.#near = createProxy<NEARStakingProtocol>("@restake/staking-sdk/protocol/near", [
+            this.#networkConfig
+        ], [
             "stake",
             "unstake",
             "withdraw",
