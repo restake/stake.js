@@ -25,8 +25,8 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
     ): Promise<Transaction>{
         const senderAddress = await signer.getAddress();
         const gasPrice = await signer.fetchGasPrice();
-        const block = await signer.fetchBlockHash("pending");
-        const nonce = await signer.fetchNonce(senderAddress, "pending");
+        const block = await signer.fetchBlockHash("latest");
+        const nonce = await signer.fetchNonce(senderAddress);
         const chainId = signer.network.chainId;
 
         const chainParams = {
@@ -65,8 +65,8 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
     ): Promise<Transaction> {
         const senderAddress = await signer.getAddress();
         const gasPrice = await signer.fetchGasPrice();
-        const block = await signer.fetchBlockHash("pending");
-        const nonce = await signer.fetchNonce(senderAddress, "pending");
+        const block = await signer.fetchBlockHash("latest");
+        const nonce = await signer.fetchNonce(senderAddress);
         const chainId = signer.network.chainId;
         const ethProvider = new ethers.providers.JsonRpcProvider(signer.network.rpcUrl);
 
