@@ -25,8 +25,8 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
     ): Promise<Transaction>{
         const senderAddress = await signer.getAddress();
         const gasPrice = await signer.fetchGasPrice();
-        const block = await signer.fetchBlockHash("latest");
-        const nonce = await signer.fetchNonce(senderAddress);
+        const block = await signer.fetchBlockHash("pending");
+        const nonce = await signer.fetchNonce(senderAddress, "pending");
         const chainId = signer.network.chainId;
 
         const chainParams = {
@@ -61,11 +61,12 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
         amount: BigInt,
         withdrawalCredentials: string,
         validatorSignature: string,
+        depositDataRoot: string,
     ): Promise<Transaction> {
         const senderAddress = await signer.getAddress();
         const gasPrice = await signer.fetchGasPrice();
-        const block = await signer.fetchBlockHash("latest");
-        const nonce = await signer.fetchNonce(senderAddress);
+        const block = await signer.fetchBlockHash("pending");
+        const nonce = await signer.fetchNonce(senderAddress, "pending");
         const chainId = signer.network.chainId;
         const ethProvider = new ethers.providers.JsonRpcProvider(signer.network.rpcUrl);
 
@@ -75,7 +76,6 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
             chainId: chainId,
             url: signer.network.rpcUrl,
         };
-
         const customCommon = Common.custom(chainParams);
 
         const depositAbi = [
@@ -109,23 +109,27 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
             }
         ];
 
-        const contractAddress = "0x00000000219ab540356cBB839Cbe05303d7705Fa";
+        const contractAddress = "0x7479Fc54515ef6Ef1C649d54e91520F51ff77982";
         const contract = new Contract(contractAddress, depositAbi, ethProvider);
-        const data_root_value = "dataroot" // WHAT IS THIS
+
+        const validatorPublickeyBytes = Buffer.from(validatorPublickey.replace(/^0x/, ""), "hex");
+        const withdrawalCredentialsBytes = Buffer.from(withdrawalCredentials.replace(/^0x/, ""), "hex");
+        const validatorSignatureBytes = Buffer.from(validatorSignature.replace(/^0x/, ""), "hex");
+        const depositDataRootBytes32 = ethers.utils.hexZeroPad(depositDataRoot, 32);
 
         const txParams = {
             nonce: "0x" + nonce.toString(16),
             gasPrice: "0x" + gasPrice.toString(16),
             gasLimit: block.gasLimit,
             to: contractAddress,
-            value: amount.toString(16),
+            value: "0x" + amount.toString(16),
             data: contract.interface.encodeFunctionData(
             "deposit",
             [
-                validatorPublickey,
-                withdrawalCredentials,
-                validatorSignature,
-                data_root_value, // WHAT IS THIS
+                validatorPublickeyBytes,
+                withdrawalCredentialsBytes,
+                validatorSignatureBytes,
+                depositDataRootBytes32,
             ]
             )
         };

@@ -9,9 +9,10 @@ export class secp256k1PublicKey implements PublicKey {
     // TODO
     #bytes: Uint8Array;
 
+    // This constructor only accepts 65-byte long uncompressed public key
     constructor(bytes: Uint8Array) {
-        if (bytes.byteLength !== 33) {
-            throw new Error("Expected 33 bytes, got " + bytes.byteLength);
+        if (bytes.byteLength !== 65) {
+            throw new Error("Expected 65 bytes, got " + bytes.byteLength);
         }
 
         this.#bytes = bytes;
@@ -21,6 +22,7 @@ export class secp256k1PublicKey implements PublicKey {
         return this.#bytes;
     }
 
+    // TODO: Verify if all protocols are using the same address derivation algorithm
     address(): string {
         return bytesToHex(this.#bytes);
     }
@@ -36,7 +38,7 @@ export class secp256k1PrivateKey implements PrivateKey<secp256k1PublicKey> {
         }
 
         this.#bytes = bytes;
-        this.#publicKey = new secp256k1PublicKey(secp256k1.getPublicKey(this.#bytes));
+        this.#publicKey = new secp256k1PublicKey(secp256k1.getPublicKey(this.#bytes, false));
     }
 
     getPublicKey(): secp256k1PublicKey {
@@ -87,6 +89,7 @@ export class secp256k1Signer implements Signer<Uint8Array> {
         return Promise.resolve(result);
     }
 
+    //Compressed public key
     getPublicKey(): secp256k1PublicKey {
         return this.#privateKey.getPublicKey();
     }

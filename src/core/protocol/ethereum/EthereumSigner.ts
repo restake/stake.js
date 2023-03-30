@@ -1,6 +1,7 @@
 import { EthereumNetwork } from "./network.js";
 import { secp256k1Signer } from "../../signer/secp256k1Signer.js";
 import { keccak_256 } from "@noble/hashes/sha3";
+import { bytesToHex } from "@noble/curves/abstract/utils";
 import { Transaction, SignedTransaction } from "./EthereumTransaction.js";
 import { TransactionSigner } from "../../signer/TransactionSigner.js";
 import { jsonrpc } from "../../utils/http.js";
@@ -39,7 +40,7 @@ export class EthereumSigner implements TransactionSigner<Transaction, SignedTran
             senderAddress,
             block,
         ]);
-
+        
         return BigInt(nonce);
     }
 
@@ -58,33 +59,12 @@ export class EthereumSigner implements TransactionSigner<Transaction, SignedTran
         ]);
     }
 
-    async getDataRoot(pubkey: string, withdrawal_credentials: string, amount: bigint, signature: string): Promise<Uint8Array> {
-
-        const pubkeyBytes = Buffer.from(pubkey.slice(2), 'hex');
-        const pubkeyRoot = keccak_256(pubkeyBytes);
-
-        const signatureBytes = Buffer.from(signature.slice(2), 'hex');
-        const signatureRoot = keccak_256(Buffer.concat([
-        keccak_256(signatureBytes.slice(0, 64)),
-        keccak_256(Buffer.concat([signatureBytes.slice(64), Buffer.alloc(32)]))
-        ]));
-
-        const withdrawalCredentialBytes = Buffer.from(withdrawal_credentials.slice(2), 'hex');
-        const amountBytes = Buffer.alloc(8);
-        amountBytes.writeBigUInt64BE(amount);
-
-        const depositDataBytes = Buffer.concat([
-        pubkeyRoot,
-        withdrawalCredentialBytes,
-        amountBytes,
-        signatureRoot
-        ]);
-        const depositDataRoot = keccak_256(depositDataBytes);
-
-        return depositDataRoot;
-    }
-
     async getAddress(): Promise<string> {
-        return "0x" + this.#parent.getPublicKey().address();
+        // Ethereum address derivation requires the removal of the first x04 byte
+        const publicKeyBytes = this.#parent.getPublicKey().getBytes().slice(1);
+        const keccakHash = keccak_256(publicKeyBytes);
+
+        // Ethereum specification outlines that last 20 bytes of keccak256 hash are used for address derivation
+        return "0x" + bytesToHex(keccakHash.slice(12));
     }
 }

@@ -52,6 +52,7 @@ export async function jsonrpc<T>(endpoint: URL | string, method: string, params:
     // TODO: proper error handling
     const { error, result } = responseBody;
     if (error) {
+        console.log(error);
         throw new Error(error);
     }
 
