@@ -5,7 +5,6 @@ import { TransactionSigner } from "../../signer/TransactionSigner.js";
 
 import { Avalanche, Buffer } from "avalanche";
 import { bech32 } from "bech32";
-import { sha256 } from "@noble/hashes/sha256";
 
 export class AvalancheSigner implements TransactionSigner<Transaction, SignedTransaction>  {
     #parent: secp256k1Signer;
