@@ -67,7 +67,7 @@ export class EthereumSigner implements TransactionSigner<Transaction, SignedTran
         // Ethereum specification outlines that last 20 bytes of keccak256 hash are used for address derivation
         const hexAddress = bytesToHex(keccakHash.slice(12));
 
-        return "0x" + (checksum ? toChecksumAddress(hexAddress) : hexAddress);
+        return checksum ? toChecksumAddress(hexAddress) : "0x" + hexAddress;
     }
 }
 
@@ -90,5 +90,5 @@ export function toChecksumAddress(address: string): string {
         }
     }
 
-    return computedAddress;
+    return "0x" + computedAddress;
 }
