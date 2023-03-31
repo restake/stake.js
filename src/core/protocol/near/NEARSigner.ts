@@ -20,9 +20,9 @@ export class NEARSigner implements TransactionSigner<Transaction, SignedTransact
     // Flag to update nonce
     #dirtyState: boolean = false;
 
-    constructor(parent: ed25519Signer, accountId: string, network: NEARNetwork) {
+    constructor(parent: ed25519Signer, accountId: string | null | undefined, network: NEARNetwork) {
         this.#parent = parent;
-        this.#accountId = accountId;
+        this.#accountId = typeof accountId === "string" ? accountId : parent.getPublicKey().address();
         this.#network = network;
         this.#nPublicKey = NEARPublicKey.fromString("ed25519:" + bs58.encode(this.#parent.getPublicKey().getBytes()));
         this.#signerImpl = new NearAPISignerImpl(() => this.#nPublicKey, this.#parent.sign);
