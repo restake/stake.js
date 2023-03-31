@@ -40,7 +40,7 @@ export class EthereumSigner implements TransactionSigner<Transaction, SignedTran
             senderAddress,
             block,
         ]);
-        
+
         return BigInt(nonce);
     }
 
@@ -59,12 +59,38 @@ export class EthereumSigner implements TransactionSigner<Transaction, SignedTran
         ]);
     }
 
-    async getAddress(): Promise<string> {
+    async getAddress(checksum: boolean = true): Promise<string> {
         // Ethereum address derivation requires the removal of the first x04 byte
         const publicKeyBytes = this.#parent.getPublicKey().getBytes().slice(1);
         const keccakHash = keccak_256(publicKeyBytes);
 
         // Ethereum specification outlines that last 20 bytes of keccak256 hash are used for address derivation
-        return "0x" + bytesToHex(keccakHash.slice(12));
+        const hexAddress = bytesToHex(keccakHash.slice(12));
+
+        return "0x" + (checksum ? toChecksumAddress(hexAddress) : hexAddress);
     }
+}
+
+// https://github.com/ethereum/EIPs/blob/master/EIPS/eip-55.md
+export function toChecksumAddress(address: string): string {
+    if (address.startsWith("0x") || address.startsWith("0X")) {
+        address = address.substring(2);
+    }
+
+    const addressHash = bytesToHex(keccak_256(new TextEncoder().encode(address)));
+    let computedAddress = "";
+    for (let i = 0; i < address.length; i++) {
+        const chr = address[i];
+        const code = chr.charCodeAt(0);
+
+        // target [a; f]
+        if (code >= 97 && code <= 102) {
+            const nibble = parseInt(addressHash[i], 16);
+            computedAddress += nibble > 7 ? chr.toUpperCase() : chr;
+        } else {
+            computedAddress += chr;
+        }
+    }
+
+    return computedAddress;
 }
