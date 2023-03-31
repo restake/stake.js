@@ -1,12 +1,13 @@
+import { BlockFinality } from "./network.js";
 import { EthereumNetwork } from "./network.js";
+import { jsonrpc } from "../../utils/http.js";
 import { secp256k1Signer } from "../../signer/secp256k1Signer.js";
-import { keccak_256 } from "@noble/hashes/sha3";
-import { bytesToHex } from "@noble/curves/abstract/utils";
 import { Transaction, SignedTransaction } from "./EthereumTransaction.js";
 import { TransactionSigner } from "../../signer/TransactionSigner.js";
-import { BlockFinality } from "./network.js";
-import { jsonrpc } from "../../utils/http.js";
 
+import { bytesToHex } from "@noble/curves/abstract/utils";
+import { keccak_256 } from "@noble/hashes/sha3";
+import { Transaction as EthTransaction } from "@ethereumjs/tx";
 
 export type EthereumBlockResponse = {
     number: string;
@@ -23,8 +24,26 @@ export class EthereumSigner implements TransactionSigner<Transaction, SignedTran
     }
 
     async signTransaction(transaction: Transaction): Promise<SignedTransaction> {
-        const privateKey = Buffer.from(this.#parent.getPrivateBytes());
-        const signedTxn = transaction.payload.sign(privateKey);
+        const message = transaction.payload.getMessageToSign(true);
+        const { r, s, recovery } = await this.#parent.edSign(message);
+
+        // TODO: not sure if defaulting to 0 is fine.
+        const bRecovery = recovery ? BigInt(recovery) : 0n;
+
+        // While we'll always have chainId available, keep this condition here to
+        // possibly support this use-case.
+        const chainId = transaction.network.chainId;
+        const v = chainId === undefined ? bRecovery + 27n : bRecovery + 35n + BigInt(chainId) * 2n;
+
+        // Reconstruct transaction
+        const signedTxn =  EthTransaction.fromTxData({
+            ...transaction.payload,
+            v,
+            r,
+            s,
+        }, {
+            common: transaction.payload.common,
+        });
 
         return {
             transaction,
