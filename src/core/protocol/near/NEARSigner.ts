@@ -124,7 +124,7 @@ class NearAPISignerImpl extends NearAPISigner {
     }
 
     async signMessage(message: Uint8Array, accountId?: string | undefined, networkId?: string | undefined): Promise<Signature> {
-        const publicKey = await this.#getPublicKeyFn();
+        const publicKey = this.#getPublicKeyFn();
         const signature = await this.#signFn(message);
 
         return {
