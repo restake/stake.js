@@ -22,9 +22,9 @@ export class NEARSigner implements TransactionSigner<Transaction, SignedTransact
 
     constructor(parent: ed25519Signer, accountId: string | null | undefined, network: NEARNetwork) {
         this.#parent = parent;
-        this.#accountId = typeof accountId === "string" ? accountId : parent.getPublicKey().asHex();
+        this.#accountId = typeof accountId === "string" ? accountId : parent.publicKey.asHex();
         this.#network = network;
-        this.#nPublicKey = NEARPublicKey.fromString("ed25519:" + bs58.encode(this.#parent.getPublicKey().getBytes()));
+        this.#nPublicKey = NEARPublicKey.fromString("ed25519:" + bs58.encode(this.#parent.publicKey.bytes));
         this.#signerImpl = new NearAPISignerImpl(() => this.#nPublicKey, this.#parent.sign);
     }
 

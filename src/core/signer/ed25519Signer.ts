@@ -16,7 +16,7 @@ export class ed25519PublicKey implements PublicKey {
         this.#bytes = bytes;
     }
 
-    getBytes(): Uint8Array {
+    get bytes(): Uint8Array {
         return this.#bytes;
     }
 
@@ -38,7 +38,7 @@ export class ed25519PrivateKey implements PrivateKey<ed25519PublicKey> {
         this.#publicKey = new ed25519PublicKey(ed25519.getPublicKey(this.#bytes));
     }
 
-    getPublicKey(): ed25519PublicKey {
+    get publicKey(): ed25519PublicKey {
         return this.#publicKey;
     }
 
@@ -54,11 +54,11 @@ export class ed25519KeyPair implements KeyPair<ed25519PublicKey, ed25519PrivateK
         this.#privateKey = privateKey;
     }
 
-    getPublicKey(): ed25519PublicKey {
-        return this.#privateKey.getPublicKey();
+    get publicKey(): ed25519PublicKey {
+        return this.#privateKey.publicKey;
     }
 
-    getPrivateKey(): ed25519PrivateKey {
+    get privateKey(): ed25519PrivateKey {
         return this.#privateKey;
     }
 }
@@ -76,13 +76,13 @@ export class ed25519Signer implements Signer<Uint8Array> {
     }
 
     async verify(payload: Uint8Array, signature: Uint8Array): Promise<boolean> {
-        const publicKey = this.#privateKey.getPublicKey();
+        const publicKey = this.#privateKey.publicKey;
 
-        const result = ed25519.verify(signature, payload, publicKey.getBytes());
+        const result = ed25519.verify(signature, payload, publicKey.bytes);
         return Promise.resolve(result);
     }
 
-    getPublicKey(): ed25519PublicKey {
-        return this.#privateKey.getPublicKey();
+    get publicKey(): ed25519PublicKey {
+        return this.#privateKey.publicKey;
     }
 }

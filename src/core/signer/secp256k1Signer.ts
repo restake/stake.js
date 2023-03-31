@@ -33,7 +33,7 @@ export class secp256k1PublicKey implements PublicKey {
      *
      * @returns secp256k1 uncompressed public key bytes
      */
-    getBytes(): Uint8Array {
+    get bytes(): Uint8Array {
         return this.#bytes;
     }
 
@@ -42,7 +42,7 @@ export class secp256k1PublicKey implements PublicKey {
      *
      * @returns secp256k1 compressed public key bytes
      */
-    getCompressedBytes(): Uint8Array {
+    get compressedBytes(): Uint8Array {
         return this.#compressedBytes;
     }
 
@@ -67,7 +67,7 @@ export class secp256k1PrivateKey implements PrivateKey<secp256k1PublicKey> {
         );
     }
 
-    getPublicKey(): secp256k1PublicKey {
+    get publicKey(): secp256k1PublicKey {
         return this.#publicKey;
     }
 
@@ -83,11 +83,11 @@ export class secp256k1KeyPair implements KeyPair<secp256k1PublicKey, secp256k1Pr
         this.#privateKey = privateKey;
     }
 
-    getPublicKey(): secp256k1PublicKey {
-        return this.#privateKey.getPublicKey();
+    get publicKey(): secp256k1PublicKey {
+        return this.#privateKey.publicKey;
     }
 
-    getPrivateKey(): secp256k1PrivateKey {
+    get privateKey(): secp256k1PrivateKey {
         return this.#privateKey;
     }
 }
@@ -109,14 +109,14 @@ export class secp256k1Signer implements Signer<Uint8Array> {
     }
 
     async verify(payload: Uint8Array, signature: Uint8Array): Promise<boolean> {
-        const publicKey = this.#privateKey.getPublicKey();
+        const publicKey = this.#privateKey.publicKey;
 
-        const result = secp256k1.verify(signature, payload, publicKey.getBytes());
+        const result = secp256k1.verify(signature, payload, publicKey.bytes);
         return Promise.resolve(result);
     }
 
-    getPublicKey(): secp256k1PublicKey {
-        return this.#privateKey.getPublicKey();
+    get publicKey(): secp256k1PublicKey {
+        return this.#privateKey.publicKey;
     }
 
     // TODO: Remove
