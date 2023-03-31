@@ -8,18 +8,42 @@ import type { SignOpts } from "@noble/curves/abstract/weierstrass";
 export class secp256k1PublicKey implements PublicKey {
     // TODO
     #bytes: Uint8Array;
+    #compressedBytes: Uint8Array;
 
     // This constructor only accepts 65-byte long uncompressed public key
-    constructor(bytes: Uint8Array) {
-        if (bytes.byteLength !== 65) {
-            throw new Error("Expected 65 bytes, got " + bytes.byteLength);
+    // TODO: compute compressed public key from uncompressed one
+    constructor(
+        uncompressedBytes: Uint8Array,
+        compressedBytes: Uint8Array,
+    ) {
+        if (uncompressedBytes.byteLength !== 65) {
+            throw new Error("Expected 65 bytes, got " + uncompressedBytes.byteLength);
         }
 
-        this.#bytes = bytes;
+        if (compressedBytes.byteLength !== 33) {
+            throw new Error("Expected 33 bytes, got " + compressedBytes.byteLength);
+        }
+
+        this.#bytes = uncompressedBytes;
+        this.#compressedBytes = compressedBytes;
     }
 
+    /**
+     * Gets secp256k1 uncompressed public key bytes
+     *
+     * @returns secp256k1 uncompressed public key bytes
+     */
     getBytes(): Uint8Array {
         return this.#bytes;
+    }
+
+    /**
+     * Gets secp256k1 compressed public key bytes
+     *
+     * @returns secp256k1 compressed public key bytes
+     */
+    getCompressedBytes(): Uint8Array {
+        return this.#compressedBytes;
     }
 
     // TODO: Verify if all protocols are using the same address derivation algorithm
@@ -38,7 +62,10 @@ export class secp256k1PrivateKey implements PrivateKey<secp256k1PublicKey> {
         }
 
         this.#bytes = bytes;
-        this.#publicKey = new secp256k1PublicKey(secp256k1.getPublicKey(this.#bytes, false));
+        this.#publicKey = new secp256k1PublicKey(
+            secp256k1.getPublicKey(this.#bytes, false),
+            secp256k1.getPublicKey(this.#bytes, true),
+        );
     }
 
     getPublicKey(): secp256k1PublicKey {
