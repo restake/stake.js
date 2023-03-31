@@ -37,7 +37,7 @@ export class AvalancheProtocol implements TransactionBroadcaster<SignedTransacti
         dateEnd: Date,
         rewardLockTime?: BigInt,
     ): Promise<Transaction> {
-        const pAddress: string = await signer.deriveAddress("P");
+        const pAddress: string = signer.deriveAddress("P");
         const pChain = signer.client.PChain();
         const chainId = pChain.getBlockchainID();
 
