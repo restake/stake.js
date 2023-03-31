@@ -1,13 +1,12 @@
 import { jsonrpc } from "../../utils/http.js";
-import { EthereumSigner } from "./EthereumSigner.js";
+import { EthereumBlockResponse, EthereumSigner } from "./EthereumSigner.js";
 import { SignedTransaction, Transaction } from "./EthereumTransaction.js";
 import { TransactionBroadcaster } from "../../network/broadcaster.js";
 import { Transaction as EthTransaction } from "@ethereumjs/tx";
 import { Common }  from "@ethereumjs/common";
-import { encode as b64Encode, decode as b64Decode } from "../../utils/base64.js";
 import { ethers } from "ethers";
 import { Contract } from "ethers";
-
+import { BlockFinality } from "./network.js";
 
 export type EthereumBroadcastResponse = string;
 
@@ -18,16 +17,29 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
         // no-op
     }
 
+    private async fetchParameters(
+        signer: EthereumSigner,
+        block: BlockFinality | BigInt,
+    ): Promise<{ ethBlock: EthereumBlockResponse, gasPrice: BigInt, nonce: BigInt }> {
+        const senderAddress = signer.getAddress();
+        const [ ethBlock, gasPrice ] = await Promise.all([ signer.fetchBlock(block), signer.fetchGasPrice() ]);
+        const nonce = await signer.fetchNonce(senderAddress, typeof block === "bigint" ? block : BigInt(ethBlock.number));
+
+        return {
+            ethBlock,
+            gasPrice,
+            nonce
+        };
+    }
+
     async transfer(
         signer: EthereumSigner,
         receiveAddress: string,
         amount: BigInt,
+        block: BlockFinality | BigInt = "latest",
     ): Promise<Transaction>{
-        const senderAddress = await signer.getAddress();
-        const gasPrice = await signer.fetchGasPrice();
-        const block = await signer.fetchBlockHash("latest");
-        const nonce = await signer.fetchNonce(senderAddress);
         const chainId = signer.network.chainId;
+        const { ethBlock, gasPrice, nonce } = await this.fetchParameters(signer, block);
 
         const chainParams = {
             name: 'testnetwork',
@@ -42,7 +54,7 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
         const txParams = {
             nonce: "0x" + nonce.toString(16),
             gasPrice: "0x" + gasPrice.toString(16),
-            gasLimit: block.gasLimit,
+            gasLimit: ethBlock.gasLimit,
             to: receiveAddress,
             value: "0x" + amount.toString(16),
         }
@@ -62,12 +74,11 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
         withdrawalCredentials: string,
         validatorSignature: string,
         depositDataRoot: string,
+        block: BlockFinality | BigInt = "latest",
     ): Promise<Transaction> {
-        const senderAddress = await signer.getAddress();
-        const gasPrice = await signer.fetchGasPrice();
-        const block = await signer.fetchBlockHash("latest");
-        const nonce = await signer.fetchNonce(senderAddress);
         const chainId = signer.network.chainId;
+        const { ethBlock, gasPrice, nonce } = await this.fetchParameters(signer, block);
+
         const ethProvider = new ethers.providers.JsonRpcProvider(signer.network.rpcUrl);
 
         const chainParams = {
@@ -120,7 +131,7 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
         const txParams = {
             nonce: "0x" + nonce.toString(16),
             gasPrice: "0x" + gasPrice.toString(16),
-            gasLimit: block.gasLimit,
+            gasLimit: ethBlock.gasLimit,
             to: contractAddress,
             value: "0x" + amount.toString(16),
             data: contract.interface.encodeFunctionData(
@@ -141,9 +152,6 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
             network: signer.network,
         };
     }
-
-
-
 
     /**
      * Broadcast the transaction using sendRawTransaction JSON-RPC method.
