@@ -4,7 +4,7 @@ export interface AvalancheNetwork {
     networkId: number;
 }
 
-export const networks: { [id: string]: AvalancheNetwork } = {
+export const _networks = {
     "mainnet": {
         id: "mainnet",
         rpcUrl: "https://api.avax.network",
@@ -15,4 +15,8 @@ export const networks: { [id: string]: AvalancheNetwork } = {
         rpcUrl: "https://api.avax-test.network",
         networkId: 5,
     },
-};
+} as const;
+
+export type AvalancheNetworkID = keyof typeof _networks;
+
+export const networks = _networks as { [id in AvalancheNetworkID]: AvalancheNetwork };

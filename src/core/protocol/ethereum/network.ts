@@ -4,12 +4,11 @@ export interface EthereumNetwork {
     chainId: number;
 }
 
-export const networks: { [id: string]: EthereumNetwork } = {
+const _networks = {
     "mainnet": {
         id: "mainnet",
         rpcUrl: "https://rpc.ankr.com/eth",
         chainId: 1,
-
     },
     "testnet": {
         id: "goerli",
@@ -17,8 +16,12 @@ export const networks: { [id: string]: EthereumNetwork } = {
         chainId: 5,
     },
     "ganache": {
-        id: "testnetwork",
-        rpcUrl: "HTTP://127.0.0.1:7545",
+        id: "ganache",
+        rpcUrl: "http://127.0.0.1:7545",
         chainId: 1337,
     },
-};
+} as const;
+
+export type EthereumNetworkID = keyof typeof _networks;
+
+export const networks = _networks as { [id in EthereumNetworkID]: EthereumNetwork };
