@@ -59,7 +59,7 @@ export class EthereumSigner implements TransactionSigner<Transaction, SignedTran
         ]);
     }
 
-    async getAddress(checksum: boolean = true): Promise<string> {
+    getAddress(checksum: boolean = true): string {
         // Ethereum address derivation requires the removal of the first x04 byte
         const publicKeyBytes = this.#parent.getPublicKey().getBytes().slice(1);
         const keccakHash = keccak_256(publicKeyBytes);
