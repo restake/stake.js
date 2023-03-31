@@ -3,7 +3,7 @@ export interface NEARNetwork {
     rpcUrl: string;
 }
 
-export const networks: { [id: string]: NEARNetwork } = {
+const _networks = {
     "mainnet": {
         id: "mainnet",
         rpcUrl: "https://rpc.mainnet.near.org",
@@ -12,7 +12,11 @@ export const networks: { [id: string]: NEARNetwork } = {
         id: "testnet",
         rpcUrl: "https://rpc.testnet.near.org",
     },
-};
+} as const;
+
+export type NEARNetworkID = keyof typeof _networks;
+
+export const networks = _networks as { [id in NEARNetworkID]: NEARNetwork };
 
 export type BlockFinality = "optimistic" | "final";
 
