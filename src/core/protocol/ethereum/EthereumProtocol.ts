@@ -7,6 +7,7 @@ import { Common }  from "@ethereumjs/common";
 import { ethers } from "ethers";
 import { Contract } from "ethers";
 import { BlockFinality } from "./network.js";
+import { hexToBytes } from "@noble/curves/abstract/utils";
 
 export type EthereumBroadcastResponse = string;
 
@@ -123,9 +124,10 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
         const contractAddress = "0x7479Fc54515ef6Ef1C649d54e91520F51ff77982";
         const contract = new Contract(contractAddress, depositAbi, ethProvider);
 
-        const validatorPublickeyBytes = Buffer.from(validatorPublickey.replace(/^0x/, ""), "hex");
-        const withdrawalCredentialsBytes = Buffer.from(withdrawalCredentials.replace(/^0x/, ""), "hex");
-        const validatorSignatureBytes = Buffer.from(validatorSignature.replace(/^0x/, ""), "hex");
+
+        const validatorPublickeyBytes = hexToBytes(validatorPublickey.replace(/^0x/, ""));
+        const withdrawalCredentialsBytes = hexToBytes(withdrawalCredentials.replace(/^0x/, ""));
+        const validatorSignatureBytes = hexToBytes(validatorSignature.replace(/^0x/, ""));
         const depositDataRootBytes32 = ethers.utils.hexZeroPad(depositDataRoot, 32);
 
         const txParams = {
