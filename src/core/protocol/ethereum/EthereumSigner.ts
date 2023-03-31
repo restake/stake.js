@@ -4,10 +4,12 @@ import { keccak_256 } from "@noble/hashes/sha3";
 import { bytesToHex } from "@noble/curves/abstract/utils";
 import { Transaction, SignedTransaction } from "./EthereumTransaction.js";
 import { TransactionSigner } from "../../signer/TransactionSigner.js";
+import { BlockFinality } from "./network.js";
 import { jsonrpc } from "../../utils/http.js";
 
 
 export type EthereumBlockResponse = {
+    number: string;
     gasLimit: string;
 };
 
@@ -34,11 +36,11 @@ export class EthereumSigner implements TransactionSigner<Transaction, SignedTran
         return this.#network;
     }
 
-    async fetchNonce(senderAddress: string, block: number | "latest" | "earliest" | "pending" = "latest"): Promise<BigInt> {
+    async fetchNonce(senderAddress: string, block: BigInt | BlockFinality = "latest"): Promise<BigInt> {
         const endpoint = new URL(this.#network.rpcUrl);
         const nonce = await jsonrpc<string>(endpoint, "eth_getTransactionCount", [
             senderAddress,
-            block,
+            typeof block === "bigint" ? block.toString(16) : block,
         ]);
 
         return BigInt(nonce);
@@ -51,11 +53,11 @@ export class EthereumSigner implements TransactionSigner<Transaction, SignedTran
         return BigInt(gasPrice);
     }
 
-    async fetchBlockHash(blockNumber: string): Promise<EthereumBlockResponse> {
+    async fetchBlock(block: BigInt | BlockFinality): Promise<EthereumBlockResponse> {
         const endpoint = new URL(this.#network.rpcUrl);
         return jsonrpc<EthereumBlockResponse>(endpoint, "eth_getBlockByNumber", [
-            blockNumber,
-            true,
+            typeof block === "bigint" ? block.toString(16) : block,
+            false,
         ]);
     }
 

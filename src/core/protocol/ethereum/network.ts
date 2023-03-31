@@ -25,3 +25,9 @@ const _networks = {
 export type EthereumNetworkID = keyof typeof _networks;
 
 export const networks = _networks as { [id in EthereumNetworkID]: EthereumNetwork };
+
+export type BlockFinality = "latest" | "earliest" | "pending";
+
+export function isFinality(block: BlockFinality | string): block is BlockFinality {
+    return block === "latest" || block === "earliest" || block === "pending";
+}
