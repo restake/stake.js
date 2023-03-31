@@ -73,14 +73,12 @@ export class EthereumSigner implements TransactionSigner<Transaction, SignedTran
 
 // https://github.com/ethereum/EIPs/blob/master/EIPS/eip-55.md
 export function toChecksumAddress(address: string): string {
-    if (address.startsWith("0x") || address.startsWith("0X")) {
-        address = address.substring(2);
-    }
+    const cleanAddress = address.toLowerCase().replace(/^0x/, "");
 
-    const addressHash = bytesToHex(keccak_256(new TextEncoder().encode(address)));
+    const addressHash = bytesToHex(keccak_256(new TextEncoder().encode(cleanAddress)));
     let computedAddress = "";
-    for (let i = 0; i < address.length; i++) {
-        const chr = address[i];
+    for (let i = 0; i < cleanAddress.length; i++) {
+        const chr = cleanAddress[i];
         const code = chr.charCodeAt(0);
 
         // target [a; f]
