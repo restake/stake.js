@@ -15,7 +15,7 @@ describe("ed25519 signer", () => {
         const privateKeyBytes = hexToBytes(privateKey);
         const signer = new ed25519Signer(new ed25519PrivateKey(privateKeyBytes));
 
-        const pk1 = signer.getPublicKey().getBytes();
+        const pk1 = signer.publicKey.bytes;
         const pk2 = ed25519.getPublicKey(privateKeyBytes);
         expect(pk1).toStrictEqual(pk2);
     });

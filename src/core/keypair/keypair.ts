@@ -3,7 +3,7 @@ export interface PublicKey {
 }
 
 export interface PublicKeyContainer<P = PublicKey> {
-    getPublicKey(): P;
+    readonly publicKey: P;
 }
 
 export interface PrivateKey<P = PublicKey> extends PublicKeyContainer<P> {
@@ -11,7 +11,7 @@ export interface PrivateKey<P = PublicKey> extends PublicKeyContainer<P> {
 }
 
 export interface PrivateKeyContainer<K = PrivateKey<unknown>> {
-    getPrivateKey(): K;
+    readonly privateKey: K;
 }
 
 export interface KeyPair<P = PublicKey, K = PrivateKey<P>> extends PublicKeyContainer<P>, PrivateKeyContainer<K> {

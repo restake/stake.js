@@ -15,11 +15,11 @@ describe("secp256k1 signer", () => {
         const privateKeyBytes = hexToBytes(privateKey);
         const signer = new secp256k1Signer(new secp256k1PrivateKey(privateKeyBytes));
 
-        const pk1 = signer.getPublicKey().getBytes();
+        const pk1 = signer.publicKey.bytes;
         const pk2 = secp256k1.getPublicKey(privateKeyBytes, false);
         expect(pk1).toStrictEqual(pk2);
 
-        const cpk1 = signer.getPublicKey().getCompressedBytes();
+        const cpk1 = signer.publicKey.compressedBytes;
         const cpk2 = secp256k1.getPublicKey(privateKeyBytes, true);
         expect(cpk1).toStrictEqual(cpk2);
     });
