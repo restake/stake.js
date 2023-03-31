@@ -115,7 +115,6 @@ export class secp256k1Signer implements Signer<Uint8Array> {
         return Promise.resolve(result);
     }
 
-    //Compressed public key
     getPublicKey(): secp256k1PublicKey {
         return this.#privateKey.getPublicKey();
     }
