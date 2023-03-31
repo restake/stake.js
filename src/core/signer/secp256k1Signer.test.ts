@@ -18,5 +18,9 @@ describe("secp256k1 signer", () => {
         const pk1 = signer.getPublicKey().getBytes();
         const pk2 = secp256k1.getPublicKey(privateKeyBytes, false);
         expect(pk1).toStrictEqual(pk2);
+
+        const cpk1 = signer.getPublicKey().getCompressedBytes();
+        const cpk2 = secp256k1.getPublicKey(privateKeyBytes, true);
+        expect(cpk1).toStrictEqual(cpk2);
     });
 });
