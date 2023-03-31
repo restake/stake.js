@@ -1,8 +1,37 @@
 import { secp256k1PrivateKey, secp256k1Signer } from "../../signer/index.js";
-import { networks, EthereumSigner, toChecksumAddress } from "./index.js";
+import { networks, EthereumSigner, toChecksumAddress, EthereumProtocol } from "./index.js";
 
-import { describe, expect, test } from "@jest/globals";
+import { describe, expect, jest, test } from "@jest/globals";
 import { hexToBytes } from "@noble/curves/abstract/utils";
+
+const rpcMethods = {
+    "eth_getBlockByNumber": async (args: unknown[]) => ({
+        number: "0xa",
+        gasLimit: "0xb",
+    }),
+    "eth_gasPrice": async (args: unknown[]) => "0xcafe",
+    "eth_getTransactionCount": async (args: unknown[]) => "0x1",
+};
+
+globalThis.fetch = jest.fn(async (input: RequestInfo | URL, init?: RequestInit | undefined): Promise<Response> => {
+    const body = init?.body;
+    if (body) {
+        const request = JSON.parse(body as string);
+        const id = request["id"];
+        const method = request["method"];
+
+        if (typeof method === "string" && method in rpcMethods) {
+            const result = await rpcMethods[method as keyof typeof rpcMethods](request["args"]);
+
+            return new Response(JSON.stringify({ jsonrpc: "2.0", id, result }), {
+                status: 200,
+            });
+        }
+    }
+
+    console.log(input, init);
+    return Promise.reject("No internet");
+});
 
 const testAccounts = [
     { privateKey: "0x63f51a686d55844eb07274ec68bae4929ef3f97209199cc281a2e125e95338c3", address: "0x133afc1CD3dB58827cFb2c5eDC691770f2C3Ae5B" },
@@ -36,6 +65,21 @@ describe("Ethereum signer", () => {
         const ethSigner = constructSigner(bytes);
 
         expect(ethSigner.getAddress()).toBe(address);
+    });
+
+    test("signs transaction properly", async () => {
+        const privateKey = testAccounts[0].privateKey;
+        const bytes = hexToBytes(privateKey.startsWith("0x") ? privateKey.substring(2) : privateKey);
+        const ethSigner = constructSigner(bytes);
+
+        const recipient = testAddresses[0].address;
+        const tx = await EthereumProtocol.INSTANCE.transfer(ethSigner, recipient, 500n, 10n);
+        const signedTx = await ethSigner.signTransaction(tx);
+
+        const expected = "f8610182cafe0b9452908400098527886e0f7030069857d2e4169ee78201f48025a04f09b0dd1817793b3a1630816aaf584fad7eeb17cbc601688dc6fe391f69b475a05a158989f3a54be1b6aeed2a161f6466c53fa5dfc0171eabb155653ccebde17a";
+        const serialized = signedTx.payload.serialize().toString("hex");
+
+        expect(serialized).toBe(expected);
     });
 });
 
