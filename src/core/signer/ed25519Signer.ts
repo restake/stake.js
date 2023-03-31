@@ -20,7 +20,7 @@ export class ed25519PublicKey implements PublicKey {
         return this.#bytes;
     }
 
-    address(): string {
+    asHex(): string {
         return bytesToHex(this.#bytes);
     }
 }

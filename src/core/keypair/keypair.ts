@@ -1,5 +1,5 @@
 export interface PublicKey {
-    address(): string;
+    asHex(): string;
 }
 
 export interface PublicKeyContainer<P = PublicKey> {

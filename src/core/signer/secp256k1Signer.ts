@@ -46,8 +46,7 @@ export class secp256k1PublicKey implements PublicKey {
         return this.#compressedBytes;
     }
 
-    // TODO: Verify if all protocols are using the same address derivation algorithm
-    address(): string {
+    asHex(): string {
         return bytesToHex(this.#bytes);
     }
 }
