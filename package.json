@@ -95,7 +95,7 @@
     "@types/elliptic": "6.4.14",
     "@types/node": "18.14.2",
     "@types/ws": "8.5.4",
-    "typescript": "5.0.0-beta"
+    "typescript": "5.0.3"
   },
   "dependencies": {
     "@ethereumjs/common": "3.1.1",
