@@ -4,7 +4,6 @@ import { jsonrpc } from "../../utils/http.js";
 import { SignedTransaction, Transaction } from "./NEARTransaction.js";
 import { TransactionSigner } from "../../signer/TransactionSigner.js";
 
-import bs58 from "bs58";
 import { Signer as NearAPISigner } from "near-api-js";
 import { signTransaction as nearSignTransaction } from "near-api-js/lib/transaction.js";
 import { PublicKey as NEARPublicKey, Signature } from "near-api-js/lib/utils/key_pair.js";
@@ -24,7 +23,7 @@ export class NEARSigner implements TransactionSigner<Transaction, SignedTransact
         this.#parent = parent;
         this.#accountId = typeof accountId === "string" ? accountId : parent.publicKey.asHex();
         this.#network = network;
-        this.#nPublicKey = NEARPublicKey.fromString("ed25519:" + bs58.encode(this.#parent.publicKey.bytes));
+        this.#nPublicKey = new NEARPublicKey({ keyType: 0, data: this.#parent.publicKey.bytes });
         this.#signerImpl = new NearAPISignerImpl(() => this.#nPublicKey, this.#parent.sign);
     }
 
