@@ -21,7 +21,7 @@ globalThis.fetch = jest.fn(async (input: RequestInfo | URL, init?: RequestInit |
         const method = request["method"];
 
         if (typeof method === "string" && method in rpcMethods) {
-            const result = await rpcMethods[method as keyof typeof rpcMethods](request["args"]);
+            const result = await rpcMethods[method as keyof typeof rpcMethods](request["params"]);
 
             return new Response(JSON.stringify({ jsonrpc: "2.0", id, result }), {
                 status: 200,
