@@ -1,30 +1,25 @@
 import type { KeyPair, PrivateKey, PublicKey } from "../keypair/keypair.js";
 import type { Signer } from "./signer.js";
 
-import { bytesToHex } from "@noble/curves/abstract/utils";
+import { bytesToHex, hexToBytes } from "@noble/curves/abstract/utils";
 import { secp256k1, schnorr } from "@noble/curves/secp256k1";
 import type { SignOpts } from "@noble/curves/abstract/weierstrass";
+import { decompressSecp256k1PublicKey } from "../utils/secp256k1.js";
 
 export class secp256k1PublicKey implements PublicKey {
     // TODO
     #bytes: Uint8Array;
     #compressedBytes: Uint8Array;
 
-    // This constructor only accepts 65-byte long uncompressed public key
-    // TODO: compute compressed public key from uncompressed one
+    // This constructor only accepts 33-byte long compressed public key
     constructor(
-        uncompressedBytes: Uint8Array,
         compressedBytes: Uint8Array,
     ) {
-        if (uncompressedBytes.byteLength !== 65) {
-            throw new Error("Expected 65 bytes, got " + uncompressedBytes.byteLength);
-        }
-
         if (compressedBytes.byteLength !== 33) {
             throw new Error("Expected 33 bytes, got " + compressedBytes.byteLength);
         }
 
-        this.#bytes = uncompressedBytes;
+        this.#bytes = hexToBytes(decompressSecp256k1PublicKey(bytesToHex(compressedBytes)));
         this.#compressedBytes = compressedBytes;
     }
 
@@ -62,7 +57,6 @@ export class secp256k1PrivateKey implements PrivateKey<secp256k1PublicKey> {
 
         this.#bytes = bytes;
         this.#publicKey = new secp256k1PublicKey(
-            secp256k1.getPublicKey(this.#bytes, false),
             secp256k1.getPublicKey(this.#bytes, true),
         );
     }
