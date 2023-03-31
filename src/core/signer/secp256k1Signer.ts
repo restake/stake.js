@@ -109,7 +109,7 @@ export class secp256k1Signer implements Signer<Uint8Array> {
     }
 
     async verify(payload: Uint8Array, signature: Uint8Array): Promise<boolean> {
-        const publicKey = await this.#privateKey.getPublicKey();
+        const publicKey = this.#privateKey.getPublicKey();
 
         const result = secp256k1.verify(signature, payload, publicKey.getBytes());
         return Promise.resolve(result);
