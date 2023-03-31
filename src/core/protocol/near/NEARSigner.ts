@@ -12,7 +12,6 @@ export class NEARSigner implements TransactionSigner<Transaction, SignedTransact
     #parent: ed25519Signer;
     #network: NEARNetwork;
     #accountId: string;
-    #nPublicKey: NEARPublicKey;
     #signerImpl: NearAPISignerImpl;
     #currentNonce: BigInt | null = null;
 
@@ -23,8 +22,7 @@ export class NEARSigner implements TransactionSigner<Transaction, SignedTransact
         this.#parent = parent;
         this.#accountId = typeof accountId === "string" ? accountId : parent.publicKey.asHex();
         this.#network = network;
-        this.#nPublicKey = new NEARPublicKey({ keyType: 0, data: this.#parent.publicKey.bytes });
-        this.#signerImpl = new NearAPISignerImpl(() => this.#nPublicKey, this.#parent.sign);
+        this.#signerImpl = new NearAPISignerImpl(() => this.nearPublicKey, this.#parent.sign);
     }
 
     async signTransaction(transaction: Transaction): Promise<SignedTransaction> {
@@ -97,7 +95,7 @@ export class NEARSigner implements TransactionSigner<Transaction, SignedTransact
     }
 
     get nearPublicKey(): NEARPublicKey {
-        return this.#nPublicKey;
+        return new NEARPublicKey({ keyType: 0, data: this.#parent.publicKey.bytes });
     }
 }
 
