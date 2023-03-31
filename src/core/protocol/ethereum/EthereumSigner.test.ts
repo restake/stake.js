@@ -31,11 +31,11 @@ function constructSigner(privateKey: Uint8Array): EthereumSigner {
 }
 
 describe("Ethereum signer", () => {
-    test.each(testAccounts)("derives address '$address' correctly", async ({ privateKey, address }) => {
+    test.each(testAccounts)("derives address '$address' correctly", ({ privateKey, address }) => {
         const bytes = hexToBytes(privateKey.startsWith("0x") ? privateKey.substring(2) : privateKey);
         const ethSigner = constructSigner(bytes);
 
-        await expect(ethSigner.getAddress()).resolves.toBe(address);
+        expect(ethSigner.getAddress()).toBe(address);
     });
 });
 
