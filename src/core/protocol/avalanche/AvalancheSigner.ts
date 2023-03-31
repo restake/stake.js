@@ -14,7 +14,7 @@ export class AvalancheSigner implements TransactionSigner<Transaction, SignedTra
     constructor(parent: secp256k1Signer, network: AvalancheNetwork) {
         this.#parent = parent;
         this.#network = network;
-        this.#avalanche = AvalancheSigner.getClient(network.id, network.rpcUrl, network.networkId);
+        this.#avalanche = AvalancheSigner.getClient(network.rpcUrl, network.id, network.networkId);
 
         const pKeyChain = this.#avalanche.PChain().keyChain();
         pKeyChain.importKey(Buffer.from(this.#parent.getPrivateBytes()));
