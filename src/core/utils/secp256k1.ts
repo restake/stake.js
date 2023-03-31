@@ -1,4 +1,4 @@
-export function decompressEthKey(compressedKey: string): string {
+export function decompressSecp256k1PublicKey(compressedKey: string): string {
     const prefix = compressedKey.slice(0,2);
     const xValue = BigInt(`0x${compressedKey.slice(2)}`);
 
