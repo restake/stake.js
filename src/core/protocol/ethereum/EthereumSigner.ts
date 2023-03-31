@@ -40,7 +40,7 @@ export class EthereumSigner implements TransactionSigner<Transaction, SignedTran
         const endpoint = new URL(this.#network.rpcUrl);
         const nonce = await jsonrpc<string>(endpoint, "eth_getTransactionCount", [
             senderAddress,
-            typeof block === "bigint" ? block.toString(16) : block,
+            typeof block === "bigint" ? "0x" + block.toString(16) : block,
         ]);
 
         return BigInt(nonce);
@@ -56,7 +56,7 @@ export class EthereumSigner implements TransactionSigner<Transaction, SignedTran
     async fetchBlock(block: BigInt | BlockFinality): Promise<EthereumBlockResponse> {
         const endpoint = new URL(this.#network.rpcUrl);
         return jsonrpc<EthereumBlockResponse>(endpoint, "eth_getBlockByNumber", [
-            typeof block === "bigint" ? block.toString(16) : block,
+            typeof block === "bigint" ? "0x" + block.toString(16) : block,
             false,
         ]);
     }
