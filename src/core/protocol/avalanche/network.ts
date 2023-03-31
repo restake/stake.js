@@ -20,3 +20,5 @@ export const _networks = {
 export type AvalancheNetworkID = keyof typeof _networks;
 
 export const networks = _networks as { [id in AvalancheNetworkID]: AvalancheNetwork };
+
+export type AvalancheChainID = "C" | "P" | "X";
