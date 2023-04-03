@@ -54,7 +54,7 @@ const testAddresses = [
 ];
 
 function constructSigner(privateKey: Uint8Array): EthereumSigner {
-    const signer = new secp256k1Signer(new secp256k1PrivateKey(privateKey));
+    const signer = new secp256k1PrivateKey(privateKey);
     const ethSigner = new EthereumSigner(signer, networks["mainnet"]);
     return ethSigner;
 }

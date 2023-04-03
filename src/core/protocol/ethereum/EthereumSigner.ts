@@ -5,9 +5,10 @@ import { secp256k1Signer } from "../../signer/secp256k1Signer.js";
 import { Transaction, SignedTransaction } from "./EthereumTransaction.js";
 import { TransactionSigner } from "../../signer/TransactionSigner.js";
 
-import { bytesToHex } from "@noble/curves/abstract/utils";
+import { bytesToHex, hexToBytes } from "@noble/curves/abstract/utils";
 import { keccak_256 } from "@noble/hashes/sha3";
 import { Transaction as EthTransaction } from "@ethereumjs/tx";
+import { decompressSecp256k1PublicKey } from "../../utils/secp256k1.js";
 
 export type EthereumBlockResponse = {
     number: string;
@@ -82,7 +83,8 @@ export class EthereumSigner implements TransactionSigner<Transaction, SignedTran
 
     getAddress(checksum: boolean = true): string {
         // Ethereum address derivation requires the removal of the first x04 byte
-        const publicKeyBytes = this.#parent.publicKey.bytes.slice(1);
+        const uncompressed = hexToBytes(decompressSecp256k1PublicKey(this.#parent.publicKey.asHex()));
+        const publicKeyBytes = uncompressed.slice(1);
         const keccakBytes = keccak_256(publicKeyBytes);
 
         // Ethereum specification outlines that last 20 bytes of keccak256 hash are used for address derivation

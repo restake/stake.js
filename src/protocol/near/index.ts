@@ -5,7 +5,7 @@ import { Wallet } from "../../index.js";
 import { NEARNetwork, NEARProtocol, NEARSigner, networks } from "../../core/protocol/near/index.js";
 import { Transaction } from "../../core/protocol/near/NEARTransaction.js";
 import FilesystemWallet from "../../wallet/filesystem/index.js";
-import { ed25519PrivateKey, ed25519PublicKey, ed25519Signer } from "../../core/signer/ed25519Signer.js";
+import { ed25519PublicKey, ed25519Signer } from "../../core/signer/ed25519Signer.js";
 
 export default class NEARStakingProvider implements NEARStakingProtocol {
     #networkConfig: NetworkConfig;
@@ -94,7 +94,6 @@ export default class NEARStakingProvider implements NEARStakingProtocol {
             ]);
 
             const publicKey = new ed25519PublicKey(rawPublicKey);
-
             const signerImpl = new DelegatingEd25519Signer(publicKey, (payload) => {
                 return fsw.sign(this.#protocolID, payload);
             });
@@ -114,7 +113,8 @@ export default class NEARStakingProvider implements NEARStakingProtocol {
 
 type SignFn = (payload: Uint8Array) => Promise<Uint8Array>;
 
-class DelegatingEd25519Signer extends ed25519Signer {
+class DelegatingEd25519Signer implements ed25519Signer {
+    readonly keyType = "ed25519";
     #publicKey: ed25519PublicKey;
     #signFn: SignFn;
 
@@ -122,17 +122,19 @@ class DelegatingEd25519Signer extends ed25519Signer {
         publicKey: ed25519PublicKey,
         signFn: SignFn,
     ) {
-        const fakePrivateKey = new ed25519PrivateKey(new Uint8Array(32));
-        super(fakePrivateKey);
         this.#publicKey = publicKey;
         this.#signFn = signFn;
     }
 
-    override async sign(payload: Uint8Array): Promise<Uint8Array> {
+    async sign(payload: Uint8Array): Promise<Uint8Array> {
         return this.#signFn(payload);
     }
 
-    override get publicKey(): ed25519PublicKey {
+    verify(payload: Uint8Array, signature: Uint8Array): Promise<boolean> {
+        throw new Error("Method not implemented.");
+    }
+
+    get publicKey(): ed25519PublicKey {
         return this.#publicKey;
     }
 }
