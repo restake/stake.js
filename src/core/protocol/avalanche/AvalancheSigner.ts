@@ -55,8 +55,8 @@ export class AvalancheSigner implements TransactionSigner<Transaction, SignedTra
 
                 // Signature length is 65 bytes
                 const signval = Buffer.from(hexToBytes([
-                    r.toString(16),
-                    s.toString(16),
+                    r.toString(16).padStart(64, "0"),
+                    s.toString(16).padStart(64, "0"),
                     (recovery ?? 0).toString(16).padStart(2, "0"),
                 ].join("")));
 
