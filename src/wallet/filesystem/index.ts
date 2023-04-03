@@ -1,10 +1,10 @@
 import { ed25519 } from "@noble/curves/ed25519";
 import { decode as b64decode } from "../../core/utils/base64.js";
-import { Wallet, __WALLET_IMPL } from "../../index.js";
+import { Wallet, __USING_CORE_SDK } from "../../index.js";
 import { readFile } from "node:fs/promises";
 
 export class FilesystemWallet implements Wallet {
-    [__WALLET_IMPL] = true;
+    [__USING_CORE_SDK] = true;
     #filePath: string;
     #loadedKeys: ProtocolKeypair[] | undefined;
 
