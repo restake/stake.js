@@ -1,6 +1,7 @@
 /**
  * Wallet contains a single keypair
  */
+export const __WALLET_IMPL = Symbol();
 export interface Wallet {
-    // TODO
+    [__WALLET_IMPL]: boolean;
 }
