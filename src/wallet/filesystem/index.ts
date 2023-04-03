@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { decode as b64decode } from "../../core/utils/base64.ts";
 import { SignerWallet, __USING_CORE_SDK } from "../../index.ts";
 import { Signer } from "../../core/signer/signer.ts";
@@ -10,6 +11,13 @@ export class FilesystemWallet implements SignerWallet {
     [__USING_CORE_SDK] = true;
     __filePath: string;
     __loadedKeys: ProtocolKeypair[] | undefined;
+=======
+import { Wallet, __WALLET_IMPL } from "../../index.js";
+
+export class FilesystemWallet implements Wallet {
+    [__WALLET_IMPL] = true;
+    #filePath: string;
+>>>>>>> 371f84b (Don't allow arbitrary object to be a wallet object for now)
 
     constructor(filePath: string) {
         this.__filePath = filePath;

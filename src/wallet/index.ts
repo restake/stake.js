@@ -3,6 +3,7 @@ import { StakeParameters } from "./stake.ts";
 /**
  * Wallet contains a single keypair
  */
+<<<<<<< HEAD
 export const __USING_CORE_SDK = Symbol();
 export interface Wallet {
     [__USING_CORE_SDK]: boolean;
@@ -28,4 +29,9 @@ export function isSignerWallet(wallet: Wallet): wallet is SignerWallet {
 
 export function isStakeWallet<P>(wallet: Wallet): wallet is StakeWallet<P> {
     return "stake" in wallet;
+=======
+export const __WALLET_IMPL = Symbol();
+export interface Wallet {
+    [__WALLET_IMPL]: boolean;
+>>>>>>> 371f84b (Don't allow arbitrary object to be a wallet object for now)
 }
