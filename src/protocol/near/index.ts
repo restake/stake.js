@@ -4,10 +4,13 @@ import { Wallet } from "../../index.js";
 
 import { NEARNetwork, NEARProtocol, NEARSigner, networks } from "../../core/protocol/near/index.js";
 import { Transaction } from "../../core/protocol/near/NEARTransaction.js";
+import FilesystemWallet from "../../wallet/filesystem/index.js";
+import { ed25519PrivateKey, ed25519PublicKey, ed25519Signer } from "../../core/signer/ed25519Signer.js";
 
 export default class NEARStakingProvider implements NEARStakingProtocol {
     #networkConfig: NetworkConfig;
     #signers: WeakMap<Wallet, NEARSigner>;
+    #protocolID = "near";
 
     constructor(networkConfig: NetworkConfig) {
         this.#networkConfig = networkConfig;
@@ -23,25 +26,25 @@ export default class NEARStakingProvider implements NEARStakingProtocol {
         stakingPoolAccountId: string,
         amount: BigInt,
     ): Promise<string> {
-        const signer = this.getSigner(wallet);
+        const signer = await this.getSigner(wallet);
         return this.signAndBroadcast(signer, NEARProtocol.INSTANCE.createStakeTransaction(signer, stakingPoolAccountId, amount, "all"));
     }
 
-    unstake(
+    async unstake(
         wallet: Wallet,
         stakingPoolAccountId: string,
         amount: BigInt | "all",
     ): Promise<string> {
-        const signer = this.getSigner(wallet);
+        const signer = await this.getSigner(wallet);
         return this.signAndBroadcast(signer, NEARProtocol.INSTANCE.createUnstakeTransaction(signer, stakingPoolAccountId, amount));
     }
 
-    withdraw(
+    async withdraw(
         wallet: Wallet,
         stakingPoolAccountId: string,
         amount: BigInt | "all",
     ): Promise<string> {
-        const signer = this.getSigner(wallet);
+        const signer = await this.getSigner(wallet);
         return this.signAndBroadcast(signer, NEARProtocol.INSTANCE.createWithdrawTransaction(signer, stakingPoolAccountId, amount));
     }
 
@@ -72,13 +75,32 @@ export default class NEARStakingProvider implements NEARStakingProtocol {
         return network;
     }
 
-    private getSigner(wallet: Wallet): NEARSigner {
+    private _fsw(wallet: Wallet): FilesystemWallet {
+        if (!(wallet instanceof FilesystemWallet)) {
+            throw new Error("Not FilesystemWallet");
+        }
+        return wallet as FilesystemWallet;
+    }
+
+    private async getSigner(wallet: Wallet): Promise<NEARSigner> {
         let signer = this.#signers.get(wallet);
         if (!signer) {
             const network = this.getNetwork();
-            //signer = new NEARSigner(null, null, network);
-            //this.#signers.set(wallet, signer);
-            throw new Error("not implemented");
+            const fsw = this._fsw(wallet);
+
+            const [ accountId, rawPublicKey ] = await Promise.all([
+                fsw.accountId(this.#protocolID),
+                fsw.publicKey(this.#protocolID),
+            ]);
+
+            const publicKey = new ed25519PublicKey(rawPublicKey);
+
+            const signerImpl = new DelegatingEd25519Signer(publicKey, (payload) => {
+                return fsw.sign(this.#protocolID, payload);
+            });
+
+            signer = new NEARSigner(signerImpl, accountId, network);
+            this.#signers.set(wallet, signer);
         }
         return signer;
     }
@@ -87,5 +109,30 @@ export default class NEARStakingProvider implements NEARStakingProtocol {
         return transactionPromise
             .then((rawTx) => signer.signTransaction(rawTx))
             .then((signedTx) => NEARProtocol.INSTANCE.broadcastSimple(signedTx));
+    }
+}
+
+type SignFn = (payload: Uint8Array) => Promise<Uint8Array>;
+
+class DelegatingEd25519Signer extends ed25519Signer {
+    #publicKey: ed25519PublicKey;
+    #signFn: SignFn;
+
+    constructor(
+        publicKey: ed25519PublicKey,
+        signFn: SignFn,
+    ) {
+        const fakePrivateKey = new ed25519PrivateKey(new Uint8Array(32));
+        super(fakePrivateKey);
+        this.#publicKey = publicKey;
+        this.#signFn = signFn;
+    }
+
+    override async sign(payload: Uint8Array): Promise<Uint8Array> {
+        return this.#signFn(payload);
+    }
+
+    override get publicKey(): ed25519PublicKey {
+        return this.#publicKey;
     }
 }
