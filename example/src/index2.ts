@@ -3,9 +3,8 @@ import { secp256k1PrivateKey, secp256k1Signer } from "@restake/staking-sdk/core/
 import { FilesystemSignerProvider, FireblocksSignerProvider } from "@restake/staking-sdk/core/signer/provider";
 
 
-const provider = new FilesystemSignerProvider<secp256k1Signer>("/Users/hansoskaraaviksoo/.avalanche-credentials/testnet", (identifier, bytes) => {
-    const privateKey = new secp256k1PrivateKey(bytes);
-    return new secp256k1Signer(privateKey);
+const provider = new FilesystemSignerProvider<secp256k1Signer, "secp256k1">("/Users/hansoskaraaviksoo/.avalanche-credentials/testnet", (identifier, bytes) => {
+    return new secp256k1PrivateKey(bytes);
 });
 
 const testnetSigner = await provider.getSigner("avalancheTesting");

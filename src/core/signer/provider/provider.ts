@@ -1,5 +1,5 @@
-import type { Signer } from "../signer.js";
+import type { Signer, KeyType } from "../index.js";
 
-export interface SignerProvider<S = Signer<unknown, unknown>> {
+export interface SignerProvider<S extends Signer<K>, K extends KeyType> {
     getSigner(identifier: string): Promise<S>;
 }

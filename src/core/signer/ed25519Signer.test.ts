@@ -13,7 +13,7 @@ const privateKeys = [
 describe("ed25519 signer", () => {
     test.each(privateKeys)("signer construction", ({ privateKey }) => {
         const privateKeyBytes = hexToBytes(privateKey);
-        const signer = new ed25519Signer(new ed25519PrivateKey(privateKeyBytes));
+        const signer: ed25519Signer = new ed25519PrivateKey(privateKeyBytes);
 
         const pk1 = signer.publicKey.bytes;
         const pk2 = ed25519.getPublicKey(privateKeyBytes);

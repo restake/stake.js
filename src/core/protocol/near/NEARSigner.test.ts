@@ -26,7 +26,7 @@ const privateKeys = [
 describe("NEAR signer", () => {
     test.each(privateKeys)("signer construction", ({ privateKey, providedAccountId, expectedAccountId, expectedPublicKey }) => {
         const privateKeyBytes = hexToBytes(privateKey);
-        const edSigner = new ed25519Signer(new ed25519PrivateKey(privateKeyBytes));
+        const edSigner = new ed25519PrivateKey(privateKeyBytes);
         const signer = new NEARSigner(edSigner, providedAccountId, networks["mainnet"]);
 
         expect(signer.nearPublicKey.toString()).toBe(expectedPublicKey);
