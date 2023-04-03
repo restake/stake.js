@@ -97,7 +97,7 @@ describe("Avalanche signer", () => {
     test.each(privateKeys)("signer construction", async ({ privateKey, expectedAddress }) => {
         const privateKeyBytes = BinTools.getInstance().cb58Decode(privateKey.replace("PrivateKey-", ""));
 
-        const edSigner = new secp256k1Signer(new secp256k1PrivateKey(privateKeyBytes));
+        const edSigner = new secp256k1PrivateKey(privateKeyBytes);
         const signer = new AvalancheSigner(edSigner, networks["testnet"]);
 
         const derivedAddress = signer.deriveAddress("P");
@@ -108,7 +108,7 @@ describe("Avalanche signer", () => {
         const privateKey = privateKeys[0].privateKey;
         const privateKeyBytes = BinTools.getInstance().cb58Decode(privateKey.replace("PrivateKey-", ""));
 
-        const edSigner = new secp256k1Signer(new secp256k1PrivateKey(privateKeyBytes));
+        const edSigner = new secp256k1PrivateKey(privateKeyBytes);
         const signer = new AvalancheSigner(edSigner, networks["testnet"]);
 
         // Wed Mar 31 2123 10:41:22 GMT+0000

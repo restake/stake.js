@@ -31,7 +31,7 @@ export class AvalancheSigner implements TransactionSigner<Transaction, SignedTra
 
         // The 33-byte compressed representation of the public key is hashed with sha256 once.
         // The result is then hashed with ripemd160 to yield a 20-byte address.
-        const hash = ripemd160(sha256(publicKey.compressedBytes));
+        const hash = ripemd160(sha256(publicKey.bytes));
         const words = bech32.toWords(hash);
         return `${chainID}-${bech32.encode(networkID, words)}`;
     }
