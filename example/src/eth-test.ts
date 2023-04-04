@@ -13,9 +13,8 @@ const weiStakeAmount = parseUnits(formatUnits(amount, "gwei"), "ether");
 const receiveAddress = "0x845fEFB215f669f32Ebfdf4Fefb9a62864d732cb";
 const transferAmount = 10000000000000000n;
 
-const provider = new FilesystemSignerProvider<secp256k1Signer>("/Users/hansoskaraaviksoo/.ethereum-credentials/testnet", (identifier, bytes) => {
-    const privateKey = new secp256k1PrivateKey(bytes);
-    return new secp256k1Signer(privateKey);
+const provider = new FilesystemSignerProvider<secp256k1Signer, "secp256k1">("/Users/hansoskaraaviksoo/.ethereum-credentials/testnet", (identifier, bytes) => {
+    return new secp256k1PrivateKey(bytes);
 });
 
 const signer = await provider.getSigner("ethereumGanache");
