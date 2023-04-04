@@ -10,9 +10,7 @@
   "author": "",
   "license": "Proprietary",
   "dependencies": {
-    "@restake/staking-sdk": "../",
-    "bs58": "5.0.0",
-    "ethers": "^6.2.0"
+    "@restake/staking.js": "../"
   },
   "type": "module",
   "devDependencies": {
