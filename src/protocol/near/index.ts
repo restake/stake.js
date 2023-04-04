@@ -6,6 +6,7 @@ import { NEARNetwork, NEARProtocol, NEARSigner, networks } from "../../core/prot
 import { Transaction } from "../../core/protocol/near/NEARTransaction.js";
 import FilesystemWallet from "../../wallet/filesystem/index.js";
 import { ed25519PublicKey, ed25519Signer } from "../../core/signer/ed25519Signer.js";
+import { PublicKey } from "../../core/signer/key.js";
 
 export default class NEARStakingProvider implements NEARStakingProtocol {
     #networkConfig: NetworkConfig;
@@ -94,7 +95,7 @@ export default class NEARStakingProvider implements NEARStakingProtocol {
             ]);
 
             const publicKey = new ed25519PublicKey(rawPublicKey);
-            const signerImpl = new DelegatingEd25519Signer(publicKey, (payload) => {
+            const signerImpl = createSigner(publicKey, (payload) => {
                 return fsw.sign(this.#protocolID, payload);
             });
 
@@ -113,28 +114,17 @@ export default class NEARStakingProvider implements NEARStakingProtocol {
 
 type SignFn = (payload: Uint8Array) => Promise<Uint8Array>;
 
-class DelegatingEd25519Signer implements ed25519Signer {
-    readonly keyType = "ed25519";
-    #publicKey: ed25519PublicKey;
-    #signFn: SignFn;
+function createSigner(publicKey: PublicKey<"ed25519">, signFn: SignFn): ed25519Signer {
+    return Object.freeze({
+        keyType: "ed25519",
+        publicKey,
 
-    constructor(
-        publicKey: ed25519PublicKey,
-        signFn: SignFn,
-    ) {
-        this.#publicKey = publicKey;
-        this.#signFn = signFn;
-    }
+        sign(payload: Uint8Array): Promise<Uint8Array> {
+            return signFn(payload);
+        },
 
-    async sign(payload: Uint8Array): Promise<Uint8Array> {
-        return this.#signFn(payload);
-    }
-
-    verify(payload: Uint8Array, signature: Uint8Array): Promise<boolean> {
-        throw new Error("Method not implemented.");
-    }
-
-    get publicKey(): ed25519PublicKey {
-        return this.#publicKey;
-    }
+        verify(payload: Uint8Array, signature: Uint8Array): Promise<boolean> {
+            throw new Error("Method not implemented.");
+        }
+    });
 }
