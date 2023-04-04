@@ -5,7 +5,7 @@ import { TransactionSigner } from "../../signer/TransactionSigner.js";
 import { jsonrpc } from "../../utils/http.js";
 
 import { Avalanche } from "avalanche";
-import { Buffer } from "buffer/";
+import { Buffer } from "buffer/index.js";
 import { bech32 } from "bech32";
 import { sha256 } from "@noble/hashes/sha256";
 import { ripemd160 } from "@noble/hashes/ripemd160";
