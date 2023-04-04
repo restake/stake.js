@@ -14,7 +14,7 @@ export class NEARSigner implements TransactionSigner<Transaction, SignedTransact
     #network: NEARNetwork;
     #accountId: string;
     #signerImpl: NearAPISignerImpl;
-    #currentNonce: BigInt | null = null;
+    #currentNonce: bigint | null = null;
 
     // Flag to update nonce
     #dirtyState: boolean = false;
@@ -35,14 +35,13 @@ export class NEARSigner implements TransactionSigner<Transaction, SignedTransact
         };
     }
 
-    async fetchNonce(block: BlockFinality | string = "final"): Promise<BigInt> {
+    async fetchNonce(block: BlockFinality | string = "final"): Promise<bigint> {
         type AccessKeyResponse = {
             error?: string;
             nonce?: number;
         };
 
-        let nonce: BigInt;
-
+        let nonce: bigint;
         let currentNonce = this.#currentNonce;
         if (this.#dirtyState || !currentNonce) {
             this.#currentNonce = nonce = await jsonrpc<AccessKeyResponse>(this.#network.rpcUrl, "query", {
