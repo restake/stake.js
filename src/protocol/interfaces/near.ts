@@ -4,18 +4,18 @@ export interface NEARStakingProtocol {
     stake(
         wallet: Wallet,
         stakingPoolAccountId: string,
-        amount: BigInt,
+        amount: string,
     ): Promise<string>;
 
     unstake(
         wallet: Wallet,
         stakingPoolAccountId: string,
-        amount: BigInt | "all",
+        amount: string | "all",
     ): Promise<string>;
 
     withdraw(
         wallet: Wallet,
         stakingPoolAccountId: string,
-        amount: BigInt | "all",
+        amount: string | "all",
     ): Promise<string>;
 }
