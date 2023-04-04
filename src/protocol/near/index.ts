@@ -7,6 +7,7 @@ import { Transaction } from "../../core/protocol/near/NEARTransaction.js";
 import FilesystemWallet from "../../wallet/filesystem/index.js";
 import { ed25519PublicKey, ed25519Signer } from "../../core/signer/ed25519Signer.js";
 import { PublicKey } from "../../core/signer/key.js";
+import { parseNearAmount } from "near-api-js/lib/utils/format.js";
 
 export default class NEARStakingProvider implements NEARStakingProtocol {
     #networkConfig: NetworkConfig;
@@ -25,28 +26,31 @@ export default class NEARStakingProvider implements NEARStakingProtocol {
     async stake(
         wallet: Wallet,
         stakingPoolAccountId: string,
-        amount: BigInt,
+        amount: string,
     ): Promise<string> {
         const signer = await this.getSigner(wallet);
-        return this.signAndBroadcast(signer, NEARProtocol.INSTANCE.createStakeTransaction(signer, stakingPoolAccountId, amount, "all"));
+        const yAmount = this.normalizeAmount(amount, []);
+        return this.signAndBroadcast(signer, NEARProtocol.INSTANCE.createStakeTransaction(signer, stakingPoolAccountId, yAmount, "all"));
     }
 
     async unstake(
         wallet: Wallet,
         stakingPoolAccountId: string,
-        amount: BigInt | "all",
+        amount: string | "all",
     ): Promise<string> {
         const signer = await this.getSigner(wallet);
-        return this.signAndBroadcast(signer, NEARProtocol.INSTANCE.createUnstakeTransaction(signer, stakingPoolAccountId, amount));
+        const yAmount = this.normalizeAmount(amount, ["all"]);
+        return this.signAndBroadcast(signer, NEARProtocol.INSTANCE.createUnstakeTransaction(signer, stakingPoolAccountId, yAmount));
     }
 
     async withdraw(
         wallet: Wallet,
         stakingPoolAccountId: string,
-        amount: BigInt | "all",
+        amount: string | "all",
     ): Promise<string> {
         const signer = await this.getSigner(wallet);
-        return this.signAndBroadcast(signer, NEARProtocol.INSTANCE.createWithdrawTransaction(signer, stakingPoolAccountId, amount));
+        const yAmount = this.normalizeAmount(amount, ["all"]);
+        return this.signAndBroadcast(signer, NEARProtocol.INSTANCE.createWithdrawTransaction(signer, stakingPoolAccountId, yAmount));
     }
 
     private getNetwork(): NEARNetwork {
@@ -74,6 +78,26 @@ export default class NEARStakingProvider implements NEARStakingProtocol {
         }
 
         return network;
+    }
+
+    private normalizeAmount<T extends string>(
+        amount: string,
+        passthroughValues: T[],
+    ): bigint | T {
+        if (typeof amount === "bigint") {
+            return amount;
+        }
+
+        if (passthroughValues.includes(amount as T)) {
+            return amount as T;
+        }
+
+        const parsed = parseNearAmount(amount);
+        if (!parsed) {
+            throw new Error(`Unable to parse NEAR amount: "${amount}"`);
+        }
+
+        return BigInt(parsed);
     }
 
     private _fsw(wallet: Wallet): FilesystemWallet {
