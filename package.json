@@ -1,176 +1,45 @@
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-  "name": "@restake/stake.js",
-  "version": "0.0.4",
-  "description": "Restake staking SDK",
-  "main": "dist/index.cjs",
-  "module": "dist/index.js",
-  "files": [
-    "LICENSE",
-    "dist",
-    "src"
-  ],
-  "type": "module",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "default": "./dist/index.js",
-      "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts",
-      "source": "./src/index.ts"
-    },
-    "./core": {
-      "import": "./dist/core/index.js",
-      "default": "./dist/core/index.js",
-      "require": "./dist/core/index.cjs",
-      "types": "./dist/core/index.d.ts",
-      "source": "./src/core/index.ts"
-    },
-    "./core/protocol/avalanche": {
-      "import": "./dist/core/protocol/avalanche/index.js",
-      "default": "./dist/core/protocol/avalanche/index.js",
-      "require": "./dist/core/protocol/avalanche/index.cjs",
-      "types": "./dist/core/protocol/avalanche/index.d.ts",
-      "source": "./src/core/protocol/avalanche/index.ts"
-    },
-    "./core/protocol/ethereum": {
-      "import": "./dist/core/protocol/ethereum/index.js",
-      "default": "./dist/core/protocol/ethereum/index.js",
-      "require": "./dist/core/protocol/ethereum/index.cjs",
-      "types": "./dist/core/protocol/ethereum/index.d.ts",
-      "source": "./src/core/protocol/ethereum/index.ts"
-    },
-    "./core/protocol/near": {
-      "import": "./dist/core/protocol/near/index.js",
-      "default": "./dist/core/protocol/near/index.js",
-      "require": "./dist/core/protocol/near/index.cjs",
-      "types": "./dist/core/protocol/near/index.d.ts",
-      "source": "./src/core/protocol/near/index.ts"
-    },
-    "./core/protocol/sui": {
-      "import": "./dist/core/protocol/sui/index.js",
-      "default": "./dist/core/protocol/sui/index.js",
-      "require": "./dist/core/protocol/sui/index.cjs",
-      "types": "./dist/core/protocol/sui/index.d.ts",
-      "source": "./src/core/protocol/sui/index.ts"
-    },
-    "./core/signer": {
-      "import": "./dist/core/signer/index.js",
-      "default": "./dist/core/signer/index.js",
-      "require": "./dist/core/signer/index.cjs",
-      "types": "./dist/core/signer/index.d.ts",
-      "source": "./src/core/signer/index.ts"
-    },
-    "./core/signer/provider": {
-      "import": "./dist/core/signer/provider/index.js",
-      "default": "./dist/core/signer/provider/index.js",
-      "require": "./dist/core/signer/provider/index.cjs",
-      "types": "./dist/core/signer/provider/index.d.ts",
-      "source": "./src/core/signer/provider/index.ts"
-    },
-    "./core/signer/provider/codec": {
-      "import": "./dist/core/signer/provider/codec/index.js",
-      "default": "./dist/core/signer/provider/codec/index.js",
-      "require": "./dist/core/signer/provider/codec/index.cjs",
-      "types": "./dist/core/signer/provider/codec/index.d.ts",
-      "source": "./src/core/signer/provider/codec/index.ts"
-    },
-    "./protocol/avalanche": {
-      "import": "./dist/protocol/avalanche/index.js",
-      "default": "./dist/protocol/avalanche/index.js",
-      "require": "./dist/protocol/avalanche/index.cjs",
-      "types": "./dist/protocol/avalanche/index.d.ts",
-      "source": "./src/protocol/avalanche/index.ts"
-    },
-    "./protocol/ethereum": {
-      "import": "./dist/protocol/ethereum/index.js",
-      "default": "./dist/protocol/ethereum/index.js",
-      "require": "./dist/protocol/ethereum/index.cjs",
-      "types": "./dist/protocol/ethereum/index.d.ts",
-      "source": "./src/protocol/ethereum/index.ts"
-    },
-    "./protocol/near": {
-      "import": "./dist/protocol/near/index.js",
-      "default": "./dist/protocol/near/index.js",
-      "require": "./dist/protocol/near/index.cjs",
-      "types": "./dist/protocol/near/index.d.ts",
-      "source": "./src/protocol/near/index.ts"
-    },
-    "./wallet/filesystem": {
-      "import": "./dist/wallet/filesystem/index.js",
-      "default": "./dist/wallet/filesystem/index.js",
-      "require": "./dist/wallet/filesystem/index.cjs",
-      "types": "./dist/wallet/filesystem/index.d.ts",
-      "source": "./src/wallet/filesystem/index.ts"
-    },
-    "./wallet/fireblocks": {
-      "import": "./dist/wallet/fireblocks/index.js",
-      "default": "./dist/wallet/fireblocks/index.js",
-      "require": "./dist/wallet/fireblocks/index.cjs",
-      "types": "./dist/wallet/fireblocks/index.d.ts",
-      "source": "./src/wallet/fireblocks/index.ts"
-    }
-  },
-  "engines": {
-    "node": ">=18.15.0"
-  },
-  "scripts": {
-    "test": "jest",
-    "lint": "eslint .",
-    "build": "tsup",
-    "build:doc": "typedoc"
-  },
-  "author": "Restake AG <social@restake.net>",
-  "license": "MIT",
-  "devDependencies": {
-    "@jest/globals": "29.5.0",
-    "@types/bn.js": "5.1.1",
-    "@types/elliptic": "6.4.14",
-    "@types/node": "18.14.2",
-    "@types/ws": "8.5.4",
-    "@typescript-eslint/eslint-plugin": "^5.58.0",
-    "@typescript-eslint/parser": "^5.58.0",
-    "eslint": "^8.38.0",
-    "jest": "29.5.0",
-    "ts-jest": "29.0.5",
-    "ts-node": "10.9.1",
-    "tsup": "6.7.0",
-    "typedoc": "0.24.8",
-    "typescript": "5.0.3"
-  },
-  "dependencies": {
-    "@ethereumjs/common": "3.1.1",
-    "@ethereumjs/tx": "4.1.1",
-    "@mysten/sui.js": "0.36.0",
-    "@noble/curves": "1.1.0",
-    "@noble/hashes": "1.3.1",
-    "avalanche": "3.16.0",
-    "bech32": "2.0.0",
-    "bn.js": "5.2.1",
-    "bs58": "5.0.0",
-    "buffer": "6.0.3",
-    "ethers": "6.4.0",
-    "near-api-js": "1.1.0",
-    "zod": "3.21.4"
-=======
-  "name": "staking-sdk",
-=======
   "name": "@restake/staking-sdk",
->>>>>>> c6fd319 (Update package name)
   "version": "0.0.1",
   "description": "Restake staking SDK",
   "private": true,
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
+  "type": "module",
   "exports": {
     ".": {
       "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js"
+      "default": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/esm/index.d.ts"
+    },
+    "./protocol/avalanche": {
+      "import": "./dist/esm/protocol/avalanche/index.js",
+      "default": "./dist/esm/protocol/avalanche/index.js",
+      "require": "./dist/cjs/protocol/avalanche/index.js",
+      "types": "./dist/esm/protocol/avalanche/index.d.ts"
+    },
+    "./protocol/ethereum": {
+      "import": "./dist/esm/protocol/ethereum/index.js",
+      "default": "./dist/esm/protocol/ethereum/index.js",
+      "require": "./dist/cjs/protocol/ethereum/index.js",
+      "types": "./dist/esm/protocol/ethereum/index.d.ts"
+    },
+    "./protocol/near": {
+      "import": "./dist/esm/protocol/near/index.js",
+      "default": "./dist/esm/protocol/near/index.js",
+      "require": "./dist/cjs/protocol/near/index.js",
+      "types": "./dist/esm/protocol/near/index.d.ts"
+    },
+    "./wallet/filesystem": {
+      "import": "./dist/esm/wallet/filesystem/index.js",
+      "default": "./dist/esm/wallet/filesystem/index.js",
+      "require": "./dist/cjs/wallet/filesystem/index.js",
+      "types": "./dist/esm/wallet/filesystem/index.d.ts"
     }
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "build:cjs_old": "tsc -p tsconfig.cjs.json && esbuild --tsconfig=tsconfig.cjs.json --bundle --sourcemap --platform=node    --outdir=dist/cjs src/index.ts",
     "build:esm_old": "tsc -p tsconfig.esm.json && esbuild --tsconfig=tsconfig.esm.json --bundle --sourcemap --platform=browser --outdir=dist/esm src/index.ts",
     "build:cjs": "tsc -p tsconfig.cjs.json",
@@ -180,14 +49,25 @@
   "author": "",
   "license": "Proprietary",
   "devDependencies": {
+    "@jest/globals": "29.5.0",
     "@types/bn.js": "5.1.1",
+    "@types/elliptic": "6.4.14",
     "@types/node": "18.14.2",
-    "typescript": "5.0.0-beta"
+    "@types/ws": "8.5.4",
+    "jest": "29.5.0",
+    "ts-jest": "29.0.5",
+    "ts-node": "10.9.1",
+    "typescript": "5.0.3"
   },
   "dependencies": {
+    "@ethereumjs/common": "3.1.1",
+    "@ethereumjs/tx": "4.1.1",
     "@noble/curves": "0.7.3",
+    "@noble/hashes": "1.3.0",
+    "avalanche": "3.16.0",
+    "bech32": "2.0.0",
     "bn.js": "5.2.1",
+    "bs58": "5.0.0",
     "near-api-js": "1.1.0"
->>>>>>> b0cd9af (Initial commit)
   }
 }
