@@ -10,7 +10,7 @@ import { functionCall } from "near-api-js/lib/transaction.js";
 import { NEAR_NOMINATION } from "near-api-js/lib/utils/format.js";
 import { transactions } from "near-api-js";
 import BN from "bn.js";
-import { decode as bs58Decode } from "bs58";
+import bs58 from "bs58";
 
 const ZERO = new BN(0);
 const STAKING_GAS = new BN(300e12);
@@ -180,7 +180,7 @@ export class NEARProtocol implements TransactionBroadcaster<SignedTransaction, N
  * @returns
  */
 function decodeBlockHash(blockHash: string): Uint8Array {
-    const decoded = bs58Decode(blockHash);
+    const decoded = bs58.decode(blockHash);
 
     // 32 = sha256 in bytes
     if (decoded.byteLength !== 32) {
