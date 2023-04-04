@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "ts-node": "ts-node --esm",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "rm -rf node_modules && sh -c 'cd .. && echo $PWD && yarn build' && yarn install && ts-node --esm src/index.ts"
   },
   "author": "",
   "license": "Proprietary",
