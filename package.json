@@ -13,48 +13,6 @@
       "require": "./dist/cjs/index.js",
       "types": "./dist/esm/index.d.ts"
     },
-    "./core": {
-      "import": "./dist/esm/core/index.js",
-      "default": "./dist/esm/core/index.js",
-      "require": "./dist/cjs/core/index.js",
-      "types": "./dist/esm/core/index.d.ts"
-    },
-    "./core/protocol/avalanche": {
-      "import": "./dist/esm/core/protocol/avalanche/index.js",
-      "default": "./dist/esm/core/protocol/avalanche/index.js",
-      "require": "./dist/cjs/core/protocol/avalanche/index.js",
-      "types": "./dist/esm/core/protocol/avalanche/index.d.ts"
-    },
-    "./core/protocol/ethereum": {
-      "import": "./dist/esm/core/protocol/ethereum/index.js",
-      "default": "./dist/esm/core/protocol/ethereum/index.js",
-      "require": "./dist/cjs/core/protocol/ethereum/index.js",
-      "types": "./dist/esm/core/protocol/ethereum/index.d.ts"
-    },
-    "./core/protocol/near": {
-      "import": "./dist/esm/core/protocol/near/index.js",
-      "default": "./dist/esm/core/protocol/near/index.js",
-      "require": "./dist/cjs/core/protocol/near/index.js",
-      "types": "./dist/esm/core/protocol/near/index.d.ts"
-    },
-    "./core/signer": {
-      "import": "./dist/esm/core/signer/index.js",
-      "default": "./dist/esm/core/signer/index.js",
-      "require": "./dist/cjs/core/signer/index.js",
-      "types": "./dist/esm/core/signer/index.d.ts"
-    },
-    "./core/signer/provider": {
-      "import": "./dist/esm/core/signer/provider/index.js",
-      "default": "./dist/esm/core/signer/provider/index.js",
-      "require": "./dist/cjs/core/signer/provider/index.js",
-      "types": "./dist/esm/core/signer/provider/index.d.ts"
-    },
-    "./core/signer/provider/codec": {
-      "import": "./dist/esm/core/signer/provider/codec/index.js",
-      "default": "./dist/esm/core/signer/provider/codec/index.js",
-      "require": "./dist/cjs/core/signer/provider/codec/index.js",
-      "types": "./dist/esm/core/signer/provider/codec/index.d.ts"
-    },
     "./protocol/avalanche": {
       "import": "./dist/esm/protocol/avalanche/index.js",
       "default": "./dist/esm/protocol/avalanche/index.js",
