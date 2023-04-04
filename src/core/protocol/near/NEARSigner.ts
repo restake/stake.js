@@ -4,9 +4,10 @@ import { jsonrpc } from "../../utils/http.js";
 import { SignedTransaction, Transaction } from "./NEARTransaction.js";
 import { TransactionSigner } from "../../signer/TransactionSigner.js";
 
+import { PublicKey as NEARPublicKey, Signature } from "near-api-js/lib/utils/key_pair.js";
+import { sha256 } from "@noble/hashes/sha256";
 import { Signer as NearAPISigner } from "near-api-js";
 import { signTransaction as nearSignTransaction } from "near-api-js/lib/transaction.js";
-import { PublicKey as NEARPublicKey, Signature } from "near-api-js/lib/utils/key_pair.js";
 
 export class NEARSigner implements TransactionSigner<Transaction, SignedTransaction> {
     #parent: ed25519Signer;
@@ -122,7 +123,7 @@ class NearAPISignerImpl extends NearAPISigner {
 
     async signMessage(message: Uint8Array, accountId?: string | undefined, networkId?: string | undefined): Promise<Signature> {
         const publicKey = this.#getPublicKeyFn();
-        const signature = await this.#signFn(message);
+        const signature = await this.#signFn(sha256(message));
 
         return {
             signature,
