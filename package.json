@@ -40,8 +40,6 @@
   },
   "scripts": {
     "test": "jest",
-    "build:cjs_old": "tsc -p tsconfig.cjs.json && esbuild --tsconfig=tsconfig.cjs.json --bundle --sourcemap --platform=node    --outdir=dist/cjs src/index.ts",
-    "build:esm_old": "tsc -p tsconfig.esm.json && esbuild --tsconfig=tsconfig.esm.json --bundle --sourcemap --platform=browser --outdir=dist/esm src/index.ts",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:esm": "tsc -p tsconfig.esm.json",
     "build": "npm run build:cjs && npm run build:esm"
