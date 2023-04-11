@@ -10,7 +10,7 @@
   "author": "",
   "license": "Proprietary",
   "dependencies": {
-    "@restake/staking.js": "../"
+    "@restake/stake.js": "../"
   },
   "type": "module",
   "devDependencies": {

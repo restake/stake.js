@@ -1,5 +1,5 @@
 {
-  "name": "@restake/staking.js",
+  "name": "@restake/stake.js",
   "version": "0.0.1",
   "description": "Restake staking SDK",
   "private": true,
