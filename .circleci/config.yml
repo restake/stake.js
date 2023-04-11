@@ -3,11 +3,19 @@ version: 2.1
 orbs:
   node: "circleci/node@5.1.0"
 
+parameters:
+  node_version:
+    type: "string"
+    default: "18.15.0"
+
+node_executor: &node_executor
+  executor:
+    name: "node/default"
+    tag: "<< pipeline.parameters.node_version >>"
+
 jobs:
   test:
-    executor:
-      name: "node/default"
-      tag: "18.15.0"
+    <<: *node_executor
     steps:
       - checkout
       - node/install-packages:
@@ -16,8 +24,18 @@ jobs:
           name: "Run all tests"
           command: yarn run test
 
+  lint:
+    <<: *node_executor
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      - run:
+          name: "Lint all files"
+          command: yarn run lint
 
 workflows:
-  test:
+  lint-and-test:
     jobs:
+      - lint
       - test
