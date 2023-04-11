@@ -1,5 +1,5 @@
 import BN from "bn.js";
 
-export function BNFromBigInt(bigInt: BigInt): BN {
+export function BNFromBigInt(bigInt: bigint): BN {
     return new BN(bigInt.toString());
 }

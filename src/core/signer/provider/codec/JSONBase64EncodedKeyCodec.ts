@@ -18,4 +18,4 @@ export const JSONBase64EncodedKeyCodec: Codec = {
     async determineFilename(identifier: string): Promise<string> {
         return basename(identifier + ".json");
     },
-}
+};

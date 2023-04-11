@@ -24,7 +24,7 @@ export class NEARProtocol implements TransactionBroadcaster<SignedTransaction, N
     static INSTANCE = new NEARProtocol();
 
     private constructor() {
-        // no-op
+        // No-op
     }
 
     private async buildFunctionCallTransaction(
@@ -34,7 +34,7 @@ export class NEARProtocol implements TransactionBroadcaster<SignedTransaction, N
         args: Record<string, unknown>,
         gas: BN,
         block: BlockFinality | string,
-        depositAmount?: BigInt,
+        depositAmount?: bigint,
     ): Promise<Transaction> {
         const blockHash = isFinality(block) ? await signer.fetchBlockHash(block) : block;
         const nonce = await signer.fetchNonce();
@@ -64,12 +64,12 @@ export class NEARProtocol implements TransactionBroadcaster<SignedTransaction, N
     async createStakeTransaction(
         signer: NEARSigner,
         stakingPoolAccountId: string,
-        depositAmount?: BigInt,
-        stakeAmount: BigInt | "all" = "all",
+        depositAmount?: bigint,
+        stakeAmount: bigint | "all" = "all",
         block: BlockFinality | string = "final",
     ): Promise<Transaction> {
         let methodName: string;
-        let args: Record<string, unknown> = {};
+        const args: Record<string, unknown> = {};
         if (stakeAmount === "all") {
             methodName = depositAmount ? "deposit_and_stake" : "stake_all";
         } else {
@@ -98,13 +98,13 @@ export class NEARProtocol implements TransactionBroadcaster<SignedTransaction, N
     async createUnstakeTransaction(
         signer: NEARSigner,
         stakingPoolAccountId: string,
-        amount: BigInt | "all" = "all",
+        amount: bigint | "all" = "all",
         block: BlockFinality | string = "final",
     ): Promise<Transaction> {
         const methodName = amount !== "all" ? "unstake" : "unstake_all";
-        let args: Record<string, unknown> = {};
+        const args: Record<string, unknown> = {};
         if (amount !== "all") {
-            args.amount = amount.toString()
+            args.amount = amount.toString();
         }
 
         return this.buildFunctionCallTransaction(signer, stakingPoolAccountId, methodName, args, STAKING_GAS, block, 0n);
@@ -122,11 +122,11 @@ export class NEARProtocol implements TransactionBroadcaster<SignedTransaction, N
     async createDepositTransaction(
         signer: NEARSigner,
         stakingPoolAccountId: string,
-        depositAmount: BigInt,
+        depositAmount: bigint,
         block: BlockFinality | string = "final",
     ): Promise<Transaction> {
         const methodName = "deposit";
-        let args: Record<string, unknown> = {};
+        const args: Record<string, unknown> = {};
 
         return this.buildFunctionCallTransaction(signer, stakingPoolAccountId, methodName, args, STAKING_GAS, block, depositAmount);
     }
@@ -143,11 +143,11 @@ export class NEARProtocol implements TransactionBroadcaster<SignedTransaction, N
     async createWithdrawTransaction(
         signer: NEARSigner,
         stakingPoolAccountId: string,
-        withdrawAmount: BigInt | "all" = "all",
+        withdrawAmount: bigint | "all" = "all",
         block: BlockFinality | string = "final",
     ): Promise<Transaction> {
         const methodName = withdrawAmount !== "all" ? "withdraw" : "withdraw_all";
-        let args: Record<string, unknown> = {};
+        const args: Record<string, unknown> = {};
         if (withdrawAmount !== "all") {
             args.amount = withdrawAmount.toString();
         }
@@ -162,7 +162,7 @@ export class NEARProtocol implements TransactionBroadcaster<SignedTransaction, N
         const encodedPayload = b64Encode(signedTransaction.payload.encode());
 
         const response = await jsonrpc<string>(endpoint, "broadcast_tx_async", [
-            encodedPayload
+            encodedPayload,
         ]);
 
         return response;
@@ -170,6 +170,7 @@ export class NEARProtocol implements TransactionBroadcaster<SignedTransaction, N
 
     async broadcastSimple(signedTransaction: SignedTransaction): Promise<string> {
         const response = await this.broadcast(signedTransaction);
+
         return response;
     }
 }
@@ -186,6 +187,7 @@ function decodeBlockHash(blockHash: string): Uint8Array {
     if (decoded.byteLength !== 32) {
         throw new Error("Block hash length is expected to be 32 bytes, got " + decoded.byteLength);
     }
+
     return decoded;
 }
 
@@ -195,8 +197,9 @@ function decodeBlockHash(blockHash: string): Uint8Array {
  * @param amount Amount to convert
  * @returns Amount in yoctoNEAR
  */
-export function ntoy(amount: string | number | BN | BigInt): BigInt {
-    // TODO: drop BN
-    const bn = new BN(amount instanceof BigInt ? BNFromBigInt(amount) : amount).mul(NEAR_NOMINATION);
+export function ntoy(amount: string | number | BN | bigint): bigint {
+    // TODO: drop BN + it's broken anyway.
+    const bn = new BN(typeof amount === "bigint" ? BNFromBigInt(amount) : amount).mul(NEAR_NOMINATION);
+
     return BigInt(bn.toString());
 }

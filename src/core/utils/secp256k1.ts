@@ -20,6 +20,7 @@ export function decompressSecp256k1PublicKey(compressed: string): string {
 
     const xHex = xValue.toString(16).padStart(64, "0");
     const yHex = yValue.toString(16).padStart(64, "0");
+    
     return `04${xHex}${yHex}`;
 }
 

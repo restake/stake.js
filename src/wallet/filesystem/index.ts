@@ -18,6 +18,7 @@ export class FilesystemWallet implements Wallet {
             const data = await readFile(this.#filePath, { encoding: "utf-8" });
             this.#loadedKeys = keys = JSON.parse(data) as ProtocolKeypair[];
         }
+
         return keys;
     }
 
@@ -42,8 +43,10 @@ export class FilesystemWallet implements Wallet {
             }
 
             if (protocol === "near") {
-                // If user converted base58 private key from ~/.near-credentials to base64 directly, then
-                // byte array length is 64 - first 32 bytes is private key, remaining is public key.
+                /*
+                If user converted base58 private key from ~/.near-credentials to base64 directly, then
+                byte array length is 64 - first 32 bytes is private key, remaining is public key.
+                */
                 privateKeyBytes = privateKeyBytes.slice(0, 32);
             }
 
@@ -62,8 +65,10 @@ export class FilesystemWallet implements Wallet {
             }
 
             if (protocol === "near") {
-                // If user converted base58 private key from ~/.near-credentials to base64 directly, then
-                // byte array length is 64 - first 32 bytes is private key, remaining is public key.
+                /*
+                If user converted base58 private key from ~/.near-credentials to base64 directly, then
+                byte array length is 64 - first 32 bytes is private key, remaining is public key.
+                */
                 privateKeyBytes = privateKeyBytes.slice(0, 32);
             }
 

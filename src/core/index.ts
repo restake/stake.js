@@ -1,1 +1,1 @@
-throw new Error('Incorrect usage. Look into submodules instead');
+throw new Error("Incorrect usage. Look into submodules instead");
