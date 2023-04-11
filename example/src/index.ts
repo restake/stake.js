@@ -1,5 +1,5 @@
-import { StakingService, Wallet } from "@restake/staking.js";
-import { FilesystemWallet } from "@restake/staking.js/wallet/filesystem";
+import { StakingService, Wallet } from "@restake/stake.js";
+import { FilesystemWallet } from "@restake/stake.js/wallet/filesystem";
 
 const wallet: Wallet = new FilesystemWallet("key.json");
 
