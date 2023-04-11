@@ -9,4 +9,4 @@ export type Transaction = {
 export type SignedTransaction = {
     transaction: Transaction;
     payload: Tx;
-}
+};

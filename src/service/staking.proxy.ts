@@ -1,3 +1,5 @@
+// eslint-disable-next-line max-len
+/* eslint-disable prefer-rest-params, @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/ban-ts-comment */
 export function createProxy<T extends object>(
     importPath: string,
     constructorArgs: Array<unknown>,
@@ -11,11 +13,11 @@ export function createProxy<T extends object>(
     return new Proxy({}, {
         get(target, prop, receiver) {
             // Check if we have instance set
-            let instance = constructedInstance;
+            const instance = constructedInstance;
             if (instance !== undefined) {
                 // @ts-ignore
                 return instance[prop];
-            };
+            }
 
             // Check if said method is in allowed list
             if (!methodSet.has(prop as keyof T)) {
@@ -47,8 +49,9 @@ export function createProxy<T extends object>(
             }
 
             // Return wrapper async function;
-            return async function() {
+            return async function () {
                 const inst = await initPromise as any;
+
                 return inst[prop].call(inst, ...arguments);
             };
         },

@@ -10,4 +10,4 @@ export type SignedTransaction = {
     transaction: Transaction;
     // Has fields v, r, s set
     payload: EthTransaction;
-}
+};

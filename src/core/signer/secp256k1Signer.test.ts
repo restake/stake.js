@@ -1,4 +1,4 @@
-import { secp256k1PrivateKey, secp256k1Signer } from "./index.js";
+import { secp256k1PrivateKey } from "./index.js";
 
 import { describe, expect, test } from "@jest/globals";
 import { hexToBytes } from "@noble/curves/abstract/utils";

@@ -17,49 +17,49 @@ const depositContractAbi = [
             {
                 "internalType": "bytes",
                 "name": "pubkey",
-                "type": "bytes"
+                "type": "bytes",
             },
             {
                 "internalType": "bytes",
                 "name": "withdrawal_credentials",
-                "type": "bytes"
+                "type": "bytes",
             },
             {
                 "internalType": "bytes",
                 "name": "signature",
-                "type": "bytes"
+                "type": "bytes",
             },
             {
                 "internalType": "bytes32",
                 "name": "data_root_value",
-                "type": "bytes32"
-            }
+                "type": "bytes32",
+            },
         ],
         "name": "deposit",
         "outputs": [],
         "stateMutability": "nonpayable",
-        "type": "function"
-    }
+        "type": "function",
+    },
 ] as const;
 
 // TODO: better name
 type Parameters = {
     ethBlock: EthereumBlockResponse;
-    gasPrice: BigInt;
-    nonce: BigInt;
+    gasPrice: bigint;
+    nonce: bigint;
 };
 
 export class EthereumProtocol implements TransactionBroadcaster<SignedTransaction, EthereumBroadcastResponse> {
     static INSTANCE = new EthereumProtocol();
 
     private constructor() {
-        // no-op
+        // No-op
     }
 
     // TODO: better name
     private async fetchParameters(
         signer: EthereumSigner,
-        block: BlockFinality | BigInt,
+        block: BlockFinality | bigint,
     ): Promise<Parameters> {
         const senderAddress = signer.getAddress();
         const [ ethBlock, gasPrice ] = await Promise.all([ signer.fetchBlock(block), signer.fetchGasPrice() ]);
@@ -68,7 +68,7 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
         return {
             ethBlock,
             gasPrice,
-            nonce
+            nonce,
         };
     }
 
@@ -96,8 +96,8 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
     async transfer(
         signer: EthereumSigner,
         receiveAddress: string,
-        amount: BigInt,
-        block: BlockFinality | BigInt = "latest",
+        amount: bigint,
+        block: BlockFinality | bigint = "latest",
     ): Promise<Transaction>{
         const parameters = await this.fetchParameters(signer, block);
 
@@ -111,18 +111,18 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
             payload,
             network: signer.network,
         };
-    };
+    }
 
     async stake(
         signer: EthereumSigner,
         validatorPublickey: string,
-        amount: BigInt,
+        amount: bigint,
         withdrawalCredentials: string,
         validatorSignature: string,
         depositDataRoot: string,
-        block: BlockFinality | BigInt = "latest",
+        block: BlockFinality | bigint = "latest",
     ): Promise<Transaction> {
-        const parameters = await this.fetchParameters(signer, block)
+        const parameters = await this.fetchParameters(signer, block);
 
         const ethProvider = new ethers.providers.JsonRpcProvider(signer.network.rpcUrl);
 
@@ -145,8 +145,8 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
                     withdrawalCredentialsBytes,
                     validatorSignatureBytes,
                     depositDataRootBytes32,
-                ]
-            )
+                ],
+            ),
         });
 
         return {
@@ -167,7 +167,7 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
         const serializedTx = signedTransaction.payload.serialize();
 
         const response = await jsonrpc<EthereumBroadcastResponse>(endpoint, "eth_sendRawTransaction", [
-            "0x" + serializedTx.toString("hex")
+            "0x" + serializedTx.toString("hex"),
         ]);
 
         return response;
@@ -175,6 +175,7 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
 
     async broadcastSimple(signedTransaction: SignedTransaction): Promise<string> {
         const response = await this.broadcast(signedTransaction);
+        
         return response;
     }
 }

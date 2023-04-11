@@ -45,11 +45,13 @@ export class ed25519PrivateKey implements Signer<"ed25519"> {
 
     async sign(payload: Uint8Array): Promise<Uint8Array> {
         const result = ed25519.sign(payload, this.#bytes);
+        
         return Promise.resolve(result);
     }
 
     async verify(payload: Uint8Array, signature: Uint8Array): Promise<boolean> {
         const result = ed25519.verify(signature, payload, this.#publicKey.bytes);
+        
         return Promise.resolve(result);
     }
 

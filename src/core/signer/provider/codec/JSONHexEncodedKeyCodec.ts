@@ -18,4 +18,4 @@ export const JSONHexEncodedKeyCodec: Codec = {
     async determineFilename(identifier: string): Promise<string> {
         return basename(identifier + ".json");
     },
-}
+};

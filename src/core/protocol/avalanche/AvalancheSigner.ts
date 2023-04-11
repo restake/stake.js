@@ -33,6 +33,7 @@ export class AvalancheSigner implements TransactionSigner<Transaction, SignedTra
         // The result is then hashed with ripemd160 to yield a 20-byte address.
         const hash = ripemd160(sha256(publicKey.bytes));
         const words = bech32.toWords(hash);
+
         return `${chainID}-${bech32.encode(networkID, words)}`;
     }
 
@@ -46,10 +47,12 @@ export class AvalancheSigner implements TransactionSigner<Transaction, SignedTra
             const cred: Credential = SelectCredentialClass(ins[`${i}`].getInput().getCredentialID());
             const sigidxs = ins[`${i}`].getInput().getSigIdxs();
 
-            for (let j: number = 0; j < sigidxs.length; j++) {
-                //const keypair: KeyPair = kc.getKey(sigidxs[`${j}`].getSource());
-                //const signval: Buffer = keypair.sign(Buffer.from(message));
-
+            for (let j = 0; j < sigidxs.length; j++) {
+                // eslint-disable-next-line capitalized-comments
+                /*
+                const keypair: KeyPair = kc.getKey(sigidxs[`${j}`].getSource());
+                const signval: Buffer = keypair.sign(Buffer.from(message));
+                */
                 // TODO: multiple key support?
                 const { r, s, recovery } = await this.#parent.edSign(message);
 
@@ -61,8 +64,8 @@ export class AvalancheSigner implements TransactionSigner<Transaction, SignedTra
                 ].join("")));
 
                 const sig: Signature = new Signature();
-                sig.fromBuffer(signval)
-                cred.addSignature(sig)
+                sig.fromBuffer(signval);
+                cred.addSignature(sig);
             }
             creds.push(cred);
         }
@@ -71,18 +74,20 @@ export class AvalancheSigner implements TransactionSigner<Transaction, SignedTra
 
         return {
             transaction,
-            payload: signedTx
+            payload: signedTx,
         };
     }
 
     async fetchStakingAssetID(): Promise<{ assetID: string }> {
         const endpoint = new URL("/ext/bc/P", this.network.rpcUrl);
+
         return await jsonrpc<{ assetID: string }>(endpoint, "platform.getStakingAssetID", {});
     }
 
-    async fetchMinStake(): Promise<{minValidatorStake: string, minDelegatorStake: string}> {
+    async fetchMinStake(): Promise<{ minValidatorStake: string, minDelegatorStake: string }> {
         const endpoint = new URL("/ext/bc/P", this.network.rpcUrl);
-        return await jsonrpc<{minValidatorStake: string, minDelegatorStake: string}>(endpoint, "platform.getMinStake", {});
+
+        return await jsonrpc<{ minValidatorStake: string, minDelegatorStake: string }>(endpoint, "platform.getMinStake", {});
     }
 
     get client(): Avalanche {
@@ -98,7 +103,7 @@ export class AvalancheSigner implements TransactionSigner<Transaction, SignedTra
         const client = new Avalanche(
             url.hostname,
             parseInt(url.port),
-            url.protocol.replace(':', ''),
+            url.protocol.replace(":", ""),
             networkId,
             undefined,
             undefined,
