@@ -34,8 +34,22 @@ jobs:
           name: "Lint all files"
           command: yarn run lint
 
+  build:
+    <<: *node_executor
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      - run:
+          name: "Build the project"
+          command: yarn run build
+
 workflows:
-  lint-and-test:
+  build:
     jobs:
       - lint
       - test
+      - build:
+          requires:
+            - lint
+            - test

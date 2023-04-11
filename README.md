@@ -1,5 +1,7 @@
 # stake.js
 
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/restake/stake.js/tree/master.svg?style=shield&circle-token=8de591d088f23c001c417fdc7228ddb6e688878d)](https://dl.circleci.com/status-badge/redirect/gh/restake/stake.js/tree/master)
+
 The goal of `stake.js` is to help developers easily integrate Proof-of-Stake staking functions into Web3 applications. We have removed the complexity involved with implementing such processes, and aim to provide users with an easy to use high-level API that "just works".
 
 **Disclaimer: this library is in active development.**
