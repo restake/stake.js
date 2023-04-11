@@ -32,7 +32,7 @@ export class EthereumSigner implements TransactionSigner<Transaction, SignedTran
         const bRecovery = recovery ? BigInt(recovery) : 0n;
 
         // While we'll always have chainId available, keep this condition here to
-        // possibly support this use-case.
+        // Possibly support this use-case.
         const chainId = transaction.network.chainId;
         const v = chainId === undefined ? bRecovery + 27n : bRecovery + 35n + BigInt(chainId) * 2n;
 
@@ -56,7 +56,7 @@ export class EthereumSigner implements TransactionSigner<Transaction, SignedTran
         return this.#network;
     }
 
-    async fetchNonce(senderAddress: string, block: BigInt | BlockFinality = "latest"): Promise<BigInt> {
+    async fetchNonce(senderAddress: string, block: bigint | BlockFinality = "latest"): Promise<bigint> {
         const endpoint = new URL(this.#network.rpcUrl);
         const nonce = await jsonrpc<string>(endpoint, "eth_getTransactionCount", [
             senderAddress,
@@ -66,22 +66,23 @@ export class EthereumSigner implements TransactionSigner<Transaction, SignedTran
         return BigInt(nonce);
     }
 
-    async fetchGasPrice(): Promise<BigInt> {
+    async fetchGasPrice(): Promise<bigint> {
         const endpoint = new URL(this.#network.rpcUrl);
         const gasPrice = await jsonrpc<string>(endpoint, "eth_gasPrice", []);
 
         return BigInt(gasPrice);
     }
 
-    async fetchBlock(block: BigInt | BlockFinality): Promise<EthereumBlockResponse> {
+    async fetchBlock(block: bigint | BlockFinality): Promise<EthereumBlockResponse> {
         const endpoint = new URL(this.#network.rpcUrl);
+        
         return jsonrpc<EthereumBlockResponse>(endpoint, "eth_getBlockByNumber", [
             typeof block === "bigint" ? "0x" + block.toString(16) : block,
             false,
         ]);
     }
 
-    getAddress(checksum: boolean = true): string {
+    getAddress(checksum = true): string {
         // Ethereum address derivation requires the removal of the first x04 byte
         const uncompressed = hexToBytes(decompressSecp256k1PublicKey(this.#parent.publicKey.asHex()));
         const publicKeyBytes = uncompressed.slice(1);
@@ -104,7 +105,7 @@ export function toChecksumAddress(address: string): string {
         const chr = cleanAddress[i];
         const code = chr.charCodeAt(0);
 
-        // target [a; f]
+        // Target [a; f]
         if (code >= 97 && code <= 102) {
             const nibble = parseInt(addressHash[i], 16);
             computedAddress += nibble > 7 ? chr.toUpperCase() : chr;

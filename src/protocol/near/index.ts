@@ -30,6 +30,7 @@ export default class NEARStakingProvider implements NEARStakingProtocol {
     ): Promise<string> {
         const signer = await this.getSigner(wallet);
         const yAmount = this.normalizeAmount(amount, []);
+
         return this.signAndBroadcast(signer, NEARProtocol.INSTANCE.createStakeTransaction(signer, stakingPoolAccountId, yAmount, "all"));
     }
 
@@ -40,6 +41,7 @@ export default class NEARStakingProvider implements NEARStakingProtocol {
     ): Promise<string> {
         const signer = await this.getSigner(wallet);
         const yAmount = this.normalizeAmount(amount, ["all"]);
+
         return this.signAndBroadcast(signer, NEARProtocol.INSTANCE.createUnstakeTransaction(signer, stakingPoolAccountId, yAmount));
     }
 
@@ -50,6 +52,7 @@ export default class NEARStakingProvider implements NEARStakingProtocol {
     ): Promise<string> {
         const signer = await this.getSigner(wallet);
         const yAmount = this.normalizeAmount(amount, ["all"]);
+
         return this.signAndBroadcast(signer, NEARProtocol.INSTANCE.createWithdrawTransaction(signer, stakingPoolAccountId, yAmount));
     }
 
@@ -104,6 +107,7 @@ export default class NEARStakingProvider implements NEARStakingProtocol {
         if (!(wallet instanceof FilesystemWallet)) {
             throw new Error("Not FilesystemWallet");
         }
+
         return wallet as FilesystemWallet;
     }
 
@@ -126,6 +130,7 @@ export default class NEARStakingProvider implements NEARStakingProtocol {
             signer = new NEARSigner(signerImpl, accountId, network);
             this.#signers.set(wallet, signer);
         }
+
         return signer;
     }
 
@@ -147,8 +152,8 @@ function createSigner(publicKey: PublicKey<"ed25519">, signFn: SignFn): ed25519S
             return signFn(payload);
         },
 
-        verify(payload: Uint8Array, signature: Uint8Array): Promise<boolean> {
+        verify(_payload: Uint8Array, _signature: Uint8Array): Promise<boolean> {
             throw new Error("Method not implemented.");
-        }
+        },
     });
 }

@@ -31,17 +31,17 @@ export class StakingService {
         }
 
         this.#avalanche = createProxy<AvalancheStakingProtocol>("@restake/stake.js/protocol/avalanche", [
-            this.#networkConfig
+            this.#networkConfig,
         ], [
             "stake",
         ]);
         this.#ethereum = createProxy<EthereumStakingProtocol>("@restake/stake.js/protocol/ethereum", [
-            this.#networkConfig
+            this.#networkConfig,
         ], [
             "stake",
         ]);
         this.#near = createProxy<NEARStakingProtocol>("@restake/stake.js/protocol/near", [
-            this.#networkConfig
+            this.#networkConfig,
         ], [
             "stake",
             "unstake",

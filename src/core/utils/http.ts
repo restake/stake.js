@@ -1,3 +1,4 @@
+// eslint-disable-next-line capitalized-comments
 /*
 export class HTTPError implements Error {
     name: string;
@@ -41,12 +42,12 @@ export async function jsonrpc<T>(endpoint: URL | string, method: string, params:
     // TODO: brittle
     const contentType = request.headers.get("Content-Type");
     if (!contentType?.toLowerCase()?.startsWith("application/json")) {
-        // throw new HTTPError();
+        // Throw new HTTPError();
     }
 
     const responseBody = await request.json() as JSONRPCResponse<T, string>;
     if (request.status !== 200) {
-        // throw new HTTPError();
+        // Throw new HTTPError();
     }
 
     // TODO: proper error handling
@@ -60,5 +61,6 @@ export async function jsonrpc<T>(endpoint: URL | string, method: string, params:
         // XXX: if result is not present, then remote is not following JSON-RPC specification
         throw new Error("No result");
     }
+    
     return result;
 }

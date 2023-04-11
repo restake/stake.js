@@ -35,7 +35,7 @@ export class secp256k1PublicKey implements PublicKey<"secp256k1"> {
      * @returns secp256k1 uncompressed public key bytes
      */
     get uncompressedBytes(): Uint8Array {
-        return hexToBytes(decompressSecp256k1PublicKey(this.asHex()))
+        return hexToBytes(decompressSecp256k1PublicKey(this.asHex()));
     }
 
     asHex(): string {
@@ -61,6 +61,7 @@ export class secp256k1PrivateKey implements Signer<"secp256k1"> {
 
     async sign(payload: Uint8Array): Promise<Uint8Array> {
         const result = schnorr.sign(payload, this.#bytes);
+        
         return Promise.resolve(result);
     }
 
@@ -70,6 +71,7 @@ export class secp256k1PrivateKey implements Signer<"secp256k1"> {
 
     async verify(payload: Uint8Array, signature: Uint8Array): Promise<boolean> {
         const result = secp256k1.verify(signature, payload, this.#publicKey.bytes);
+        
         return Promise.resolve(result);
     }
 

@@ -27,8 +27,10 @@ export class NEARSigner implements TransactionSigner<Transaction, SignedTransact
     }
 
     async signTransaction(transaction: Transaction): Promise<SignedTransaction> {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const [_raw, signedTxn] = await nearSignTransaction(transaction.payload, this.#signerImpl);
         this.#dirtyState = true;
+
         return {
             transaction,
             payload: signedTxn,
@@ -42,7 +44,7 @@ export class NEARSigner implements TransactionSigner<Transaction, SignedTransact
         };
 
         let nonce: bigint;
-        let currentNonce = this.#currentNonce;
+        const currentNonce = this.#currentNonce;
         if (this.#dirtyState || !currentNonce) {
             this.#currentNonce = nonce = await jsonrpc<AccessKeyResponse>(this.#network.rpcUrl, "query", {
                 request_type: "view_access_key",
@@ -55,6 +57,7 @@ export class NEARSigner implements TransactionSigner<Transaction, SignedTransact
                     throw new Error(response.error);
                 }
 
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 return BigInt(response.nonce!);
             });
             this.#dirtyState = false;
@@ -112,15 +115,15 @@ class NearAPISignerImpl extends NearAPISigner {
         this.#signFn = signFn;
     }
 
-    createKey(accountId: string, networkId?: string | undefined): Promise<NEARPublicKey> {
+    createKey(_accountId: string, _networkId?: string | undefined): Promise<NEARPublicKey> {
         throw new Error("Method not implemented.");
     }
 
-    getPublicKey(accountId?: string | undefined, networkId?: string | undefined): Promise<NEARPublicKey> {
+    getPublicKey(_accountId?: string | undefined, _networkId?: string | undefined): Promise<NEARPublicKey> {
         return Promise.resolve(this.#getPublicKeyFn());
     }
 
-    async signMessage(message: Uint8Array, accountId?: string | undefined, networkId?: string | undefined): Promise<Signature> {
+    async signMessage(message: Uint8Array, _accountId?: string | undefined, _networkId?: string | undefined): Promise<Signature> {
         const publicKey = this.#getPublicKeyFn();
         const signature = await this.#signFn(sha256(message));
 

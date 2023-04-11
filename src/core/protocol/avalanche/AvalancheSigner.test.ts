@@ -1,16 +1,17 @@
-import { secp256k1PrivateKey, secp256k1Signer } from "../../signer/index.js";
+/* eslint-disable max-len */
+import { secp256k1PrivateKey } from "../../signer/index.js";
 import { AvalancheProtocol, AvalancheSigner, networks } from "./index.js";
 
 import { describe, expect, jest, test } from "@jest/globals";
 import { BinTools } from "avalanche";
 
-jest
-  .useFakeTimers()
-  .setSystemTime(new Date(4835932882000));
+jest.useFakeTimers()
+    .setSystemTime(new Date(4835932882000));
 
 const rpcMethods = {
     "platform.getUTXOs": async (args: { addresses: string[] }) => {
         const firstAddress = args.addresses[0];
+
         return {
             "numFetched": "17",
             "utxos": [
@@ -36,11 +37,11 @@ const rpcMethods = {
                 "address": firstAddress,
                 "utxo": "g9GGo5VM93phDTi7CDPN17AHYPJQFi1CTFjn34VHYduvKLXez",
             },
-            "encoding":"hex"
+            "encoding":"hex",
         };
     },
-    "platform.getStakingAssetID": async (args: unknown) => ({ assetID: "U8iRqJoiJm8xZHAacmvYyZVwqQx6uDNtQeP3CQ6fcgQk3JqnK" }),
-    "platform.getMinStake": async (args: unknown) => ({minValidatorStake: "1000000000", minDelegatorStake: "1000000000"}),
+    "platform.getStakingAssetID": async (_args: unknown) => ({ assetID: "U8iRqJoiJm8xZHAacmvYyZVwqQx6uDNtQeP3CQ6fcgQk3JqnK" }),
+    "platform.getMinStake": async (_args: unknown) => ({ minValidatorStake: "1000000000", minDelegatorStake: "1000000000" }),
 };
 
 globalThis.fetch = jest.fn(async (input: RequestInfo | URL, init?: RequestInit | undefined): Promise<Response> => {
@@ -54,6 +55,7 @@ globalThis.fetch = jest.fn(async (input: RequestInfo | URL, init?: RequestInit |
     }
 
     if (body) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const request = body as any;
         const id = request["id"];
         const method = request["method"];
@@ -71,6 +73,7 @@ globalThis.fetch = jest.fn(async (input: RequestInfo | URL, init?: RequestInit |
     }
 
     console.log(input, init);
+
     return Promise.reject("No internet");
 });
 
@@ -114,7 +117,7 @@ describe("Avalanche signer", () => {
         // Wed Mar 31 2123 10:41:22 GMT+0000
         const base = 4835932882000;
 
-        const dateStart = new Date(base+10000)
+        const dateStart = new Date(base+10000);
         const dateEnd = new Date(base+1209600000);
 
         const tx = await AvalancheProtocol.INSTANCE.buildStakeTransaction(

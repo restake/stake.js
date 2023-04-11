@@ -13,7 +13,7 @@ export class AvalancheProtocol implements TransactionBroadcaster<SignedTransacti
     static INSTANCE = new AvalancheProtocol();
 
     private constructor() {
-        // no-op
+        // No-op
     }
 
     /**
@@ -35,7 +35,7 @@ export class AvalancheProtocol implements TransactionBroadcaster<SignedTransacti
         amount: string,
         dateStart: Date,
         dateEnd: Date,
-        rewardLockTime?: BigInt,
+        rewardLockTime?: bigint,
     ): Promise<Transaction> {
         const pAddress: string = signer.deriveAddress("P");
         const pChain = signer.client.PChain();
@@ -77,7 +77,7 @@ export class AvalancheProtocol implements TransactionBroadcaster<SignedTransacti
      * @returns Array of all the UTXOs
      */
     private async getAllUTXOs(
-        signer: AvalancheSigner
+        signer: AvalancheSigner,
     ): Promise<string[]> {
         const pAddress: string = await signer.deriveAddress("P");
         const pChain = signer.client.PChain();
@@ -97,7 +97,7 @@ export class AvalancheProtocol implements TransactionBroadcaster<SignedTransacti
      */
     private async getAmount(
         txID: string,
-        signer: AvalancheSigner
+        signer: AvalancheSigner,
     ): Promise<number | null> {
         const pChain = signer.client.PChain();
         const rewardUTXO = await pChain.getRewardUTXOs(txID);
@@ -109,8 +109,7 @@ export class AvalancheProtocol implements TransactionBroadcaster<SignedTransacti
         const amountOne = parseInt(rewardUTXO.utxos[0].slice(150, 166), 16);
         const amountTwo = parseInt(rewardUTXO.utxos[1].slice(150, 166), 16);
 
-        if (amountOne < amountTwo) {return amountTwo}
-        else {return amountOne};
+        return Math.max(amountOne, amountTwo);
     }
 
     /**
@@ -119,19 +118,20 @@ export class AvalancheProtocol implements TransactionBroadcaster<SignedTransacti
      * @param txIDCB58 CB58 encoded string of a transactionID
      * @returns Decoded trsansactionID
      */
-    private async getTxID (
+    private async getTxID(
         txIDCB58: string,
     ): Promise<string> {
         const binTools = BinTools.getInstance();
         const decoded = binTools.cb58Decode(txIDCB58);
+
         return binTools.cb58Encode(decoded.slice(2, 34));
-    };
+    }
 
     async broadcast(signedTransaction: SignedTransaction): Promise<AvalancheBroadcastResponse> {
         // https://docs.avax.network/apis/avalanchego/apis/p-chain#platformissuetx
 
         const endpoint = new URL("/ext/bc/P", signedTransaction.transaction.network.rpcUrl);
-        const encodedPayload = signedTransaction.payload.toStringHex()
+        const encodedPayload = signedTransaction.payload.toStringHex();
 
         const response = await jsonrpc<AvalancheBroadcastResponse>(endpoint, "platform.issueTx", {
             tx: encodedPayload,
@@ -143,6 +143,7 @@ export class AvalancheProtocol implements TransactionBroadcaster<SignedTransacti
 
     async broadcastSimple(signedTransaction: SignedTransaction): Promise<string> {
         const response = await this.broadcast(signedTransaction);
+
         return response.txID;
     }
 }
