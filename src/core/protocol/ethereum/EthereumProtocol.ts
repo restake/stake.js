@@ -175,7 +175,7 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
 
     async broadcastSimple(signedTransaction: SignedTransaction): Promise<string> {
         const response = await this.broadcast(signedTransaction);
-        
+
         return response;
     }
 }
