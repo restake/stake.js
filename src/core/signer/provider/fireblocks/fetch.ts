@@ -31,13 +31,13 @@ async function computeJWT(
 ): Promise<string> {
     const encodedBody = new TextEncoder().encode(serializedBody ?? "\"\"");
     const nonce = crypto.randomUUID();
-    const now = Date.now() / 1000;
+    const now = Math.floor(Date.now() / 1000);
 
     const claims = {
         uri: url.pathname + url.search,
         nonce,
         iat: now,
-        exp: now + 35,
+        exp: now + 29,
         sub: apiKey,
         bodyHash: bytesToHex(sha256(encodedBody)),
     };
