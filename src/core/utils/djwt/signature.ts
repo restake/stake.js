@@ -24,7 +24,7 @@ export async function create(
 ): Promise<string> {
     return isNull(key) ? "" : b64encode(
         new Uint8Array(
-            await globalThis.crypto.subtle.sign(
+            await crypto.subtle.sign(
                 getAlgorithm(alg),
                 key,
                 encoder.encode(signingInput),

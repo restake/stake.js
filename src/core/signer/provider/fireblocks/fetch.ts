@@ -12,7 +12,7 @@ export async function importKey(apiSecretPEM: string): Promise<CryptoKey> {
 
     const der = b64decode(apiSecretPEM.replace(pemHeader, "").replace(pemFooter, ""));
 
-    return await globalThis.crypto.subtle.importKey(
+    return await crypto.subtle.importKey(
         "pkcs8",
         der,
         { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" },
@@ -28,7 +28,7 @@ async function computeJWT(
     serializedBody: string | undefined,
 ): Promise<string> {
     const encodedBody = new TextEncoder().encode(serializedBody ?? "\"\"");
-    const nonce = globalThis.crypto.randomUUID();
+    const nonce = crypto.randomUUID();
     const now = Date.now() / 1000;
 
     const claims = {
