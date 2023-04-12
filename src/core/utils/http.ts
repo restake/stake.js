@@ -1,3 +1,5 @@
+import { ZodType, z } from "zod";
+
 // eslint-disable-next-line capitalized-comments
 /*
 export class HTTPError implements Error {
@@ -61,6 +63,21 @@ export async function jsonrpc<T>(endpoint: URL | string, method: string, params:
         // XXX: if result is not present, then remote is not following JSON-RPC specification
         throw new Error("No result");
     }
-    
+
     return result;
+}
+
+export async function zodFetch<T extends ZodType, R extends z.infer<T>>(validator: T, url: URL, init?: RequestInit): Promise<R> {
+    const response = await fetch(url, init);
+    if (!response.ok) {
+        // Throw new HTTPError();
+    }
+
+    const contentType = response.headers.get("Content-Type");
+    if (!contentType?.toLowerCase()?.startsWith("application/json")) {
+        // Throw new HTTPError();
+    }
+
+    return response.json()
+        .then((body) => validator.parseAsync(body));
 }
