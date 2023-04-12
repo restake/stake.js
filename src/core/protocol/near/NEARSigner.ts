@@ -23,7 +23,7 @@ export class NEARSigner implements TransactionSigner<Transaction, SignedTransact
         this.#parent = parent;
         this.#accountId = typeof accountId === "string" ? accountId : parent.publicKey.asHex();
         this.#network = network;
-        this.#signerImpl = new NearAPISignerImpl(() => this.nearPublicKey, this.#parent.sign);
+        this.#signerImpl = new NearAPISignerImpl((() => this.nearPublicKey).bind(this), this.#parent.sign);
     }
 
     async signTransaction(transaction: Transaction): Promise<SignedTransaction> {
