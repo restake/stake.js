@@ -11,6 +11,8 @@ export interface Wallet {
 export interface SignerWallet extends Wallet {
     sign(protocol: string, data: Uint8Array): Promise<Uint8Array>;
 
+    accountId(protocol: string): Promise<string | null>;
+
     publicKey(protocol: string): Promise<Uint8Array>;
 }
 

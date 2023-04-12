@@ -50,6 +50,10 @@ export class FireblocksWallet implements SignerWallet {
         return signer.publicKey.bytes;
     }
 
+    async accountId(_protocol: string): Promise<string | null> {
+        return null;
+    }
+
     private async getSigner(protocol: string): Promise<Signer<never>> {
         const asset = knownAssets[protocol];
         if (!asset) {
