@@ -36,6 +36,12 @@
       "default": "./dist/esm/wallet/filesystem/index.js",
       "require": "./dist/cjs/wallet/filesystem/index.js",
       "types": "./dist/esm/wallet/filesystem/index.d.ts"
+    },
+    "./wallet/fireblocks": {
+      "import": "./dist/esm/wallet/fireblocks/index.js",
+      "default": "./dist/esm/wallet/fireblocks/index.js",
+      "require": "./dist/cjs/wallet/fireblocks/index.js",
+      "types": "./dist/esm/wallet/fireblocks/index.d.ts"
     }
   },
   "engines": {
