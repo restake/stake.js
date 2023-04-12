@@ -143,6 +143,7 @@ export function encode(data: ArrayBuffer | string, url: boolean = false): string
  * @param b64
  */
 export function decode(b64: string, url: boolean = false): Uint8Array {
+  /* BROKEN
   const binString = atob(b64);
   const size = binString.length;
   const bytes = new Uint8Array(size);
@@ -150,4 +151,6 @@ export function decode(b64: string, url: boolean = false): Uint8Array {
     bytes[i] = binString.charCodeAt(i);
   }
   return bytes;
+  */
+  return Buffer.from(b64, url ? "base64url" : "base64");
 }
