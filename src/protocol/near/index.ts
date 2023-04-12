@@ -1,10 +1,9 @@
 import { NEARStakingProtocol } from "../interfaces/index.js";
 import { NetworkConfig, isNamedNetworkConfig, isRawRPCNetworkConfig } from "../../service/network.js";
-import { Wallet } from "../../index.js";
+import { SignerWallet, Wallet, __USING_CORE_SDK } from "../../index.js";
 
 import { NEARNetwork, NEARProtocol, NEARSigner, networks } from "../../core/protocol/near/index.js";
 import { Transaction } from "../../core/protocol/near/NEARTransaction.js";
-import FilesystemWallet from "../../wallet/filesystem/index.js";
 import { ed25519PublicKey, ed25519Signer } from "../../core/signer/ed25519Signer.js";
 import { PublicKey } from "../../core/signer/key.js";
 import { parseNearAmount } from "near-api-js/lib/utils/format.js";
@@ -103,12 +102,12 @@ export default class NEARStakingProvider implements NEARStakingProtocol {
         return BigInt(parsed);
     }
 
-    private _fsw(wallet: Wallet): FilesystemWallet {
-        if (!(wallet instanceof FilesystemWallet)) {
-            throw new Error("Not FilesystemWallet");
+    private _fsw(wallet: Wallet): SignerWallet {
+        if (!wallet[__USING_CORE_SDK]) {
+            throw new Error("Not SignerWallet");
         }
 
-        return wallet as FilesystemWallet;
+        return wallet as SignerWallet;
     }
 
     private async getSigner(wallet: Wallet): Promise<NEARSigner> {
