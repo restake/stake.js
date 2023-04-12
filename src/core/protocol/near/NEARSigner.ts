@@ -25,7 +25,7 @@ export class NEARSigner implements TransactionSigner<Transaction, SignedTransact
         this.#network = network;
         this.#signerImpl = new NearAPISignerImpl(
             (() => this.nearPublicKey).bind(this),
-            ((msg: Uint8Array) => this.#parent.sign(msg)).bind(this)
+            ((msg: Uint8Array) => this.#parent.sign(msg)).bind(this),
         );
     }
 
