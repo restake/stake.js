@@ -11,10 +11,23 @@ The goal of `stake.js` is to help developers easily integrate Proof-of-Stake sta
 - [Node.js](https://nodejs.org/en) – `>= 18.15.x`
 - [yarn](https://yarnpkg.com)
 
-## Usage
+## Usage and Example
 
 ```sh
 yarn add @restake/stake.js
+```
+
+An example use-case for staking tokens on NEAR Protocol to a staking pool:
+
+```typescript
+import { StakingService, Wallet } from "@restake/stake.js";
+import { FilesystemWallet } from "@restake/stake.js/wallet/filesystem";
+
+const wallet: Wallet = new FilesystemWallet("key.json");
+
+const rstk = new StakingService("testnet");
+const txId = await rstk.near.stake(wallet, "shurik.pool.f863973.m0", "0.1");
+console.log("txId", txId);
 ```
 
 ## Supported Protocols
