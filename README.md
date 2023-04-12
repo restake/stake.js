@@ -37,10 +37,6 @@ Behind the scenes, the library does the heavy lifting on the following key areas
 
 We also aim to keep the library as lightweight as possible by implementing common functionalities (such as various elliptic curve signers) into our core SDK. Our signers mainly rely on audited modular cryptographic libraries, such as [`@noble/curves`](https://github.com/paulmillr/noble-curves) and [`@noble/hashes`](https://github.com/paulmillr/noble-hashes). Whenever we can, we aim to use libraries that support tree-shaking to decrease package size during bundling.
 
-## Security
-
-Restake takes security very seriously. Should you discover a vulnerability, please **DO NOT** submit a public PR. Instead, send your report privately to security@restake.net.
-
 ## Contributing
 
 If you find an issue or want to suggest improvements, feel free to open a pull request.
