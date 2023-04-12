@@ -100,7 +100,10 @@ const base64abcUrl = base64abc.slice(0, base64abc.length - 2).concat(["-", "_"])
  * Encodes a given Uint8Array, ArrayBuffer or string into RFC4648 base64 representation
  * @param data
  */
-export function encode(data: ArrayBuffer | string, url: boolean = false): string {
+export function encode(data: ArrayBuffer, url: boolean = false): string {
+    return Buffer.from(data).toString(url ? "base64url" : "base64")
+}
+export function encode2(data: ArrayBuffer | string, url: boolean = false): string {
   const uint8 = typeof data === "string"
     ? new TextEncoder().encode(data)
     : data instanceof Uint8Array
