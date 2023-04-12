@@ -64,9 +64,9 @@ export const Transaction = z.object({
         publicKey: z.string(),
         signature: z.object({
             fullSig: z.string(),
-            r: z.string(),
-            s: z.string(),
-            v: z.string(),
+            r: z.optional(z.string()),
+            s: z.optional(z.string()),
+            v: z.optional(z.string()),
         }),
     })),
 });

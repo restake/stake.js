@@ -187,6 +187,9 @@ class FireblocksSigner<K extends KeyType> implements Signer<K> {
 
     async edSign(payload: Uint8Array): Promise<{ r: bigint, s: bigint, recovery?: number }> {
         const signature = await this._sign(payload);
+        if (!signature.r || !signature.s || !signature.v) {
+            throw new Error("No r or s or v");
+        }
 
         return {
             r: BigInt(signature.r),
