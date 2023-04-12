@@ -6,6 +6,8 @@ import { zodFetch } from "../../../utils/http.ts";
 import { decode as b64decode } from "../../../utils/base64.ts";
 import { create as createJWT } from "../../../utils/djwt/index.ts";
 
+import { webcrypto as crypto } from "node:crypto";
+
 export async function importKey(apiSecretPEM: string): Promise<CryptoKey> {
     const pemHeader = "-----BEGIN PRIVATE KEY-----";
     const pemFooter = "-----END PRIVATE KEY-----";

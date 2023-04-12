@@ -3,6 +3,8 @@ import { encoder, isNull } from "./util.js";
 import type { Algorithm } from "./algorithm.js";
 import { encode as b64encode } from "../base64.js";
 
+import { webcrypto as crypto } from "node:crypto";
+
 export async function verify(
     signature: Uint8Array,
     key: CryptoKey | null,
