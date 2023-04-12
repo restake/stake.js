@@ -3,7 +3,7 @@ import { KeyType, PublicKey, Signer, ed25519PublicKey } from "../index.js";
 import { fireblocksAPI, importKey } from "./fireblocks/fetch.js";
 import { Account, Address, PublicKeyInfo, Transaction } from "./fireblocks/types.js";
 import { SignerProvider } from "./provider.js";
-import { hexToBytes } from "@noble/curves/abstract/utils";
+import { bytesToHex, hexToBytes } from "@noble/curves/abstract/utils";
 
 
 export type FireblocksKeyAlgorithm = "MPC_EDDSA_ED25519" | "MPC_ECDSA_SECP256K1";
@@ -145,6 +145,7 @@ class FireblocksSigner<K extends KeyType> implements Signer<K> {
     }
 
     private async _sign(payload: Uint8Array): Promise<Transaction["signedMessages"][number]["signature"]> {
+        const content = bytesToHex(payload);
         const { id } = await this.fireblocksPost(z.object({ id: z.string() }), "/v1/transactions", {
             assetId: this.#assetId,
             source: {
@@ -157,7 +158,7 @@ class FireblocksSigner<K extends KeyType> implements Signer<K> {
                 rawMessageData: {
                     messages: [
                         {
-                            content: payload,
+                            content,
                         },
                     ],
                 },
