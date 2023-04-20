@@ -2,7 +2,6 @@
   "name": "@restake/stake.js",
   "version": "0.0.1",
   "description": "Restake staking SDK",
-  "private": true,
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "type": "module",
@@ -90,8 +89,8 @@
     "build:esm": "tsc -p tsconfig.esm.json",
     "build": "npm run build:cjs && npm run build:esm"
   },
-  "author": "",
-  "license": "Proprietary",
+  "author": "Restake AG <social@restake.net>",
+  "license": "MIT",
   "devDependencies": {
     "@jest/globals": "29.5.0",
     "@types/bn.js": "5.1.1",

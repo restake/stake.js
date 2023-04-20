@@ -46,5 +46,5 @@ If you find an issue or want to suggest improvements, feel free to open a pull r
 
 ## License
 
-Proprietary.
+MIT
 
