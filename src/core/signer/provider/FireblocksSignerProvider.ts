@@ -13,6 +13,11 @@ export const keyTypeToFireblocksAlgorithm = {
     "secp256k1": "MPC_ECDSA_SECP256K1",
 } as const;
 
+export const fireblocksAlgorithmToKeyType = {
+    "MPC_EDDSA_ED25519": "ed25519",
+    "MPC_ECDSA_SECP256K1": "secp256k1",
+} as const;
+
 export interface FireblocksSignerOptions {
     assetId: string;
     // XXX: no idea what this is for honestly
@@ -20,7 +25,15 @@ export interface FireblocksSignerOptions {
     expectedAlgorithm: FireblocksKeyAlgorithm;
 }
 
-export class FireblocksSignerProvider<S extends Signer<K>, K extends KeyType> implements SignerProvider<S, K, FireblocksSignerOptions> {
+export class FireblocksSignerProvider<
+    S extends Signer<K>,
+    K extends typeof fireblocksAlgorithmToKeyType[P["expectedAlgorithm"]],
+    P extends FireblocksSignerOptions = FireblocksSignerOptions
+> implements SignerProvider<
+    S,
+    K,
+    P
+> {
     #apiKey: string;
     #apiSecret: string;
     #apiBaseUrl: string;
@@ -31,10 +44,12 @@ export class FireblocksSignerProvider<S extends Signer<K>, K extends KeyType> im
         this.#apiBaseUrl = apiBaseUrl;
     }
 
-    async getSigner(vaultAccountId: string, options: FireblocksSignerOptions): Promise<S> {
+    // Adjust return type to typeof options["expectedAlgorithm"]
+    async getSigner(vaultAccountId: string, options: P): Promise<S> {
+        const keyType = fireblocksAlgorithmToKeyType[options.expectedAlgorithm];
         const secretKey = await importKey(this.#apiSecret);
         const signer = new FireblocksSigner(
-            "ed25519",
+            keyType,
             vaultAccountId,
             this.#apiKey,
             secretKey,
