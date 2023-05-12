@@ -1,7 +1,6 @@
 import { Wallet, __USING_CORE_SDK } from "../../index.js";
 import { ed25519 } from "@noble/curves/ed25519";
 import { decode as b64decode } from "../../core/utils/base64.js";
-import { Wallet, __USING_CORE_SDK } from "../../index.js";
 import { readFile } from "node:fs/promises";
 
 export class FilesystemWallet implements Wallet {
