@@ -75,7 +75,7 @@ export class EthereumSigner implements TransactionSigner<Transaction, SignedTran
 
     async fetchBlock(block: bigint | BlockFinality): Promise<EthereumBlockResponse> {
         const endpoint = new URL(this.__network.rpcUrl);
-        
+
         return jsonrpc<EthereumBlockResponse>(endpoint, "eth_getBlockByNumber", [
             typeof block === "bigint" ? "0x" + block.toString(16) : block,
             false,
@@ -83,6 +83,12 @@ export class EthereumSigner implements TransactionSigner<Transaction, SignedTran
     }
 
     getAddress(checksum = true): string {
+        if ("ethereumAddress" in this.__parent) {
+            const fn = this.__parent.ethereumAddress as (() => string);
+
+            return fn();
+        }
+
         // Ethereum address derivation requires the removal of the first x04 byte
         const uncompressed = hexToBytes(decompressSecp256k1PublicKey(this.__parent.publicKey.asHex()));
         const publicKeyBytes = uncompressed.slice(1);
