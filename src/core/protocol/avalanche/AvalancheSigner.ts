@@ -15,19 +15,19 @@ import { Tx } from "avalanche/dist/apis/platformvm/tx.js";
 import { hexToBytes } from "@noble/curves/abstract/utils";
 
 export class AvalancheSigner implements TransactionSigner<Transaction, SignedTransaction>  {
-    #parent: secp256k1Signer;
-    #network: AvalancheNetwork;
-    #avalanche: Avalanche;
+    __parent: secp256k1Signer;
+    __network: AvalancheNetwork;
+    __avalanche: Avalanche;
 
     constructor(parent: secp256k1Signer, network: AvalancheNetwork) {
-        this.#parent = parent;
-        this.#network = network;
-        this.#avalanche = AvalancheSigner.getClient(network.rpcUrl, network.id, network.networkId);
+        this.__parent = parent;
+        this.__network = network;
+        this.__avalanche = AvalancheSigner.getClient(network.rpcUrl, network.id, network.networkId);
     }
 
     deriveAddress(chainID: AvalancheChainID): string {
-        const publicKey = this.#parent.publicKey;
-        const networkID = this.#network.id;
+        const publicKey = this.__parent.publicKey;
+        const networkID = this.__network.id;
 
         // The 33-byte compressed representation of the public key is hashed with sha256 once.
         // The result is then hashed with ripemd160 to yield a 20-byte address.
@@ -54,7 +54,7 @@ export class AvalancheSigner implements TransactionSigner<Transaction, SignedTra
                 const signval: Buffer = keypair.sign(Buffer.from(message));
                 */
                 // TODO: multiple key support?
-                const { r, s, recovery } = await this.#parent.edSign(message);
+                const { r, s, recovery } = await this.__parent.edSign(message);
 
                 // Signature length is 65 bytes
                 const signval = Buffer.from(hexToBytes([
@@ -91,11 +91,11 @@ export class AvalancheSigner implements TransactionSigner<Transaction, SignedTra
     }
 
     get client(): Avalanche {
-        return this.#avalanche;
+        return this.__avalanche;
     }
 
     get network(): AvalancheNetwork {
-        return this.#network;
+        return this.__network;
     }
 
     private static getClient(rpcUrl: string, network: string, networkId: number): Avalanche {

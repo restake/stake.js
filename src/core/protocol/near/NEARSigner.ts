@@ -10,26 +10,26 @@ import { Signer as NearAPISigner } from "near-api-js";
 import { signTransaction as nearSignTransaction } from "near-api-js/lib/transaction.js";
 
 export class NEARSigner implements TransactionSigner<Transaction, SignedTransaction> {
-    #parent: ed25519Signer;
-    #network: NEARNetwork;
-    #accountId: string;
-    #signerImpl: NearAPISignerImpl;
-    #currentNonce: bigint | null = null;
+    __parent: ed25519Signer;
+    __network: NEARNetwork;
+    __accountId: string;
+    __signerImpl: NearAPISignerImpl;
+    __currentNonce: bigint | null = null;
 
     // Flag to update nonce
-    #dirtyState: boolean = false;
+    __dirtyState: boolean = false;
 
     constructor(parent: ed25519Signer, accountId: string | null | undefined, network: NEARNetwork) {
-        this.#parent = parent;
-        this.#accountId = typeof accountId === "string" ? accountId : parent.publicKey.asHex();
-        this.#network = network;
-        this.#signerImpl = new NearAPISignerImpl(() => this.nearPublicKey, this.#parent.sign);
+        this.__parent = parent;
+        this.__accountId = typeof accountId === "string" ? accountId : parent.publicKey.asHex();
+        this.__network = network;
+        this.__signerImpl = new NearAPISignerImpl(() => this.nearPublicKey, this.__parent.sign);
     }
 
     async signTransaction(transaction: Transaction): Promise<SignedTransaction> {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const [_raw, signedTxn] = await nearSignTransaction(transaction.payload, this.#signerImpl);
-        this.#dirtyState = true;
+        const [_raw, signedTxn] = await nearSignTransaction(transaction.payload, this.__signerImpl);
+        this.__dirtyState = true;
 
         return {
             transaction,
@@ -44,13 +44,13 @@ export class NEARSigner implements TransactionSigner<Transaction, SignedTransact
         };
 
         let nonce: bigint;
-        const currentNonce = this.#currentNonce;
-        if (this.#dirtyState || !currentNonce) {
-            this.#currentNonce = nonce = await jsonrpc<AccessKeyResponse>(this.#network.rpcUrl, "query", {
+        const currentNonce = this.__currentNonce;
+        if (this.__dirtyState || !currentNonce) {
+            this.__currentNonce = nonce = await jsonrpc<AccessKeyResponse>(this.__network.rpcUrl, "query", {
                 request_type: "view_access_key",
                 finality: isFinality(block) ? block : undefined,
                 block_id: !isFinality(block) ? block : undefined,
-                account_id: this.#accountId,
+                account_id: this.__accountId,
                 public_key: this.nearPublicKey.toString(),
             }).then((response) => {
                 if (response.error) {
@@ -60,7 +60,7 @@ export class NEARSigner implements TransactionSigner<Transaction, SignedTransact
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 return BigInt(response.nonce!);
             });
-            this.#dirtyState = false;
+            this.__dirtyState = false;
         } else {
             nonce = currentNonce;
         }
@@ -75,7 +75,7 @@ export class NEARSigner implements TransactionSigner<Transaction, SignedTransact
             };
         };
 
-        return await jsonrpc<BlockResponse>(this.#network.rpcUrl, "block", {
+        return await jsonrpc<BlockResponse>(this.__network.rpcUrl, "block", {
             finality: isFinality(block) ? block : undefined,
             block_id: !isFinality(block) ? block : undefined,
         }).then((response) => {
@@ -87,32 +87,32 @@ export class NEARSigner implements TransactionSigner<Transaction, SignedTransact
      * Gets current accountId
      */
     get accountId(): string {
-        return this.#accountId;
+        return this.__accountId;
     }
 
     /**
      * Gets current NEAR network
      */
     get network(): NEARNetwork {
-        return this.#network;
+        return this.__network;
     }
 
     get nearPublicKey(): NEARPublicKey {
-        return new NEARPublicKey({ keyType: 0, data: this.#parent.publicKey.bytes });
+        return new NEARPublicKey({ keyType: 0, data: this.__parent.publicKey.bytes });
     }
 }
 
 class NearAPISignerImpl extends NearAPISigner {
-    #getPublicKeyFn: () => NEARPublicKey;
-    #signFn: (msg: Uint8Array) => Promise<Uint8Array>;
+    __getPublicKeyFn: () => NEARPublicKey;
+    __signFn: (msg: Uint8Array) => Promise<Uint8Array>;
 
     constructor(
         getPublicKeyFn: () => NEARPublicKey,
         signFn: (msg: Uint8Array) => Promise<Uint8Array>,
     ) {
         super();
-        this.#getPublicKeyFn = getPublicKeyFn;
-        this.#signFn = signFn;
+        this.__getPublicKeyFn = getPublicKeyFn;
+        this.__signFn = signFn;
     }
 
     createKey(_accountId: string, _networkId?: string | undefined): Promise<NEARPublicKey> {
@@ -120,12 +120,12 @@ class NearAPISignerImpl extends NearAPISigner {
     }
 
     getPublicKey(_accountId?: string | undefined, _networkId?: string | undefined): Promise<NEARPublicKey> {
-        return Promise.resolve(this.#getPublicKeyFn());
+        return Promise.resolve(this.__getPublicKeyFn());
     }
 
     async signMessage(message: Uint8Array, _accountId?: string | undefined, _networkId?: string | undefined): Promise<Signature> {
-        const publicKey = this.#getPublicKeyFn();
-        const signature = await this.#signFn(sha256(message));
+        const publicKey = this.__getPublicKeyFn();
+        const signature = await this.__signFn(sha256(message));
 
         return {
             signature,

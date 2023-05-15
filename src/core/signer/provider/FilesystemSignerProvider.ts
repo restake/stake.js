@@ -19,9 +19,9 @@ export type SignerConstructor<S extends Signer<K>, K extends KeyType> = (identif
  * @type K The signer type
  */
 export class FilesystemSignerProvider<S extends Signer<K>, K extends KeyType> implements SignerProvider<S, K> {
-    #keyDirectory: string;
-    #constructorFunc: SignerConstructor<S, K>;
-    #codec: Codec;
+    __keyDirectory: string;
+    __constructorFunc: SignerConstructor<S, K>;
+    __codec: Codec;
 
     /**
      * Constructs a new instance of FilesystemSignerProvider
@@ -31,18 +31,18 @@ export class FilesystemSignerProvider<S extends Signer<K>, K extends KeyType> im
      * @param codec Codec which turns file bytes into private key bytes. Defaults to `JSONHexEncodedKeyCodec`
      */
     constructor(keyDirectory: string, constructorFunc: SignerConstructor<S, K>, codec: Codec = JSONHexEncodedKeyCodec) {
-        this.#keyDirectory = keyDirectory;
-        this.#constructorFunc = constructorFunc;
-        this.#codec = codec;
+        this.__keyDirectory = keyDirectory;
+        this.__constructorFunc = constructorFunc;
+        this.__codec = codec;
     }
 
     async getSigner(identifier: string): Promise<S> {
-        const fileName = await this.#codec.determineFilename(identifier);
-        const filePath = join(this.#keyDirectory, fileName);
+        const fileName = await this.__codec.determineFilename(identifier);
+        const filePath = join(this.__keyDirectory, fileName);
 
         const file = await readFile(filePath);
-        const decoded = await this.#codec.loadPrivateKey(identifier, file);
-        const signer = this.#constructorFunc(identifier, decoded);
+        const decoded = await this.__codec.loadPrivateKey(identifier, file);
+        const signer = this.__constructorFunc(identifier, decoded);
 
         return signer;
     }

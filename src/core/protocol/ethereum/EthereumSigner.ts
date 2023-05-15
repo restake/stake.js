@@ -16,17 +16,17 @@ export type EthereumBlockResponse = {
 };
 
 export class EthereumSigner implements TransactionSigner<Transaction, SignedTransaction>  {
-    #parent: secp256k1Signer;
-    #network: EthereumNetwork;
+    __parent: secp256k1Signer;
+    __network: EthereumNetwork;
 
     constructor(parent: secp256k1Signer, network: EthereumNetwork) {
-        this.#parent = parent;
-        this.#network = network;
+        this.__parent = parent;
+        this.__network = network;
     }
 
     async signTransaction(transaction: Transaction): Promise<SignedTransaction> {
         const message = transaction.payload.getMessageToSign(true);
-        const { r, s, recovery } = await this.#parent.edSign(message);
+        const { r, s, recovery } = await this.__parent.edSign(message);
 
         // TODO: not sure if defaulting to 0 is fine.
         const bRecovery = recovery ? BigInt(recovery) : 0n;
@@ -53,11 +53,11 @@ export class EthereumSigner implements TransactionSigner<Transaction, SignedTran
     }
 
     get network(): EthereumNetwork {
-        return this.#network;
+        return this.__network;
     }
 
     async fetchNonce(senderAddress: string, block: bigint | BlockFinality = "latest"): Promise<bigint> {
-        const endpoint = new URL(this.#network.rpcUrl);
+        const endpoint = new URL(this.__network.rpcUrl);
         const nonce = await jsonrpc<string>(endpoint, "eth_getTransactionCount", [
             senderAddress,
             typeof block === "bigint" ? "0x" + block.toString(16) : block,
@@ -67,14 +67,14 @@ export class EthereumSigner implements TransactionSigner<Transaction, SignedTran
     }
 
     async fetchGasPrice(): Promise<bigint> {
-        const endpoint = new URL(this.#network.rpcUrl);
+        const endpoint = new URL(this.__network.rpcUrl);
         const gasPrice = await jsonrpc<string>(endpoint, "eth_gasPrice", []);
 
         return BigInt(gasPrice);
     }
 
     async fetchBlock(block: bigint | BlockFinality): Promise<EthereumBlockResponse> {
-        const endpoint = new URL(this.#network.rpcUrl);
+        const endpoint = new URL(this.__network.rpcUrl);
         
         return jsonrpc<EthereumBlockResponse>(endpoint, "eth_getBlockByNumber", [
             typeof block === "bigint" ? "0x" + block.toString(16) : block,
@@ -84,7 +84,7 @@ export class EthereumSigner implements TransactionSigner<Transaction, SignedTran
 
     getAddress(checksum = true): string {
         // Ethereum address derivation requires the removal of the first x04 byte
-        const uncompressed = hexToBytes(decompressSecp256k1PublicKey(this.#parent.publicKey.asHex()));
+        const uncompressed = hexToBytes(decompressSecp256k1PublicKey(this.__parent.publicKey.asHex()));
         const publicKeyBytes = uncompressed.slice(1);
         const keccakBytes = keccak_256(publicKeyBytes);
 
