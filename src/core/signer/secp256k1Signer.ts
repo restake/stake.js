@@ -60,18 +60,28 @@ export class secp256k1PrivateKey implements Signer<"secp256k1"> {
     }
 
     async sign(payload: Uint8Array): Promise<Uint8Array> {
-        const result = schnorr.sign(payload, this.__bytes);
-        
+        const result = this.signSync(payload);
+
         return Promise.resolve(result);
     }
 
-    async edSign(payload: Uint8Array, opts?: SignOpts): Promise<{ r: bigint, s: bigint, recovery?: number }> {
+    signSync(payload: Uint8Array): Uint8Array {
+        return schnorr.sign(payload, this.__bytes);
+    }
+
+    async edSign(payload: Uint8Array, opts?: SignOpts): Promise<ECDSASignature> {
+        const result = this.edSignSync(payload, opts);
+
+        return Promise.resolve(result);
+    }
+
+    edSignSync(payload: Uint8Array, opts?: SignOpts): ECDSASignature {
         return secp256k1.sign(payload, this.__bytes, opts);
     }
 
     async verify(payload: Uint8Array, signature: Uint8Array): Promise<boolean> {
         const result = secp256k1.verify(signature, payload, this.__publicKey.bytes);
-        
+
         return Promise.resolve(result);
     }
 
@@ -84,6 +94,9 @@ export class secp256k1PrivateKey implements Signer<"secp256k1"> {
     }
 }
 
+export type ECDSASignature = { r: bigint, s: bigint, recovery?: number };
+
 export type secp256k1Signer = Signer<"secp256k1"> & {
-    edSign(payload: Uint8Array, opts?: SignOpts): Promise<{ r: bigint, s: bigint, recovery?: number }>;
+    edSign(payload: Uint8Array, opts?: SignOpts): Promise<ECDSASignature>;
+    edSignSync(payload: Uint8Array, opts?: SignOpts): ECDSASignature;
 };
