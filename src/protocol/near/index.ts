@@ -10,13 +10,13 @@ import { PublicKey } from "../../core/signer/key.js";
 import { parseNearAmount } from "near-api-js/lib/utils/format.js";
 
 export default class NEARStakingProvider implements NEARStakingProtocol {
-    #networkConfig: NetworkConfig;
-    #signers: WeakMap<Wallet, NEARSigner>;
-    #protocolID = "near";
+    __networkConfig: NetworkConfig;
+    __signers: WeakMap<Wallet, NEARSigner>;
+    __protocolID = "near";
 
     constructor(networkConfig: NetworkConfig) {
-        this.#networkConfig = networkConfig;
-        this.#signers = new WeakMap();
+        this.__networkConfig = networkConfig;
+        this.__signers = new WeakMap();
     }
 
     async init(): Promise<void> {
@@ -57,7 +57,7 @@ export default class NEARStakingProvider implements NEARStakingProtocol {
     }
 
     private getNetwork(): NEARNetwork {
-        const providedConfig = this.#networkConfig.near;
+        const providedConfig = this.__networkConfig.near;
         const network: NEARNetwork = {
             id: "custom",
             rpcUrl: "",
@@ -112,23 +112,23 @@ export default class NEARStakingProvider implements NEARStakingProtocol {
     }
 
     private async getSigner(wallet: Wallet): Promise<NEARSigner> {
-        let signer = this.#signers.get(wallet);
+        let signer = this.__signers.get(wallet);
         if (!signer) {
             const network = this.getNetwork();
             const fsw = this._fsw(wallet);
 
             const [ accountId, rawPublicKey ] = await Promise.all([
-                fsw.accountId(this.#protocolID),
-                fsw.publicKey(this.#protocolID),
+                fsw.accountId(this.__protocolID),
+                fsw.publicKey(this.__protocolID),
             ]);
 
             const publicKey = new ed25519PublicKey(rawPublicKey);
             const signerImpl = createSigner(publicKey, (payload) => {
-                return fsw.sign(this.#protocolID, payload);
+                return fsw.sign(this.__protocolID, payload);
             });
 
             signer = new NEARSigner(signerImpl, accountId, network);
-            this.#signers.set(wallet, signer);
+            this.__signers.set(wallet, signer);
         }
 
         return signer;

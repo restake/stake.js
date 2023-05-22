@@ -5,18 +5,18 @@ import { readFile } from "node:fs/promises";
 
 export class FilesystemWallet implements Wallet {
     [__USING_CORE_SDK] = true;
-    #filePath: string;
-    #loadedKeys: ProtocolKeypair[] | undefined;
+    __filePath: string;
+    __loadedKeys: ProtocolKeypair[] | undefined;
 
     constructor(filePath: string) {
-        this.#filePath = filePath;
+        this.__filePath = filePath;
     }
 
     async loadKeys(): Promise<ProtocolKeypair[]> {
-        let keys = this.#loadedKeys;
+        let keys = this.__loadedKeys;
         if (keys === undefined) {
-            const data = await readFile(this.#filePath, { encoding: "utf-8" });
-            this.#loadedKeys = keys = JSON.parse(data) as ProtocolKeypair[];
+            const data = await readFile(this.__filePath, { encoding: "utf-8" });
+            this.__loadedKeys = keys = JSON.parse(data) as ProtocolKeypair[];
         }
 
         return keys;

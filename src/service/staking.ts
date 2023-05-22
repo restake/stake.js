@@ -3,11 +3,11 @@ import { createProxy } from "./staking.proxy.js";
 import { AvalancheStakingProtocol, NEARStakingProtocol, EthereumStakingProtocol } from "../protocol/interfaces/index.js";
 
 export class StakingService {
-    #networkConfig: NetworkConfig;
+    __networkConfig: NetworkConfig;
 
-    #avalanche: AvalancheStakingProtocol;
-    #ethereum: EthereumStakingProtocol;
-    #near: NEARStakingProtocol;
+    __avalanche: AvalancheStakingProtocol;
+    __ethereum: EthereumStakingProtocol;
+    __near: NEARStakingProtocol;
 
     constructor(
         networkConfigOrNetworkName?: NetworkConfig | NetworkName,
@@ -21,27 +21,27 @@ export class StakingService {
         const hasNetworkName = typeof networkConfigOrNetworkName === "string";
         const networkName = hasNetworkName ? networkConfigOrNetworkName : "mainnet";
         if (hasNetworkName) {
-            this.#networkConfig = {
+            this.__networkConfig = {
                 avalanche: networkConfig?.avalanche ?? hasNetworkName ? { networkName } : undefined,
                 ethereum: networkConfig?.ethereum ?? hasNetworkName ? { networkName } : undefined,
                 near: networkConfig?.near ?? hasNetworkName ? { networkName } : undefined,
             };
         } else {
-            this.#networkConfig = networkConfigOrNetworkName ?? {};
+            this.__networkConfig = networkConfigOrNetworkName ?? {};
         }
 
-        this.#avalanche = createProxy<AvalancheStakingProtocol>("@restake/stake.js/protocol/avalanche", [
-            this.#networkConfig,
+        this.__avalanche = createProxy<AvalancheStakingProtocol>("@restake/stake.js/protocol/avalanche", [
+            this.__networkConfig,
         ], [
             "stake",
         ]);
-        this.#ethereum = createProxy<EthereumStakingProtocol>("@restake/stake.js/protocol/ethereum", [
-            this.#networkConfig,
+        this.__ethereum = createProxy<EthereumStakingProtocol>("@restake/stake.js/protocol/ethereum", [
+            this.__networkConfig,
         ], [
             "stake",
         ]);
-        this.#near = createProxy<NEARStakingProtocol>("@restake/stake.js/protocol/near", [
-            this.#networkConfig,
+        this.__near = createProxy<NEARStakingProtocol>("@restake/stake.js/protocol/near", [
+            this.__networkConfig,
         ], [
             "stake",
             "unstake",
@@ -50,14 +50,14 @@ export class StakingService {
     }
 
     get avalanche(): AvalancheStakingProtocol {
-        return this.#avalanche;
+        return this.__avalanche;
     }
 
     get ethereum(): EthereumStakingProtocol {
-        return this.#ethereum;
+        return this.__ethereum;
     }
 
     get near(): NEARStakingProtocol {
-        return this.#near;
+        return this.__near;
     }
 }

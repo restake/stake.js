@@ -7,7 +7,7 @@ import { decompressSecp256k1PublicKey } from "../utils/secp256k1.js";
 
 export class secp256k1PublicKey implements PublicKey<"secp256k1"> {
     readonly keyType = "secp256k1";
-    #bytes: Uint8Array;
+    __bytes: Uint8Array;
 
     // This constructor only accepts 33-byte long compressed public key
     constructor(
@@ -17,7 +17,7 @@ export class secp256k1PublicKey implements PublicKey<"secp256k1"> {
             throw new Error("Expected 33 bytes, got " + compressedBytes.byteLength);
         }
 
-        this.#bytes = compressedBytes;
+        this.__bytes = compressedBytes;
     }
 
     /**
@@ -26,7 +26,7 @@ export class secp256k1PublicKey implements PublicKey<"secp256k1"> {
      * @returns secp256k1 compressed public key bytes
      */
     get bytes(): Uint8Array {
-        return this.#bytes;
+        return this.__bytes;
     }
 
     /**
@@ -39,48 +39,48 @@ export class secp256k1PublicKey implements PublicKey<"secp256k1"> {
     }
 
     asHex(): string {
-        return bytesToHex(this.#bytes);
+        return bytesToHex(this.__bytes);
     }
 }
 
 export class secp256k1PrivateKey implements Signer<"secp256k1"> {
     readonly keyType = "secp256k1";
-    #bytes: Uint8Array;
-    #publicKey: secp256k1PublicKey;
+    __bytes: Uint8Array;
+    __publicKey: secp256k1PublicKey;
 
     constructor(bytes: Uint8Array) {
         if (bytes.byteLength !== 32) {
             throw new Error("Expected 32 bytes, got " + bytes.byteLength);
         }
 
-        this.#bytes = bytes;
-        this.#publicKey = new secp256k1PublicKey(
-            secp256k1.getPublicKey(this.#bytes, true),
+        this.__bytes = bytes;
+        this.__publicKey = new secp256k1PublicKey(
+            secp256k1.getPublicKey(this.__bytes, true),
         );
     }
 
     async sign(payload: Uint8Array): Promise<Uint8Array> {
-        const result = schnorr.sign(payload, this.#bytes);
+        const result = schnorr.sign(payload, this.__bytes);
         
         return Promise.resolve(result);
     }
 
     async edSign(payload: Uint8Array, opts?: SignOpts): Promise<{ r: bigint, s: bigint, recovery?: number }> {
-        return secp256k1.sign(payload, this.#bytes, opts);
+        return secp256k1.sign(payload, this.__bytes, opts);
     }
 
     async verify(payload: Uint8Array, signature: Uint8Array): Promise<boolean> {
-        const result = secp256k1.verify(signature, payload, this.#publicKey.bytes);
+        const result = secp256k1.verify(signature, payload, this.__publicKey.bytes);
         
         return Promise.resolve(result);
     }
 
     get publicKey(): secp256k1PublicKey {
-        return this.#publicKey;
+        return this.__publicKey;
     }
 
     getPrivateBytes(): Uint8Array {
-        return this.#bytes;
+        return this.__bytes;
     }
 }
 
