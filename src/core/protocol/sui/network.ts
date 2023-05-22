@@ -6,11 +6,11 @@ export interface SuiNetwork {
 const _networks = {
     "mainnet": {
         id: "mainnet",
-        rpcUrl: "",
+        rpcUrl: "https://fullnode.mainnet.sui.io",
     },
     "testnet": {
         id: "testnet",
-        rpcUrl: "",
+        rpcUrl: "https://fullnode.testnet.sui.io",
     },
 } as const;
 
