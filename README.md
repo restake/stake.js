@@ -9,12 +9,12 @@ The goal of `stake.js` is to help developers easily integrate Proof-of-Stake sta
 ## Dependencies
 
 - [Node.js](https://nodejs.org/en) – `>= 18.15.x`
-- [yarn](https://yarnpkg.com)
+- [pnpm](https://pnpm.io/)
 
 ## Usage
 
 ```sh
-yarn add @restake/stake.js
+pnpm add @restake/stake.js
 ```
 
 ## Supported Protocols
