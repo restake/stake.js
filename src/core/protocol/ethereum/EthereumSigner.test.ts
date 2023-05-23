@@ -1,5 +1,5 @@
-import { secp256k1PrivateKey } from "../../signer/index.js";
-import { networks, EthereumSigner, toChecksumAddress, EthereumProtocol } from "./index.js";
+import { secp256k1PrivateKey } from "../../signer/index.ts";
+import { networks, EthereumSigner, toChecksumAddress, EthereumProtocol } from "./index.ts";
 
 import { describe, expect, jest, test } from "@jest/globals";
 import { hexToBytes } from "@noble/curves/abstract/utils";

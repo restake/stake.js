@@ -1,8 +1,8 @@
-import { BlockFinality, NEARNetwork, isFinality } from "./network.js";
-import { ed25519Signer } from "../../signer/ed25519Signer.js";
-import { jsonrpc } from "../../utils/http.js";
-import { SignedTransaction, Transaction } from "./NEARTransaction.js";
-import { TransactionSigner } from "../../signer/TransactionSigner.js";
+import { BlockFinality, NEARNetwork, isFinality } from "./network.ts";
+import { ed25519Signer } from "../../signer/ed25519Signer.ts";
+import { jsonrpc } from "../../utils/http.ts";
+import { SignedTransaction, Transaction } from "./NEARTransaction.ts";
+import { TransactionSigner } from "../../signer/TransactionSigner.ts";
 
 import { PublicKey as NEARPublicKey, Signature } from "near-api-js/lib/utils/key_pair.js";
 import { sha256 } from "@noble/hashes/sha256";

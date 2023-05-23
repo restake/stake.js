@@ -1,4 +1,4 @@
-import type { PublicKey, Signer } from "./index.js";
+import type { PublicKey, Signer } from "./index.ts";
 
 import { bytesToHex } from "@noble/curves/abstract/utils";
 import { ed25519 } from "@noble/curves/ed25519";

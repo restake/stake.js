@@ -1,8 +1,8 @@
-import { AvalancheChainID, AvalancheNetwork } from "./network.js";
-import { secp256k1Signer } from "../../signer/secp256k1Signer.js";
-import { Transaction, SignedTransaction } from "./AvalancheTransaction.js";
-import { TransactionSigner } from "../../signer/TransactionSigner.js";
-import { jsonrpc } from "../../utils/http.js";
+import { AvalancheChainID, AvalancheNetwork } from "./network.ts";
+import { secp256k1Signer } from "../../signer/secp256k1Signer.ts";
+import { Transaction, SignedTransaction } from "./AvalancheTransaction.ts";
+import { TransactionSigner } from "../../signer/TransactionSigner.ts";
+import { jsonrpc } from "../../utils/http.ts";
 
 import { Avalanche } from "avalanche";
 import { Buffer } from "buffer/index.js";

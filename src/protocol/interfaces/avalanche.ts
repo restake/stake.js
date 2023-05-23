@@ -1,4 +1,4 @@
-import { Wallet } from "../../wallet/index.js";
+import { Wallet } from "../../wallet/index.ts";
 
 export interface AvalancheStakingProtocol {
     stake(wallet: Wallet): Promise<string>;

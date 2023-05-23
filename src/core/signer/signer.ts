@@ -1,4 +1,4 @@
-import { KeyType, PublicKey } from "./index.js";
+import { KeyType, PublicKey } from "./index.ts";
 
 export interface Signer<K extends KeyType> {
     readonly keyType: K;

@@ -1,5 +1,5 @@
-import { KeyType, Signer } from "../index.js";
-import { SignerProvider } from "./provider.js";
+import { KeyType, Signer } from "../index.ts";
+import { SignerProvider } from "./provider.ts";
 
 export class FireblocksSignerProvider<S extends Signer<K>, K extends KeyType> implements SignerProvider<S, K> {
 

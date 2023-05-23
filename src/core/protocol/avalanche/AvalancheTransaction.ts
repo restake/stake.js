@@ -1,4 +1,4 @@
-import { AvalancheNetwork } from "./network.js";
+import { AvalancheNetwork } from "./network.ts";
 import { UnsignedTx, Tx } from "avalanche/dist/apis/platformvm";
 
 export type Transaction = {

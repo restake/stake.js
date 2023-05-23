@@ -1,3 +1,3 @@
-export * from "./AvalancheProtocol.js";
-export * from "./AvalancheSigner.js";
-export * from "./network.js";
+export * from "./AvalancheProtocol.ts";
+export * from "./AvalancheSigner.ts";
+export * from "./network.ts";

@@ -1,6 +1,6 @@
-import { NetworkName, NetworkConfig } from "./network.js";
-import { createProxy } from "./staking.proxy.js";
-import { AvalancheStakingProtocol, NEARStakingProtocol, EthereumStakingProtocol } from "../protocol/interfaces/index.js";
+import { NetworkName, NetworkConfig } from "./network.ts";
+import { createProxy } from "./staking.proxy.ts";
+import { AvalancheStakingProtocol, NEARStakingProtocol, EthereumStakingProtocol } from "../protocol/interfaces/index.ts";
 
 export class StakingService {
     __networkConfig: NetworkConfig;

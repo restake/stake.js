@@ -1,8 +1,8 @@
-import { BlockFinality } from "./network.js";
-import { EthereumBlockResponse, EthereumSigner } from "./EthereumSigner.js";
-import { jsonrpc } from "../../utils/http.js";
-import { SignedTransaction, Transaction } from "./EthereumTransaction.js";
-import { TransactionBroadcaster } from "../../network/broadcaster.js";
+import { BlockFinality } from "./network.ts";
+import { EthereumBlockResponse, EthereumSigner } from "./EthereumSigner.ts";
+import { jsonrpc } from "../../utils/http.ts";
+import { SignedTransaction, Transaction } from "./EthereumTransaction.ts";
+import { TransactionBroadcaster } from "../../network/broadcaster.ts";
 
 import { Common }  from "@ethereumjs/common";
 import { ethers, Contract } from "ethers";

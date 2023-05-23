@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
-import { secp256k1PrivateKey } from "../../signer/index.js";
-import { AvalancheProtocol, AvalancheSigner, networks } from "./index.js";
+import { secp256k1PrivateKey } from "../../signer/index.ts";
+import { AvalancheProtocol, AvalancheSigner, networks } from "./index.ts";
 
 import { describe, expect, jest, test } from "@jest/globals";
 import { BinTools } from "avalanche";

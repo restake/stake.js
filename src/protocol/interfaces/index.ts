@@ -1,3 +1,3 @@
-export * from "./avalanche.js";
-export * from "./ethereum.js";
-export * from "./near.js";
+export * from "./avalanche.ts";
+export * from "./ethereum.ts";
+export * from "./near.ts";

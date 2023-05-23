@@ -1,4 +1,4 @@
-import { Codec } from "./Codec.js";
+import { Codec } from "./Codec.ts";
 
 import { basename } from "node:path";
 import { hexToBytes } from "@noble/curves/abstract/utils";

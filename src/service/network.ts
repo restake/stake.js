@@ -1,4 +1,4 @@
-import type { StakingService } from "./staking.js";
+import type { StakingService } from "./staking.ts";
 
 export type NetworkName = "mainnet" | "testnet";
 

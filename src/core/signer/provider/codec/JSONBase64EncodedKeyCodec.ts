@@ -1,7 +1,7 @@
-import { Codec } from "./Codec.js";
+import { Codec } from "./Codec.ts";
 
 import { basename } from "node:path";
-import { decode as b64decode } from "../../../utils/base64.js";
+import { decode as b64decode } from "../../../utils/base64.ts";
 
 /**
  * Codec which handles reading JSON object with key `privateKey` containing base64 encoded private key bytes

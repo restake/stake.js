@@ -1,5 +1,5 @@
-import { AvalancheStakingProtocol } from "../interfaces/index.js";
-import { Wallet } from "../../index.js";
+import { AvalancheStakingProtocol } from "../interfaces/index.ts";
+import { Wallet } from "../../index.ts";
 
 export default class AvalancheStakingProvider implements AvalancheStakingProtocol {
     constructor() {

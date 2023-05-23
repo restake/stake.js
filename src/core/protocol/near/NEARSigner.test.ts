@@ -1,5 +1,5 @@
-import { ed25519PrivateKey } from "../../signer/index.js";
-import { NEARSigner, networks } from "./index.js";
+import { ed25519PrivateKey } from "../../signer/index.ts";
+import { NEARSigner, networks } from "./index.ts";
 
 import { describe, expect, test } from "@jest/globals";
 import { hexToBytes } from "@noble/curves/abstract/utils";

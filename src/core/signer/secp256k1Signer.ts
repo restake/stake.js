@@ -1,9 +1,9 @@
-import type { PublicKey, Signer } from "./index.js";
+import type { PublicKey, Signer } from "./index.ts";
 
 import { bytesToHex, hexToBytes } from "@noble/curves/abstract/utils";
 import { secp256k1, schnorr } from "@noble/curves/secp256k1";
 import type { SignOpts } from "@noble/curves/abstract/weierstrass";
-import { decompressSecp256k1PublicKey } from "../utils/secp256k1.js";
+import { decompressSecp256k1PublicKey } from "../utils/secp256k1.ts";
 
 export class secp256k1PublicKey implements PublicKey<"secp256k1"> {
     static COMPRESSED_PUBLIC_KEY_SIZE = 33;

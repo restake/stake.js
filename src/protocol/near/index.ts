@@ -1,13 +1,13 @@
-import { NEARStakingProtocol } from "../interfaces/index.js";
-import { NetworkConfig, isNamedNetworkConfig, isRawRPCNetworkConfig } from "../../service/network.js";
-import { Wallet } from "../../index.js";
+import { NEARStakingProtocol } from "../interfaces/index.ts";
+import { NetworkConfig, isNamedNetworkConfig, isRawRPCNetworkConfig } from "../../service/network.ts";
+import { Wallet } from "../../index.ts";
 
-import { NEARNetwork, NEARProtocol, NEARSigner, networks } from "../../core/protocol/near/index.js";
-import { Transaction } from "../../core/protocol/near/NEARTransaction.js";
-import FilesystemWallet from "../../wallet/filesystem/index.js";
-import { ed25519PublicKey, ed25519Signer } from "../../core/signer/ed25519Signer.js";
-import { PublicKey } from "../../core/signer/key.js";
-import { parseNearAmount } from "near-api-js/lib/utils/format.js";
+import { NEARNetwork, NEARProtocol, NEARSigner, networks } from "../../core/protocol/near/index.ts";
+import { Transaction } from "../../core/protocol/near/NEARTransaction.ts";
+import FilesystemWallet from "../../wallet/filesystem/index.ts";
+import { ed25519PublicKey, ed25519Signer } from "../../core/signer/ed25519Signer.ts";
+import { PublicKey } from "../../core/signer/key.ts";
+import { parseNearAmount } from "near-api-js/lib/utils/format.ts";
 
 export default class NEARStakingProvider implements NEARStakingProtocol {
     __networkConfig: NetworkConfig;

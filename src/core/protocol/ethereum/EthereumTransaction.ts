@@ -1,4 +1,4 @@
-import { EthereumNetwork } from "./network.js";
+import { EthereumNetwork } from "./network.ts";
 import { Transaction as EthTransaction } from "@ethereumjs/tx";
 
 export type Transaction = {

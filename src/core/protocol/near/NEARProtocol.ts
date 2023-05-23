@@ -1,10 +1,10 @@
-import { BlockFinality, isFinality } from "./network.js";
-import { BNFromBigInt } from "../../utils/bigint.js";
-import { encode as b64Encode } from "../../utils/base64.js";
-import { jsonrpc } from "../../utils/http.js";
-import { NEARSigner } from "./NEARSigner.js";
-import { SignedTransaction, Transaction } from "./NEARTransaction.js";
-import { TransactionBroadcaster } from "../../network/broadcaster.js";
+import { BlockFinality, isFinality } from "./network.ts";
+import { BNFromBigInt } from "../../utils/bigint.ts";
+import { encode as b64Encode } from "../../utils/base64.ts";
+import { jsonrpc } from "../../utils/http.ts";
+import { NEARSigner } from "./NEARSigner.ts";
+import { SignedTransaction, Transaction } from "./NEARTransaction.ts";
+import { TransactionBroadcaster } from "../../network/broadcaster.ts";
 
 import { functionCall } from "near-api-js/lib/transaction.js";
 import { NEAR_NOMINATION } from "near-api-js/lib/utils/format.js";

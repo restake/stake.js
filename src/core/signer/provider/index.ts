@@ -1,3 +1,3 @@
-export * from "./FilesystemSignerProvider.js";
-export * from "./FireblocksSignerProvider.js";
-export * from "./provider.js";
+export * from "./FilesystemSignerProvider.ts";
+export * from "./FireblocksSignerProvider.ts";
+export * from "./provider.ts";

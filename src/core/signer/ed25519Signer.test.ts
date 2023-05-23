@@ -1,4 +1,4 @@
-import { ed25519PrivateKey, ed25519PublicKey, ed25519Signer } from "./index.js";
+import { ed25519PrivateKey, ed25519PublicKey, ed25519Signer } from "./index.ts";
 
 import { describe, expect, test } from "@jest/globals";
 import { hexToBytes } from "@noble/curves/abstract/utils";

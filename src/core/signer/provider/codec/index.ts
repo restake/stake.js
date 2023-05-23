@@ -1,2 +1,2 @@
-export * from "./Codec.js";
-export * from "./JSONHexEncodedKeyCodec.js";
+export * from "./Codec.ts";
+export * from "./JSONHexEncodedKeyCodec.ts";

@@ -1,5 +1,5 @@
-import { EthereumStakingProtocol } from "../interfaces/index.js";
-import { Wallet } from "../../index.js";
+import { EthereumStakingProtocol } from "../interfaces/index.ts";
+import { Wallet } from "../../index.ts";
 
 export default class EthereumStakingProvider implements EthereumStakingProtocol {
     constructor() {

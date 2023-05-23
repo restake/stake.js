@@ -1,14 +1,14 @@
-import { BlockFinality } from "./network.js";
-import { EthereumNetwork } from "./network.js";
-import { jsonrpc } from "../../utils/http.js";
-import { secp256k1Signer } from "../../signer/secp256k1Signer.js";
-import { Transaction, SignedTransaction } from "./EthereumTransaction.js";
-import { TransactionSigner } from "../../signer/TransactionSigner.js";
+import { BlockFinality } from "./network.ts";
+import { EthereumNetwork } from "./network.ts";
+import { jsonrpc } from "../../utils/http.ts";
+import { secp256k1Signer } from "../../signer/secp256k1Signer.ts";
+import { Transaction, SignedTransaction } from "./EthereumTransaction.ts";
+import { TransactionSigner } from "../../signer/TransactionSigner.ts";
 
 import { bytesToHex, hexToBytes } from "@noble/curves/abstract/utils";
 import { keccak_256 } from "@noble/hashes/sha3";
 import { Transaction as EthTransaction } from "@ethereumjs/tx";
-import { decompressSecp256k1PublicKey } from "../../utils/secp256k1.js";
+import { decompressSecp256k1PublicKey } from "../../utils/secp256k1.ts";
 
 export type EthereumBlockResponse = {
     number: string;

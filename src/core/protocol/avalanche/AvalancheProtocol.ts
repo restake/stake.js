@@ -1,7 +1,7 @@
-import { AvalancheSigner } from "./AvalancheSigner.js";
-import { jsonrpc } from "../../utils/http.js";
-import { SignedTransaction, Transaction } from "./AvalancheTransaction.js";
-import { TransactionBroadcaster } from "../../network/broadcaster.js";
+import { AvalancheSigner } from "./AvalancheSigner.ts";
+import { jsonrpc } from "../../utils/http.ts";
+import { SignedTransaction, Transaction } from "./AvalancheTransaction.ts";
+import { TransactionBroadcaster } from "../../network/broadcaster.ts";
 
 import { BinTools, BN } from "avalanche";
 

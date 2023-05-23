@@ -1,7 +1,7 @@
-import { Codec } from "./codec/Codec.js";
-import { JSONHexEncodedKeyCodec } from "./codec/JSONHexEncodedKeyCodec.js";
-import { SignerProvider } from "./provider.js";
-import { KeyType, Signer } from "../index.js";
+import { Codec } from "./codec/Codec.ts";
+import { JSONHexEncodedKeyCodec } from "./codec/JSONHexEncodedKeyCodec.ts";
+import { SignerProvider } from "./provider.ts";
+import { KeyType, Signer } from "../index.ts";
 
 import { join } from "node:path";
 import { readFile } from "node:fs/promises";
