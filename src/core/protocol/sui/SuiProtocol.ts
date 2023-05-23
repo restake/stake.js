@@ -1,9 +1,13 @@
+import { TransactionBroadcaster } from "../../network/broadcaster.js";
+import { jsonrpc } from "../../utils/http.js";
 import { SuiSigner } from "./SuiSigner.js";
-import { Transaction } from "./SuiTransaction.js";
+import { SignedTransaction, Transaction } from "./SuiTransaction.js";
 
-import { TransactionBlock } from "@mysten/sui.js";
+import { SuiTransactionBlockResponse, TransactionBlock } from "@mysten/sui.js";
 
-export class SuiProtocol {
+export type SuiBroadcastResponse = SuiTransactionBlockResponse;
+
+export class SuiProtocol implements TransactionBroadcaster<SignedTransaction, SuiBroadcastResponse> {
     static INSTANCE = new SuiProtocol();
 
     private constructor() {
@@ -32,5 +36,27 @@ export class SuiProtocol {
             network: signer.network,
             payload: tx,
         };
+    }
+
+    async broadcast(signedTransaction: SignedTransaction): Promise<SuiBroadcastResponse> {
+        // https://docs.sui.io/sui-jsonrpc#sui_executeTransactionBlock
+
+        const endpoint = new URL(signedTransaction.transaction.network.rpcUrl);
+
+        const { transactionBlockBytes, signature } = signedTransaction.payload;
+        const signatures = Array.isArray(signature) ? signature : [signedTransaction.payload.signature];
+
+        return jsonrpc<SuiBroadcastResponse>(endpoint, "sui_executeTransactionBlock", [
+            transactionBlockBytes,
+            signatures,
+            null,
+            null,
+        ]);
+    }
+
+    async broadcastSimple(signedTransaction: SignedTransaction): Promise<string> {
+        const response = await this.broadcast(signedTransaction);
+
+        return response.digest;
     }
 }
