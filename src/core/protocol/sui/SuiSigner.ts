@@ -83,6 +83,10 @@ export class SuiSigner implements TransactionSigner<Transaction, SignedTransacti
         );
     }
 
+    get network(): SuiNetwork {
+        return this.__network;
+    }
+
     get keyPair(): SuiKeypair {
         return this.__wrappedParent;
     }
