@@ -152,6 +152,10 @@ function createSigner(publicKey: PublicKey<"ed25519">, signFn: SignFn): ed25519S
             return signFn(payload);
         },
 
+        signSync(_payload: Uint8Array): Uint8Array {
+            throw new Error("Method not implemented.");
+        },
+
         verify(_payload: Uint8Array, _signature: Uint8Array): Promise<boolean> {
             throw new Error("Method not implemented.");
         },
