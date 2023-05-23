@@ -17,7 +17,7 @@ export class SuiProtocol {
         baseTx?: TransactionBlock,
         senderAddress?: string,
     ): Promise<Transaction> {
-        const tx = baseTx ?? new TransactionBlock();
+        const tx = new TransactionBlock(baseTx);
         const [ coin ] = tx.splitCoins(tx.gas, [
             tx.pure(Number(amount)),
         ]);
