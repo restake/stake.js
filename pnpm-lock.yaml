@@ -28,6 +28,12 @@ dependencies:
   bs58:
     specifier: 5.0.0
     version: 5.0.0
+  buffer:
+    specifier: 6.0.3
+    version: 6.0.3
+  ethers:
+    specifier: 5.7.2
+    version: 5.7.2
   near-api-js:
     specifier: 1.1.0
     version: 1.1.0
