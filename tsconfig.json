@@ -1,14 +1,18 @@
 {
+    "include": ["src", "types"],
     "compilerOptions": {
+        "rootDir": "src",
+        "outDir": "dist",
         "moduleResolution": "bundler",
         "module": "ESNext",
         "target": "ESNext",
+        "lib": ["dom", "esnext"],
         "declaration": true,
         "strict": true,
         "noImplicitAny": true,
 
-        "allowImportingTsExtensions": false,
-        "emitDeclarationOnly": false,
+        "allowImportingTsExtensions": true,
+        "emitDeclarationOnly": true,
         "noEmit": false,
 
         "allowSyntheticDefaultImports": true,
