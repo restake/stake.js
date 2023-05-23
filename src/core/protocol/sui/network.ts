@@ -1,6 +1,7 @@
 export interface SuiNetwork {
     id: string;
     rpcUrl: string;
+    wsUrl?: string;
 }
 
 const _networks = {
