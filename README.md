@@ -22,6 +22,7 @@ yarn add @restake/stake.js
 - Avalanche
 - Ethereum
 - NEAR Protocol
+- Sui
 
 _This list is not final, as we are constantly working on adding support for additional protocols._
 
