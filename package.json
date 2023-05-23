@@ -5,6 +5,11 @@
   "private": true,
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
+  "files": [
+    "LICENSE",
+    "dist",
+    "src"
+  ],
   "type": "module",
   "exports": {
     ".": {
