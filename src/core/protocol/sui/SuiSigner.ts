@@ -4,6 +4,7 @@ import {
     ed25519Signer,
     KeyType,
     PublicKey,
+    secp256k1PublicKey,
     secp256k1Signer,
     Signer,
     TransactionSigner,
@@ -189,26 +190,21 @@ function wrapPublicKey<T extends KeyType>(
         },
 
         toSuiAddress(): string {
-            if (publicKey.keyType !== "ed25519") {
-                throw new Error(
-                    `Cannot derive address from key type "${publicKey.keyType}"`,
-                );
-            }
-
-            return toSuiAddress(this.__wrapped as PublicKey<"ed25519">);
+            return toSuiAddress(this.__wrapped);
         },
     });
 }
 
-export function toSuiAddress(publicKey: PublicKey<"ed25519">): string {
-    if (publicKey.keyType !== "ed25519") {
-        throw new Error(
-            `Cannot derive address from key type "${publicKey.keyType}"`,
-        );
-    }
+export function toSuiAddress<T extends KeyType = KeyType>(publicKey: PublicKey<T>): string {
+    const publicKeyLength = publicKey.keyType == "ed25519"
+        ? ed25519PublicKey.PUBLIC_KEY_SIZE
+        : secp256k1PublicKey.COMPRESSED_PUBLIC_KEY_SIZE;
 
-    const buf = new Uint8Array(ed25519PublicKey.PUBLIC_KEY_SIZE + 1);
-    buf.set([SIGNATURE_SCHEME_TO_FLAG["ED25519"]]);
+    const suiSignatureType = signatureMappings[publicKey.keyType];
+    const signatureScheme = SIGNATURE_SCHEME_TO_FLAG[suiSignatureType];
+
+    const buf = new Uint8Array(publicKeyLength + 1);
+    buf.set([signatureScheme]);
     buf.set(publicKey.bytes, 1);
 
     return normalizeSuiAddress(
