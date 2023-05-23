@@ -1,4 +1,4 @@
-import { secp256k1PrivateKey } from "./index.js";
+import { secp256k1PrivateKey, secp256k1PublicKey } from "./index.js";
 
 import { describe, expect, test } from "@jest/globals";
 import { hexToBytes } from "@noble/curves/abstract/utils";
@@ -17,10 +17,14 @@ describe("secp256k1 signer", () => {
 
         const pk1 = signer.publicKey.bytes;
         const pk2 = secp256k1.getPublicKey(privateKeyBytes, true);
+        expect(pk1.length).toEqual(secp256k1PublicKey.COMPRESSED_PUBLIC_KEY_SIZE);
+        expect(pk2.length).toEqual(secp256k1PublicKey.COMPRESSED_PUBLIC_KEY_SIZE);
         expect(pk1).toStrictEqual(pk2);
 
         const cpk1 = signer.publicKey.uncompressedBytes;
         const cpk2 = secp256k1.getPublicKey(privateKeyBytes, false);
+        expect(cpk1.length).toEqual(secp256k1PublicKey.UNCOMPRESSED_PUBLIC_KEY_SIZE);
+        expect(cpk2.length).toEqual(secp256k1PublicKey.UNCOMPRESSED_PUBLIC_KEY_SIZE);
         expect(cpk1).toStrictEqual(cpk2);
     });
 });

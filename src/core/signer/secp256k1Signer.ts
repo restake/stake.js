@@ -6,6 +6,9 @@ import type { SignOpts } from "@noble/curves/abstract/weierstrass";
 import { decompressSecp256k1PublicKey } from "../utils/secp256k1.js";
 
 export class secp256k1PublicKey implements PublicKey<"secp256k1"> {
+    static COMPRESSED_PUBLIC_KEY_SIZE = 33;
+    static UNCOMPRESSED_PUBLIC_KEY_SIZE = 65;
+
     readonly keyType = "secp256k1";
     __bytes: Uint8Array;
 
@@ -13,8 +16,8 @@ export class secp256k1PublicKey implements PublicKey<"secp256k1"> {
     constructor(
         compressedBytes: Uint8Array,
     ) {
-        if (compressedBytes.byteLength !== 33) {
-            throw new Error("Expected 33 bytes, got " + compressedBytes.byteLength);
+        if (compressedBytes.byteLength !== secp256k1PublicKey.COMPRESSED_PUBLIC_KEY_SIZE) {
+            throw new Error(`Expected ${secp256k1PublicKey.COMPRESSED_PUBLIC_KEY_SIZE} bytes, got ${compressedBytes.byteLength}`);
         }
 
         this.__bytes = compressedBytes;
@@ -44,13 +47,15 @@ export class secp256k1PublicKey implements PublicKey<"secp256k1"> {
 }
 
 export class secp256k1PrivateKey implements Signer<"secp256k1"> {
+    static PRIVATE_KEY_SIZE = 32;
+
     readonly keyType = "secp256k1";
     __bytes: Uint8Array;
     __publicKey: secp256k1PublicKey;
 
     constructor(bytes: Uint8Array) {
-        if (bytes.byteLength !== 32) {
-            throw new Error("Expected 32 bytes, got " + bytes.byteLength);
+        if (bytes.byteLength !== secp256k1PrivateKey.PRIVATE_KEY_SIZE) {
+            throw new Error(`Expected ${secp256k1PrivateKey.PRIVATE_KEY_SIZE} bytes, got ${bytes.byteLength}`);
         }
 
         this.__bytes = bytes;
