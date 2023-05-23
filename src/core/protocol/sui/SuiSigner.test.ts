@@ -20,6 +20,11 @@ const privateKeys = [
         keyType: "ed25519",
         expectedAddress: "0x2bc9ec0b73ed5820c1fcb92a075e7f04b840038b3d94c1f09a87aa407d009bff",
     },
+    {
+        privateKey: "08692998848bb53213360573e49f28b62ae6588f0519f62e5c31ec8b6aa8fc26",
+        keyType: "secp256k1",
+        expectedAddress: "0xe030d9f745cb92cddd54eb4c75f42d8d29d61dc9048750ae1177f2a7f2a4b887",
+    },
 ];
 
 function constructSigner(keyType: KeyType, privateKey: Uint8Array): SuiSigner {
