@@ -1,4 +1,4 @@
-import { ed25519PrivateKey, ed25519Signer } from "./index.js";
+import { ed25519PrivateKey, ed25519PublicKey, ed25519Signer } from "./index.js";
 
 import { describe, expect, test } from "@jest/globals";
 import { hexToBytes } from "@noble/curves/abstract/utils";
@@ -17,6 +17,8 @@ describe("ed25519 signer", () => {
 
         const pk1 = signer.publicKey.bytes;
         const pk2 = ed25519.getPublicKey(privateKeyBytes);
+        expect(pk1.length).toEqual(ed25519PublicKey.PUBLIC_KEY_SIZE);
+        expect(pk2.length).toEqual(ed25519PublicKey.PUBLIC_KEY_SIZE);
         expect(pk1).toStrictEqual(pk2);
     });
 });

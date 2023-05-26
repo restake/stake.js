@@ -4,12 +4,14 @@ import { bytesToHex } from "@noble/curves/abstract/utils";
 import { ed25519 } from "@noble/curves/ed25519";
 
 export class ed25519PublicKey implements PublicKey<"ed25519"> {
+    static PUBLIC_KEY_SIZE = 32;
+
     readonly keyType = "ed25519";
     __bytes: Uint8Array;
 
     constructor(bytes: Uint8Array) {
-        if (bytes.byteLength !== 32) {
-            throw new Error("Expected 32 bytes, got " + bytes.byteLength);
+        if (bytes.byteLength !== ed25519PublicKey.PUBLIC_KEY_SIZE) {
+            throw new Error(`Expected ${ed25519PublicKey.PUBLIC_KEY_SIZE} bytes, got ${bytes.byteLength}`);
         }
 
         this.__bytes = bytes;
@@ -25,14 +27,16 @@ export class ed25519PublicKey implements PublicKey<"ed25519"> {
 }
 
 export class ed25519PrivateKey implements Signer<"ed25519"> {
+    static PRIVATE_KEY_SIZE = 32;
+
     readonly keyType = "ed25519";
 
     __bytes: Uint8Array;
     __publicKey: ed25519PublicKey;
 
     constructor(bytes: Uint8Array) {
-        if (bytes.byteLength !== 32) {
-            throw new Error("Expected 32 bytes");
+        if (bytes.byteLength !== ed25519PrivateKey.PRIVATE_KEY_SIZE) {
+            throw new Error(`Expected ${ed25519PrivateKey.PRIVATE_KEY_SIZE} bytes, got ${bytes.byteLength}`);
         }
 
         this.__bytes = bytes;
@@ -44,14 +48,18 @@ export class ed25519PrivateKey implements Signer<"ed25519"> {
     }
 
     async sign(payload: Uint8Array): Promise<Uint8Array> {
-        const result = ed25519.sign(payload, this.__bytes);
-        
+        const result = this.signSync(payload);
+
         return Promise.resolve(result);
+    }
+
+    signSync(payload: Uint8Array): Uint8Array {
+        return ed25519.sign(payload, this.__bytes);
     }
 
     async verify(payload: Uint8Array, signature: Uint8Array): Promise<boolean> {
         const result = ed25519.verify(signature, payload, this.__publicKey.bytes);
-        
+
         return Promise.resolve(result);
     }
 

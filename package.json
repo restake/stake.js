@@ -37,6 +37,12 @@
       "require": "./dist/cjs/core/protocol/near/index.js",
       "types": "./dist/esm/core/protocol/near/index.d.ts"
     },
+    "./core/protocol/sui": {
+      "import": "./dist/esm/core/protocol/sui/index.js",
+      "default": "./dist/esm/core/protocol/sui/index.js",
+      "require": "./dist/cjs/core/protocol/sui/index.js",
+      "types": "./dist/esm/core/protocol/sui/index.d.ts"
+    },
     "./core/signer": {
       "import": "./dist/esm/core/signer/index.js",
       "default": "./dist/esm/core/signer/index.js",
@@ -109,6 +115,7 @@
   "dependencies": {
     "@ethereumjs/common": "3.1.1",
     "@ethereumjs/tx": "4.1.1",
+    "@mysten/sui.js": "0.34.0",
     "@noble/curves": "0.7.3",
     "@noble/hashes": "1.3.0",
     "avalanche": "3.16.0",
