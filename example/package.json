@@ -1,14 +1,14 @@
 {
   "name": "staking-sdk-example",
   "version": "1.0.0",
-  "description": "",
+  "description": "Restake staking SDK example",
   "main": "index.js",
   "scripts": {
     "ts-node": "ts-node --esm",
     "test": "ts-node --esm src/index.ts"
   },
-  "author": "",
-  "license": "Proprietary",
+  "author": "Restake AG <social@restake.net>",
+  "license": "MIT",
   "dependencies": {
     "@restake/stake.js": "../"
   },
