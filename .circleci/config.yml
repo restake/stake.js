@@ -30,7 +30,6 @@ pnpm_save_cache: &pnpm_save_cache
     name: "Save pnpm package cache"
     key: pnpm-packages-{{ checksum "pnpm-lock.yaml" }}
     paths:
-      - .pnpm-store
       - node_modules
 
 pnpm_setup: &pnpm_setup
@@ -39,7 +38,6 @@ pnpm_setup: &pnpm_setup
     command: |
       corepack enable
       corepack prepare pnpm@<< pipeline.parameters.pnpm_version >> --activate
-      pnpm config set store-dir .pnpm-store
 
 jobs:
   test:
