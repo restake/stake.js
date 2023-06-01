@@ -6,43 +6,86 @@ orbs:
 parameters:
   node_version:
     type: "string"
-    default: "18.15.0"
+    default: ""
+  pnpm_version:
+    type: "string"
+    default: "8.5.1"
 
 node_executor: &node_executor
-  executor:
-    name: "node/default"
-    tag: "<< pipeline.parameters.node_version >>"
+    docker:
+      - image: "cimg/base:stable"
+
+nodejs_install: &nodejs_install
+  node/install:
+    node-version: "" # uses .nvmrc when available
+
+pnpm_restore_cache: &pnpm_restore_cache
+  restore_cache:
+    name: "Restore pnpm package cache"
+    keys:
+      - pnpm-packages-{{ checksum "pnpm-lock.yaml" }}
+
+pnpm_save_cache: &pnpm_save_cache
+  save_cache:
+    name: "Save pnpm package cache"
+    key: pnpm-packages-{{ checksum "pnpm-lock.yaml" }}
+    paths:
+      - .pnpm-store
+      - node_modules
+
+pnpm_setup: &pnpm_setup
+  run:
+    name: "Setup pnpm"
+    command: |
+      corepack enable
+      corepack prepare pnpm@<< pipeline.parameters.pnpm_version >> --activate
+      pnpm config set store-dir .pnpm-store
 
 jobs:
   test:
     <<: *node_executor
     steps:
       - checkout
-      - node/install-packages:
-          pkg-manager: yarn
+      - <<: *pnpm_restore_cache
+      - <<: *nodejs_install
+      - <<: *pnpm_setup
+      - run:
+          name: "Install packages"
+          command: pnpm install
       - run:
           name: "Run all tests"
-          command: yarn run test
+          command: pnpm run test
+      - <<: *pnpm_save_cache
 
   lint:
     <<: *node_executor
     steps:
       - checkout
-      - node/install-packages:
-          pkg-manager: yarn
+      - <<: *pnpm_restore_cache
+      - <<: *nodejs_install
+      - <<: *pnpm_setup
+      - run:
+          name: "Install packages"
+          command: pnpm install
       - run:
           name: "Lint all files"
-          command: yarn run lint
+          command: pnpm run lint
+      - <<: *pnpm_save_cache
 
   build:
     <<: *node_executor
     steps:
       - checkout
-      - node/install-packages:
-          pkg-manager: yarn
+      - <<: *pnpm_restore_cache
+      - <<: *nodejs_install
+      - <<: *pnpm_setup
       - run:
-          name: "Build the project"
-          command: yarn run build
+          name: "Install packages"
+          command: pnpm install
+      - run:
+          name: "Lint all files"
+          command: pnpm run build
+      - <<: *pnpm_save_cache
 
 workflows:
   build:
