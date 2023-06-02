@@ -1,5 +1,5 @@
 import { SignOpts } from "@noble/curves/abstract/weierstrass";
-import { secp256k1PublicKey, secp256k1Signer } from "../index.js";
+import { ECDSASignature, secp256k1PublicKey, secp256k1Signer } from "../index.js";
 import { SignerProvider } from "./provider.js";
 import { bytesToHex } from "@noble/hashes/utils";
 import { toChecksumAddress } from "../../protocol/ethereum/EthereumSigner.js";
@@ -28,6 +28,14 @@ class MetaMaskSigner implements secp256k1Signer {
     constructor(provider: NonNullable<typeof window.ethereum>, address: string) {
         this.__provider = provider;
         this.__address = address;
+    }
+
+    signSync(_payload: Uint8Array): Uint8Array {
+        throw new Error("signSync is not available with MetaMask signer");
+    }
+
+    edSignSync(_payload: Uint8Array, _opts?: SignOpts | undefined): ECDSASignature {
+        throw new Error("signSync is not available with MetaMask signer");
     }
 
     async sign(_payload: Uint8Array): Promise<Uint8Array> {
