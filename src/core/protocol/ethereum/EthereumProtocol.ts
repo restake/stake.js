@@ -124,7 +124,7 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
     ): Promise<Transaction> {
         const parameters = await this.fetchParameters(signer, block);
 
-        const ethProvider = new ethers.providers.JsonRpcProvider(signer.network.rpcUrl);
+        const ethProvider = new ethers.JsonRpcProvider(signer.network.rpcUrl);
 
         const contractAddress = "0x7479Fc54515ef6Ef1C649d54e91520F51ff77982";
         const contract = new Contract(contractAddress, depositContractAbi, ethProvider);
@@ -132,7 +132,7 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
         const validatorPublickeyBytes = hexToBytes(validatorPublickey.replace(/^0x/, ""));
         const withdrawalCredentialsBytes = hexToBytes(withdrawalCredentials.replace(/^0x/, ""));
         const validatorSignatureBytes = hexToBytes(validatorSignature.replace(/^0x/, ""));
-        const depositDataRootBytes32 = ethers.utils.hexZeroPad(depositDataRoot, 32);
+        const depositDataRootBytes32 = ethers.zeroPadValue(depositDataRoot, 32);
 
         const payload = this.constructTransaction(signer, {
             ...this.constructTxData(parameters),
