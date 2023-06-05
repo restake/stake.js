@@ -49,6 +49,7 @@ class MetaMaskSigner implements secp256k1Signer {
     async edSign(payload: Uint8Array, _opts?: SignOpts | undefined): Promise<{ r: bigint; s: bigint; recovery?: number | undefined; }> {
         const hexPayload = bytesToHex(payload);
 
+        const { chainId } = await this.__provider.getNetwork();
         const rawSignature: string = await this.__provider.request({
             method: "eth_sign",
             params: [
@@ -62,8 +63,8 @@ class MetaMaskSigner implements secp256k1Signer {
         const s = BigInt("0x" + signature.substring(64, 128));
         const v = parseInt(signature.substring(128, 130), 16);
 
-        // TODO: verify
-        const recovery = v - 27;
+        // Reverse of (recovery + 35n + BigInt(chainId) * 2n)
+        const recovery = Number(BigInt(v) - 35n - (chainId / 2n));
 
         return {
             r,
