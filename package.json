@@ -13,94 +13,94 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": "./disk/index.js",
-      "default": "./disk/index.js",
-      "require": "./disk/index.cjs",
-      "types": "./disk/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts",
       "source": "./src/index.ts"
     },
     "./core": {
-      "import": "./disk/core/index.js",
-      "default": "./disk/core/index.js",
-      "require": "./disk/core/index.cjs",
-      "types": "./disk/core/index.d.ts",
+      "import": "./dist/core/index.js",
+      "default": "./dist/core/index.js",
+      "require": "./dist/core/index.cjs",
+      "types": "./dist/core/index.d.ts",
       "source": "./src/core/index.ts"
     },
     "./core/protocol/avalanche": {
-      "import": "./disk/core/protocol/avalanche/index.js",
-      "default": "./disk/core/protocol/avalanche/index.js",
-      "require": "./disk/core/protocol/avalanche/index.cjs",
-      "types": "./disk/core/protocol/avalanche/index.d.ts",
+      "import": "./dist/core/protocol/avalanche/index.js",
+      "default": "./dist/core/protocol/avalanche/index.js",
+      "require": "./dist/core/protocol/avalanche/index.cjs",
+      "types": "./dist/core/protocol/avalanche/index.d.ts",
       "source": "./src/core/protocol/avalanche/index.ts"
     },
     "./core/protocol/ethereum": {
-      "import": "./disk/core/protocol/ethereum/index.js",
-      "default": "./disk/core/protocol/ethereum/index.js",
-      "require": "./disk/core/protocol/ethereum/index.cjs",
-      "types": "./disk/core/protocol/ethereum/index.d.ts",
+      "import": "./dist/core/protocol/ethereum/index.js",
+      "default": "./dist/core/protocol/ethereum/index.js",
+      "require": "./dist/core/protocol/ethereum/index.cjs",
+      "types": "./dist/core/protocol/ethereum/index.d.ts",
       "source": "./src/core/protocol/ethereum/index.ts"
     },
     "./core/protocol/near": {
-      "import": "./disk/core/protocol/near/index.js",
-      "default": "./disk/core/protocol/near/index.js",
-      "require": "./disk/core/protocol/near/index.cjs",
-      "types": "./disk/core/protocol/near/index.d.ts",
+      "import": "./dist/core/protocol/near/index.js",
+      "default": "./dist/core/protocol/near/index.js",
+      "require": "./dist/core/protocol/near/index.cjs",
+      "types": "./dist/core/protocol/near/index.d.ts",
       "source": "./src/core/protocol/near/index.ts"
     },
     "./core/protocol/sui": {
-      "import": "./disk/core/protocol/sui/index.js",
-      "default": "./disk/core/protocol/sui/index.js",
-      "require": "./disk/core/protocol/sui/index.cjs",
-      "types": "./disk/core/protocol/sui/index.d.ts",
+      "import": "./dist/core/protocol/sui/index.js",
+      "default": "./dist/core/protocol/sui/index.js",
+      "require": "./dist/core/protocol/sui/index.cjs",
+      "types": "./dist/core/protocol/sui/index.d.ts",
       "source": "./src/core/protocol/sui/index.ts"
     },
     "./core/signer": {
-      "import": "./disk/core/signer/index.js",
-      "default": "./disk/core/signer/index.js",
-      "require": "./disk/core/signer/index.cjs",
-      "types": "./disk/core/signer/index.d.ts",
+      "import": "./dist/core/signer/index.js",
+      "default": "./dist/core/signer/index.js",
+      "require": "./dist/core/signer/index.cjs",
+      "types": "./dist/core/signer/index.d.ts",
       "source": "./src/core/signer/index.ts"
     },
     "./core/signer/provider": {
-      "import": "./disk/core/signer/provider/index.js",
-      "default": "./disk/core/signer/provider/index.js",
-      "require": "./disk/core/signer/provider/index.cjs",
-      "types": "./disk/core/signer/provider/index.d.ts",
+      "import": "./dist/core/signer/provider/index.js",
+      "default": "./dist/core/signer/provider/index.js",
+      "require": "./dist/core/signer/provider/index.cjs",
+      "types": "./dist/core/signer/provider/index.d.ts",
       "source": "./src/core/signer/provider/index.ts"
     },
     "./core/signer/provider/codec": {
-      "import": "./disk/core/signer/provider/codec/index.js",
-      "default": "./disk/core/signer/provider/codec/index.js",
-      "require": "./disk/core/signer/provider/codec/index.cjs",
-      "types": "./disk/core/signer/provider/codec/index.d.ts",
+      "import": "./dist/core/signer/provider/codec/index.js",
+      "default": "./dist/core/signer/provider/codec/index.js",
+      "require": "./dist/core/signer/provider/codec/index.cjs",
+      "types": "./dist/core/signer/provider/codec/index.d.ts",
       "source": "./src/core/signer/provider/codec/index.ts"
     },
     "./protocol/avalanche": {
-      "import": "./disk/protocol/avalanche/index.js",
-      "default": "./disk/protocol/avalanche/index.js",
-      "require": "./disk/protocol/avalanche/index.cjs",
-      "types": "./disk/protocol/avalanche/index.d.ts",
+      "import": "./dist/protocol/avalanche/index.js",
+      "default": "./dist/protocol/avalanche/index.js",
+      "require": "./dist/protocol/avalanche/index.cjs",
+      "types": "./dist/protocol/avalanche/index.d.ts",
       "source": "./src/protocol/avalanche/index.ts"
     },
     "./protocol/ethereum": {
-      "import": "./disk/protocol/ethereum/index.js",
-      "default": "./disk/protocol/ethereum/index.js",
-      "require": "./disk/protocol/ethereum/index.cjs",
-      "types": "./disk/protocol/ethereum/index.d.ts",
+      "import": "./dist/protocol/ethereum/index.js",
+      "default": "./dist/protocol/ethereum/index.js",
+      "require": "./dist/protocol/ethereum/index.cjs",
+      "types": "./dist/protocol/ethereum/index.d.ts",
       "source": "./src/protocol/ethereum/index.ts"
     },
     "./protocol/near": {
-      "import": "./disk/protocol/near/index.js",
-      "default": "./disk/protocol/near/index.js",
-      "require": "./disk/protocol/near/index.cjs",
-      "types": "./disk/protocol/near/index.d.ts",
+      "import": "./dist/protocol/near/index.js",
+      "default": "./dist/protocol/near/index.js",
+      "require": "./dist/protocol/near/index.cjs",
+      "types": "./dist/protocol/near/index.d.ts",
       "source": "./src/protocol/near/index.ts"
     },
     "./wallet/filesystem": {
-      "import": "./disk/wallet/filesystem/index.js",
-      "default": "./disk/wallet/filesystem/index.js",
-      "require": "./disk/wallet/filesystem/index.cjs",
-      "types": "./disk/wallet/filesystem/index.d.ts",
+      "import": "./dist/wallet/filesystem/index.js",
+      "default": "./dist/wallet/filesystem/index.js",
+      "require": "./dist/wallet/filesystem/index.cjs",
+      "types": "./dist/wallet/filesystem/index.d.ts",
       "source": "./src/wallet/filesystem/index.ts"
     }
   },
