@@ -19,7 +19,7 @@ export class MetaMaskSignerProvider implements SignerProvider<MetaMaskSigner, "s
 
 class MetaMaskSigner implements secp256k1Signer {
     readonly keyType = "secp256k1";
-    // TODO
+    // NOTE: MetaMask does not provide an API for getting the public key
     readonly publicKey = new secp256k1PublicKey(new Uint8Array(33));
 
     __provider: NonNullable<typeof window.ethereum>;
