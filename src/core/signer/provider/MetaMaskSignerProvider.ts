@@ -4,8 +4,8 @@ import { SignerProvider } from "./provider.js";
 import { bytesToHex } from "@noble/hashes/utils";
 import { toChecksumAddress } from "../../protocol/ethereum/EthereumSigner.js";
 
-export class MetaMaskSignerProvider implements SignerProvider<MetaMaskSigner, "secp256k1"> {
-    async getSigner(identifier: string): Promise<MetaMaskSigner> {
+export class MetaMaskSignerProvider implements SignerProvider<MetaMaskSigner, "secp256k1", undefined> {
+    async getSigner(identifier: string, _options: undefined): Promise<MetaMaskSigner> {
         const normalizedIdentifier = toChecksumAddress(identifier);
 
         const provider = window.ethereum;

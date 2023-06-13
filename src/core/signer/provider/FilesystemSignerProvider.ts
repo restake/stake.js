@@ -18,7 +18,7 @@ export type SignerConstructor<S extends Signer<K>, K extends KeyType> = (identif
  *
  * @type K The signer type
  */
-export class FilesystemSignerProvider<S extends Signer<K>, K extends KeyType> implements SignerProvider<S, K> {
+export class FilesystemSignerProvider<S extends Signer<K>, K extends KeyType> implements SignerProvider<S, K, undefined> {
     __keyDirectory: string;
     __constructorFunc: SignerConstructor<S, K>;
     __codec: Codec;
@@ -36,7 +36,7 @@ export class FilesystemSignerProvider<S extends Signer<K>, K extends KeyType> im
         this.__codec = codec;
     }
 
-    async getSigner(identifier: string): Promise<S> {
+    async getSigner(identifier: string, _options: undefined): Promise<S> {
         const fileName = await this.__codec.determineFilename(identifier);
         const filePath = join(this.__keyDirectory, fileName);
 
