@@ -104,6 +104,7 @@ export function encode(data: ArrayBuffer | string): string {
     : data instanceof Uint8Array
     ? data
     : new Uint8Array(data);
+  /*
   let result = "",
     i;
   const l = uint8.length;
@@ -127,6 +128,8 @@ export function encode(data: ArrayBuffer | string): string {
     result += "=";
   }
   return result;
+  */
+  return Buffer.from(uint8).toString("base64");
 }
 
 /**
@@ -134,6 +137,7 @@ export function encode(data: ArrayBuffer | string): string {
  * @param b64
  */
 export function decode(b64: string): Uint8Array {
+  /*
   const binString = atob(b64);
   const size = binString.length;
   const bytes = new Uint8Array(size);
@@ -141,4 +145,6 @@ export function decode(b64: string): Uint8Array {
     bytes[i] = binString.charCodeAt(i);
   }
   return bytes;
+  */
+  return Buffer.from(b64, "base64");
 }
