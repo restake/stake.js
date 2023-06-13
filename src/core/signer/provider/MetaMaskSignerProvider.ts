@@ -3,6 +3,7 @@ import { ECDSASignature, secp256k1PublicKey, secp256k1Signer } from "../index.js
 import { SignerProvider } from "./provider.js";
 import { bytesToHex } from "@noble/hashes/utils";
 import { toChecksumAddress } from "../../protocol/ethereum/EthereumSigner.js";
+import { vToRecovery } from "../../utils/ethereum.ts";
 
 export class MetaMaskSignerProvider implements SignerProvider<MetaMaskSigner, "secp256k1", undefined> {
     async getSigner(identifier: string, _options: undefined): Promise<MetaMaskSigner> {
@@ -63,8 +64,7 @@ class MetaMaskSigner implements secp256k1Signer {
         const s = BigInt("0x" + signature.substring(64, 128));
         const v = parseInt(signature.substring(128, 130), 16);
 
-        // Reverse of (recovery + 35n + BigInt(chainId) * 2n)
-        const recovery = Number(BigInt(v) - 35n - (chainId / 2n));
+        const recovery = vToRecovery(v, Number(chainId));
 
         return {
             r,
