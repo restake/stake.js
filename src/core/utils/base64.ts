@@ -98,7 +98,7 @@ const base64abc = [
  * Encodes a given Uint8Array, ArrayBuffer or string into RFC4648 base64 representation
  * @param data
  */
-export function encode(data: ArrayBuffer | string): string {
+export function encode(data: ArrayBuffer | string, url: boolean = false): string {
   const uint8 = typeof data === "string"
     ? new TextEncoder().encode(data)
     : data instanceof Uint8Array
@@ -129,14 +129,14 @@ export function encode(data: ArrayBuffer | string): string {
   }
   return result;
   */
-  return Buffer.from(uint8).toString("base64");
+  return Buffer.from(uint8).toString(url ? "base64url" : "base64");
 }
 
 /**
  * Decodes a given RFC4648 base64 encoded string
  * @param b64
  */
-export function decode(b64: string): Uint8Array {
+export function decode(b64: string, url: boolean = false): Uint8Array {
   /*
   const binString = atob(b64);
   const size = binString.length;
@@ -146,5 +146,5 @@ export function decode(b64: string): Uint8Array {
   }
   return bytes;
   */
-  return Buffer.from(b64, "base64");
+  return Buffer.from(b64, url ? "base64url" : "base64");
 }
