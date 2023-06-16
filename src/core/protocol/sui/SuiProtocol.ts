@@ -3,7 +3,7 @@ import { jsonrpc } from "../../utils/http.js";
 import { SuiSigner } from "./SuiSigner.js";
 import { SignedTransaction, Transaction } from "./SuiTransaction.js";
 
-import { SuiTransactionBlockResponse, TransactionBlock } from "@mysten/sui.js";
+import { SUI_SYSTEM_STATE_OBJECT_ID, SuiTransactionBlockResponse, TransactionBlock } from "@mysten/sui.js";
 
 export type SuiBroadcastResponse = SuiTransactionBlockResponse;
 
@@ -31,6 +31,61 @@ export class SuiProtocol implements TransactionBroadcaster<SignedTransaction, Su
         if (senderAddress) {
             tx.setSender(senderAddress);
         }
+
+        return {
+            network: signer.network,
+            payload: tx,
+        };
+    }
+
+    async createAddStakeTransaction(
+        signer: SuiSigner,
+        validatorAddress: string,
+        amount: bigint,
+        baseTx?: TransactionBlock,
+    ): Promise<Transaction> {
+        const tx = new TransactionBlock(baseTx);
+        const stakeCoin = tx.splitCoins(tx.gas, [
+            tx.pure(Number(amount)),
+        ]);
+
+        // eslint-disable-next-line max-len
+        // https://github.com/MystenLabs/sui/blob/03df554cc9fcd0ddf4128b32397e60a700955749/apps/wallet/src/ui/app/staking/stake/utils/transaction.ts#L6
+        tx.moveCall({
+            target: "0x3::sui_system::request_add_stake",
+            arguments: [
+                tx.sharedObjectRef({
+                    objectId: SUI_SYSTEM_STATE_OBJECT_ID,
+                    initialSharedVersion: 1,
+                    mutable: true,
+                }),
+                stakeCoin,
+                tx.pure(validatorAddress, "address"),
+            ],
+        });
+
+        return {
+            network: signer.network,
+            payload: tx,
+        };
+    }
+
+    async createWithdrawStakeTransaction(
+        signer: SuiSigner,
+        stakedSuiId: string,
+        baseTx?: TransactionBlock,
+    ): Promise<Transaction> {
+        const tx = new TransactionBlock(baseTx);
+
+        // eslint-disable-next-line max-len
+        // https://github.com/MystenLabs/sui/blob/03df554cc9fcd0ddf4128b32397e60a700955749/apps/wallet/src/ui/app/staking/stake/utils/transaction.ts#L24
+        tx.moveCall({
+            target: "0x3::sui_system::request_withdraw_stake",
+            arguments: [
+                tx.object(SUI_SYSTEM_STATE_OBJECT_ID),
+                tx.object(stakedSuiId),
+            ],
+        });
 
         return {
             network: signer.network,
