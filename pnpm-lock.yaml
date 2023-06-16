@@ -11,11 +11,11 @@ dependencies:
     specifier: 0.34.0
     version: 0.34.0
   '@noble/curves':
-    specifier: 0.7.3
-    version: 0.7.3
+    specifier: 1.1.0
+    version: 1.1.0
   '@noble/hashes':
-    specifier: 1.3.0
-    version: 1.3.0
+    specifier: 1.3.1
+    version: 1.3.1
   avalanche:
     specifier: 3.16.0
     version: 3.16.0
@@ -447,7 +447,7 @@ packages:
     resolution: {integrity: sha512-gcENLemRR13+1MED2NeZBMA7FRS0xQPM7L2vhMqvKkjqtFT4YfjSVADq5U0iLuQLhFUJEMVuA8fbv5v+TN6O9A==}
     dependencies:
       '@chainsafe/as-sha256': 0.4.1
-      '@noble/hashes': 1.3.0
+      '@noble/hashes': 1.3.1
     dev: false
 
   /@chainsafe/ssz@0.11.1:
@@ -1371,8 +1371,8 @@ packages:
     engines: {node: '>=16'}
     dependencies:
       '@mysten/bcs': 0.7.1
-      '@noble/curves': 1.0.0
-      '@noble/hashes': 1.3.0
+      '@noble/curves': 1.1.0
+      '@noble/hashes': 1.3.1
       '@scure/bip32': 1.3.0
       '@scure/bip39': 1.2.0
       '@suchipi/femver': 1.0.0
@@ -1385,17 +1385,16 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@noble/curves@0.7.3:
-    resolution: {integrity: sha512-z2dl235V3SFA6EveV/+oCAa9pAgyxxU1pUckS/FTXh5m3IyV0XRr2+NKM+HOJkyH//2DZM5DYZY0kxefU5c1qA==}
-    deprecated: Upgrade to 1.0.0 or higher for audited version
-    dependencies:
-      '@noble/hashes': 1.2.0
-    dev: false
-
   /@noble/curves@1.0.0:
     resolution: {integrity: sha512-2upgEu0iLiDVDZkNLeFV2+ht0BAVgQnEmCk6JsOch9Rp8xfkMCbvbAZlA2pBHQc73dbl+vFOXfqkf4uemdn0bw==}
     dependencies:
       '@noble/hashes': 1.3.0
+    dev: false
+
+  /@noble/curves@1.1.0:
+    resolution: {integrity: sha512-091oBExgENk/kGj3AZmtBDMpxQPDtxQABR2B9lb1JbVTs6ytdzZNwvhxQ4MWasRNEzlbEH8jCWFCwhF/Obj5AA==}
+    dependencies:
+      '@noble/hashes': 1.3.1
     dev: false
 
   /@noble/hashes@1.1.2:
@@ -1408,6 +1407,11 @@ packages:
 
   /@noble/hashes@1.3.0:
     resolution: {integrity: sha512-ilHEACi9DwqJB0pw7kv+Apvh50jiiSyR/cQ3y4W7lOR5mhvn/50FLUfsnfJz0BDZtl/RR16kXvptiv6q1msYZg==}
+    dev: false
+
+  /@noble/hashes@1.3.1:
+    resolution: {integrity: sha512-EbqwksQwz9xDRGfDST86whPBgM65E0OH/pCgqW0GBVzO22bNE+NuIbeTb714+IfSjU3aRk47EUvXIb5bTsenKA==}
+    engines: {node: '>= 16'}
     dev: false
 
   /@noble/secp256k1@1.7.1:
@@ -1451,7 +1455,7 @@ packages:
     resolution: {integrity: sha512-bcKpo1oj54hGholplGLpqPHRbIsnbixFtc06nwuNM5/dwSXOq/AAYoIBRsBmnZJSdfeNW5rnff7NTAz3ZCqR9Q==}
     dependencies:
       '@noble/curves': 1.0.0
-      '@noble/hashes': 1.3.0
+      '@noble/hashes': 1.3.1
       '@scure/base': 1.1.1
     dev: false
 
@@ -1465,7 +1469,7 @@ packages:
   /@scure/bip39@1.2.0:
     resolution: {integrity: sha512-SX/uKq52cuxm4YFXWFaVByaSHJh2w3BnokVSeUJVCv6K7WulT9u2BuNRBhuFl8vAuYnzx9bEu9WgpcNYTrYieg==}
     dependencies:
-      '@noble/hashes': 1.3.0
+      '@noble/hashes': 1.3.1
       '@scure/base': 1.1.1
     dev: false
 
