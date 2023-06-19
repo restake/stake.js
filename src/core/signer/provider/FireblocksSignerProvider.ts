@@ -46,7 +46,7 @@ export class FireblocksSignerProvider<
         this.__apiBaseUrl = apiBaseUrl;
     }
 
-    async getSigner(vaultAccountId: string, options: FireblocksSignerOptions): Promise<S> {
+    async getSigner<S2 extends S = S>(vaultAccountId: string, options: FireblocksSignerOptions): Promise<S2> {
         const keyType = fireblocksAlgorithmToKeyType[options.expectedAlgorithm];
         const secretKey = await importKey(this.__apiSecret);
         const signer = new FireblocksSigner(
