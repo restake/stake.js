@@ -196,6 +196,17 @@ function wrapPublicKey<T extends KeyType>(
         toSuiAddress(): string {
             return toSuiAddress(this.__wrapped);
         },
+
+        flag(): number {
+            const { keyType } = this.__wrapped;
+            if (keyType === "ed25519") {
+                return SIGNATURE_SCHEME_TO_FLAG.ED25519;
+            } else if (keyType === "secp256k1") {
+                return SIGNATURE_SCHEME_TO_FLAG.Secp256k1;
+            }
+
+            throw new Error(`Unsupported key type "${keyType}"`);
+        },
     });
 }
 
