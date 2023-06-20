@@ -91,6 +91,10 @@ export class SuiSigner implements TransactionSigner<Transaction, SignedTransacti
         return this.__wrappedParent;
     }
 
+    get address(): string {
+        return this.keyPair.getPublicKey().toSuiAddress();
+    }
+
     async signTransaction(
         transaction: Transaction,
     ): Promise<SignedTransaction> {

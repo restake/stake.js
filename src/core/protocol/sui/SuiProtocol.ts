@@ -2,6 +2,7 @@ import { TransactionBroadcaster } from "../../network/broadcaster.js";
 import { jsonrpc } from "../../utils/http.js";
 import { SuiSigner } from "./SuiSigner.js";
 import { SignedTransaction, Transaction } from "./SuiTransaction.js";
+import { DelegatedStake } from "./types.ts";
 
 import { SUI_SYSTEM_STATE_OBJECT_ID, SuiTransactionBlockResponse, TransactionBlock } from "@mysten/sui.js";
 
@@ -91,6 +92,14 @@ export class SuiProtocol implements TransactionBroadcaster<SignedTransaction, Su
             network: signer.network,
             payload: tx,
         };
+    }
+
+    async getStakedSuiIds(signer: SuiSigner): Promise<DelegatedStake[]> {
+        // https://docs.sui.io/sui-jsonrpc#suix_getStakes
+
+        const endpoint = new URL(signer.network.rpcUrl);
+
+        return await jsonrpc<DelegatedStake[]>(endpoint, "suix_getStakes", [signer.address]);
     }
 
     async broadcast(signedTransaction: SignedTransaction): Promise<SuiBroadcastResponse> {
