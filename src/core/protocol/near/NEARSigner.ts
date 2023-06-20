@@ -23,7 +23,7 @@ export class NEARSigner implements TransactionSigner<Transaction, SignedTransact
         this.__parent = parent;
         this.__accountId = typeof accountId === "string" ? accountId : parent.publicKey.asHex();
         this.__network = network;
-        this.__signerImpl = new NearAPISignerImpl(() => this.nearPublicKey, this.__parent.sign);
+        this.__signerImpl = new NearAPISignerImpl(this);
     }
 
     async signTransaction(transaction: Transaction): Promise<SignedTransaction> {
@@ -103,16 +103,13 @@ export class NEARSigner implements TransactionSigner<Transaction, SignedTransact
 }
 
 class NearAPISignerImpl extends NearAPISigner {
-    __getPublicKeyFn: () => NEARPublicKey;
-    __signFn: (msg: Uint8Array) => Promise<Uint8Array>;
+    __parent: NEARSigner;
 
     constructor(
-        getPublicKeyFn: () => NEARPublicKey,
-        signFn: (msg: Uint8Array) => Promise<Uint8Array>,
+        parent: NEARSigner,
     ) {
         super();
-        this.__getPublicKeyFn = getPublicKeyFn;
-        this.__signFn = signFn;
+        this.__parent = parent;
     }
 
     createKey(_accountId: string, _networkId?: string | undefined): Promise<NEARPublicKey> {
@@ -120,16 +117,15 @@ class NearAPISignerImpl extends NearAPISigner {
     }
 
     getPublicKey(_accountId?: string | undefined, _networkId?: string | undefined): Promise<NEARPublicKey> {
-        return Promise.resolve(this.__getPublicKeyFn());
+        return Promise.resolve(this.__parent.nearPublicKey);
     }
 
     async signMessage(message: Uint8Array, _accountId?: string | undefined, _networkId?: string | undefined): Promise<Signature> {
-        const publicKey = this.__getPublicKeyFn();
-        const signature = await this.__signFn(sha256(message));
+        const signature = await this.__parent.__parent.sign(sha256(message));
 
         return {
             signature,
-            publicKey,
+            publicKey: this.__parent.nearPublicKey,
         };
     }
 }
