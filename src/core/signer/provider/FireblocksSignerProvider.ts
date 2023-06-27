@@ -4,7 +4,6 @@ import { fireblocksAPI, importKey } from "./fireblocks/fetch.ts";
 import { Account, Address, PublicKeyInfo, Transaction } from "./fireblocks/types.ts";
 import { SignerProvider } from "./provider.js";
 import { bytesToHex, hexToBytes } from "@noble/curves/abstract/utils";
-import { vToRecovery } from "../../utils/ethereum.ts";
 import { compressSecp256k1PublicKey } from "../../utils/secp256k1.ts";
 
 
