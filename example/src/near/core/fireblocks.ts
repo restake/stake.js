@@ -4,9 +4,10 @@ import { NEARProtocol, NEARSigner, networks, ntoy } from "@restake/stake.js/core
 
 import { readFile } from "node:fs/promises";
 
-const apiKey = "";
-const apiSecret = await readFile("./secret.pem", { encoding: "utf-8" });
-const accountId = "";
+const apiKey = await readFile("./keys/fireblocks-api-key.txt", { encoding: "utf-8" }).then((v) => v.trim());
+const apiSecret = await readFile("./keys/fireblocks-secret.pem", { encoding: "utf-8" });
+// https://console.fireblocks.io/v2/accounts/vault/${number}
+const accountId = await readFile("./keys/fireblocks-account.txt", { encoding: "utf-8" }).then((v) => v.trim());
 
 const signerProvider = new FireblocksSignerProvider(apiKey, apiSecret);
 const signer: ed25519Signer = await signerProvider.getSigner(accountId, {
