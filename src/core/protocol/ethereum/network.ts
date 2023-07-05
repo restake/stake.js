@@ -2,6 +2,7 @@ export interface EthereumNetwork {
     id: string;
     rpcUrl: string;
     chainId: number;
+    stakeDepositContractAddress?: string;
 }
 
 const _networks = {
@@ -9,6 +10,8 @@ const _networks = {
         id: "mainnet",
         rpcUrl: "https://rpc.ankr.com/eth",
         chainId: 1,
+        // https://etherscan.io/address/0x00000000219ab540356cbb839cbe05303d7705fa
+        stakeDepositContractAddress: "0x00000000219ab540356cBB839Cbe05303d7705Fa",
     },
     "testnet": {
         id: "goerli",

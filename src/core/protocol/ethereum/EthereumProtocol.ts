@@ -4,8 +4,8 @@ import { jsonrpc } from "../../utils/http.ts";
 import { SignedTransaction, Transaction } from "./EthereumTransaction.ts";
 import { TransactionBroadcaster } from "../../network/broadcaster.ts";
 
-import { Common }  from "@ethereumjs/common";
-import { ethers, Contract } from "ethers";
+import { Common } from "@ethereumjs/common";
+import { Contract, ethers } from "ethers";
 import { hexToBytes } from "@noble/curves/abstract/utils";
 import { Transaction as EthTransaction, TxData } from "@ethereumjs/tx";
 
@@ -62,7 +62,7 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
         block: BlockFinality | bigint,
     ): Promise<Parameters> {
         const senderAddress = signer.getAddress();
-        const [ ethBlock, gasPrice ] = await Promise.all([ signer.fetchBlock(block), signer.fetchGasPrice() ]);
+        const [ethBlock, gasPrice] = await Promise.all([signer.fetchBlock(block), signer.fetchGasPrice()]);
         const nonce = await signer.fetchNonce(senderAddress, typeof block === "bigint" ? block : BigInt(ethBlock.number));
 
         return {
@@ -98,7 +98,7 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
         receiveAddress: string,
         amount: bigint,
         block: BlockFinality | bigint = "latest",
-    ): Promise<Transaction>{
+    ): Promise<Transaction> {
         const parameters = await this.fetchParameters(signer, block);
 
         const payload = this.constructTransaction(signer, {
@@ -122,11 +122,18 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
         depositDataRoot: string,
         block: BlockFinality | bigint = "latest",
     ): Promise<Transaction> {
+        const contractAddress = signer.network.stakeDepositContractAddress;
+        if (!contractAddress) {
+            const { id, chainId } = signer.network;
+            throw new Error(
+                `Network info ("${id}" id=${chainId}) attached to current signer does not have stake deposit contract address`,
+            );
+        }
+
         const parameters = await this.fetchParameters(signer, block);
 
         const ethProvider = new ethers.JsonRpcProvider(signer.network.rpcUrl);
 
-        const contractAddress = "0x7479Fc54515ef6Ef1C649d54e91520F51ff77982";
         const contract = new Contract(contractAddress, depositContractAbi, ethProvider);
 
         const validatorPublickeyBytes = hexToBytes(validatorPublickey.replace(/^0x/, ""));
