@@ -1,5 +1,5 @@
 import { Wallet } from "../../wallet/index.ts";
 
 export interface EthereumStakingProtocol {
-    stake(wallet: Wallet): Promise<string>;
+    stake(wallet: Wallet, depositData: string): Promise<string[]>;
 }

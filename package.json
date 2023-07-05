@@ -102,6 +102,13 @@
       "require": "./dist/wallet/filesystem/index.cjs",
       "types": "./dist/wallet/filesystem/index.d.ts",
       "source": "./src/wallet/filesystem/index.ts"
+    },
+    "./wallet/fireblocks": {
+      "import": "./dist/wallet/fireblocks/index.js",
+      "default": "./dist/wallet/fireblocks/index.js",
+      "require": "./dist/wallet/fireblocks/index.cjs",
+      "types": "./dist/wallet/fireblocks/index.d.ts",
+      "source": "./src/wallet/fireblocks/index.ts"
     }
   },
   "engines": {

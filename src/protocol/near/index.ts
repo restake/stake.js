@@ -1,22 +1,18 @@
 import { NEARStakingProtocol } from "../interfaces/index.ts";
 import { NetworkConfig, isNamedNetworkConfig, isRawRPCNetworkConfig } from "../../service/network.ts";
-import { Wallet } from "../../index.ts";
+import { Wallet, isSignerWallet } from "../../index.ts";
 
 import { NEARNetwork, NEARProtocol, NEARSigner, networks } from "../../core/protocol/near/index.ts";
 import { Transaction } from "../../core/protocol/near/NEARTransaction.ts";
-import FilesystemWallet from "../../wallet/filesystem/index.ts";
-import { ed25519PublicKey, ed25519Signer } from "../../core/signer/ed25519Signer.ts";
-import { PublicKey } from "../../core/signer/key.ts";
 import { parseNearAmount } from "near-api-js/lib/utils/format.ts";
+import { wrapSignerWallet } from "../../wallet/wrap.ts";
 
 export default class NEARStakingProvider implements NEARStakingProtocol {
     __networkConfig: NetworkConfig;
-    __signers: WeakMap<Wallet, NEARSigner>;
     __protocolID = "near";
 
     constructor(networkConfig: NetworkConfig) {
         this.__networkConfig = networkConfig;
-        this.__signers = new WeakMap();
     }
 
     async init(): Promise<void> {
@@ -103,35 +99,16 @@ export default class NEARStakingProvider implements NEARStakingProtocol {
         return BigInt(parsed);
     }
 
-    private _fsw(wallet: Wallet): FilesystemWallet {
-        if (!(wallet instanceof FilesystemWallet)) {
-            throw new Error("Not FilesystemWallet");
-        }
-
-        return wallet as FilesystemWallet;
-    }
-
     private async getSigner(wallet: Wallet): Promise<NEARSigner> {
-        let signer = this.__signers.get(wallet);
-        if (!signer) {
-            const network = this.getNetwork();
-            const fsw = this._fsw(wallet);
-
-            const [ accountId, rawPublicKey ] = await Promise.all([
-                fsw.accountId(this.__protocolID),
-                fsw.publicKey(this.__protocolID),
-            ]);
-
-            const publicKey = new ed25519PublicKey(rawPublicKey);
-            const signerImpl = createSigner(publicKey, (payload) => {
-                return fsw.sign(this.__protocolID, payload);
-            });
-
-            signer = new NEARSigner(signerImpl, accountId, network);
-            this.__signers.set(wallet, signer);
+        if (!isSignerWallet(wallet)) {
+            throw new Error("Expected SignerWallet");
         }
 
-        return signer;
+        const network = this.getNetwork();
+        const accountId = await wallet.accountId(this.__protocolID);
+        const signerImpl = await wrapSignerWallet("ed25519", this.__protocolID, wallet);
+
+        return new NEARSigner(signerImpl, accountId, network);
     }
 
     private signAndBroadcast(signer: NEARSigner, transactionPromise: Promise<Transaction>): Promise<string> {
@@ -139,25 +116,4 @@ export default class NEARStakingProvider implements NEARStakingProtocol {
             .then((rawTx) => signer.signTransaction(rawTx))
             .then((signedTx) => NEARProtocol.INSTANCE.broadcastSimple(signedTx));
     }
-}
-
-type SignFn = (payload: Uint8Array) => Promise<Uint8Array>;
-
-function createSigner(publicKey: PublicKey<"ed25519">, signFn: SignFn): ed25519Signer {
-    return Object.freeze({
-        keyType: "ed25519",
-        publicKey,
-
-        sign(payload: Uint8Array): Promise<Uint8Array> {
-            return signFn(payload);
-        },
-
-        signSync(_payload: Uint8Array): Uint8Array {
-            throw new Error("Method not implemented.");
-        },
-
-        verify(_payload: Uint8Array, _signature: Uint8Array): Promise<boolean> {
-            throw new Error("Method not implemented.");
-        },
-    });
 }
