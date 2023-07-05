@@ -93,7 +93,7 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
         });
     }
 
-    async transfer(
+    async createTransferTransaction(
         signer: EthereumSigner,
         receiveAddress: string,
         amount: bigint,
@@ -113,7 +113,7 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
         };
     }
 
-    async stake(
+    async createStakeTransaction(
         signer: EthereumSigner,
         validatorPublickey: string,
         amount: bigint,

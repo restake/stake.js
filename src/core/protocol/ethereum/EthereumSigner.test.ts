@@ -84,7 +84,7 @@ describe("Ethereum signer", () => {
         const ethSigner = constructSigner(bytes);
 
         const recipient = testAddresses[0].address;
-        const tx = await EthereumProtocol.INSTANCE.transfer(ethSigner, recipient, 500n, 10n);
+        const tx = await EthereumProtocol.INSTANCE.createTransferTransaction(ethSigner, recipient, 500n, 10n);
         const signedTx = await ethSigner.signTransaction(tx);
 
         // eslint-disable-next-line max-len
