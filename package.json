@@ -2,8 +2,8 @@
   "name": "@restake/stake.js",
   "version": "0.0.1",
   "description": "Restake staking SDK",
-  "main": "disk/index.cjs",
-  "module": "disk/index.js",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
   "files": [
     "LICENSE",
     "dist",
