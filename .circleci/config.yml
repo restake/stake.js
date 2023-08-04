@@ -81,7 +81,7 @@ jobs:
           name: "Install packages"
           command: pnpm install
       - run:
-          name: "Lint all files"
+          name: "Build package"
           command: pnpm run build
       - <<: *pnpm_save_cache
 
