@@ -85,6 +85,54 @@ jobs:
           command: pnpm run build
       - <<: *pnpm_save_cache
 
+  publish:
+    <<: *node_executor
+    steps:
+      - checkout
+      - <<: *pnpm_restore_cache
+      - <<: *nodejs_install
+      - <<: *pnpm_setup
+      - run:
+          name: "Install packages"
+          command: pnpm install
+      - run:
+          name: "Adjust package version"
+          command: |
+            git config --local user.email "dev@restake.net"
+            git config --local user.name "Restake Bot"
+
+            set -x
+
+            VERSION="<< pipeline.git.tag >>"
+            if [ -z "${VERSION}" ]; then
+              commit="$(git rev-parse HEAD)"
+              VERSION="0.0.0-experimental-${commit}"
+            fi
+
+            pnpm version --no-git-tag-version "${VERSION}"
+      - run:
+          name: "Build package"
+          command: pnpm run build
+      - run:
+          name: "Publish package"
+          command: |
+            pnpm set "//registry.npmjs.org/:_authToken=${RESTAKE_NPM_TOKEN}"
+            git status
+
+            set -x
+
+            publish_args=(--no-git-checks)
+            if ! [ "<< pipeline.git.branch >>" = "master" ]; then
+              publish_args+=(--dry-run)
+            fi
+
+            if (pnpm pkg get version | grep -q "experimental-"); then
+              publish_args+=(--tag "experimental")
+            fi
+
+            pnpm publish "${publish_args[@]}"
+      - <<: *pnpm_save_cache
+
 workflows:
   build:
     jobs:
@@ -94,3 +142,14 @@ workflows:
           requires:
             - lint
             - test
+      - publish:
+          context: "restake-npm-context"
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
+            tags:
+              only:
+                - "/v.*/"
