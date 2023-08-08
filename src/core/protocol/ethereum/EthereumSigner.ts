@@ -86,7 +86,7 @@ export class EthereumSigner implements TransactionSigner<Transaction, SignedTran
         if ("ethereumAddress" in this.__parent) {
             const fn = this.__parent.ethereumAddress as (() => string);
 
-            return fn();
+            return fn.call(this.__parent);
         }
 
         // Ethereum address derivation requires the removal of the first x04 byte
