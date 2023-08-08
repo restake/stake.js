@@ -93,6 +93,24 @@ describe("Ethereum signer", () => {
 
         expect(serialized).toBe(expected);
     });
+
+    test("gets Ethereum address from signer's ethereumAddress method", async () => {
+        const expectedAddress = "0x000000000000000000000000000000000000dead";
+
+        const privateKey = testAccounts[0].privateKey;
+        const bytes = hexToBytes(privateKey.startsWith("0x") ? privateKey.substring(2) : privateKey);
+
+        const _signer = new secp256k1PrivateKey(bytes);
+        const signer = Object.assign(_signer, {
+            __address: expectedAddress,
+            ethereumAddress(): string {
+                return this.__address;
+            },
+        });
+
+        const ethSigner = new EthereumSigner(signer, networks["mainnet"]);
+        expect(ethSigner.getAddress(true)).toBe(expectedAddress);
+    });
 });
 
 describe("Checksum address computing", () => {
