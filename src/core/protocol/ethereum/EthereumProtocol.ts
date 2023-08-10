@@ -49,6 +49,12 @@ type Parameters = {
     nonce: bigint;
 };
 
+type PartialTransaction = {
+    to: string;
+    value: string;
+    data?: string;
+};
+
 export class EthereumProtocol implements TransactionBroadcaster<SignedTransaction, EthereumBroadcastResponse> {
     static INSTANCE = new EthereumProtocol();
 
@@ -72,12 +78,28 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
         };
     }
 
-    private constructTxData(parameters: Parameters): TxData {
-        const { ethBlock, gasPrice, nonce } = parameters;
+    private async estimateGas(
+        endpoint: string,
+        transaction: PartialTransaction,
+    ): Promise<bigint> {
+        const { to, value, data } = transaction;
+        const estimatedGas = await jsonrpc<string>(endpoint, "eth_estimateGas", [
+            {
+                to,
+                value,
+                data,
+            },
+        ]);
+
+        return BigInt(estimatedGas);
+    }
+
+    private constructTxData(parameters: Parameters, gasPrice?: bigint): TxData {
+        const { ethBlock, gasPrice: blockGasPrice, nonce } = parameters;
 
         return {
             nonce: "0x" + nonce.toString(16),
-            gasPrice: "0x" + gasPrice.toString(16),
+            gasPrice: "0x" + (gasPrice ?? blockGasPrice).toString(16),
             gasLimit: ethBlock.gasLimit,
         };
     }
@@ -101,10 +123,15 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
     ): Promise<Transaction> {
         const parameters = await this.fetchParameters(signer, block);
 
-        const payload = this.constructTransaction(signer, {
-            ...this.constructTxData(parameters),
+        const tx: PartialTransaction = {
             to: receiveAddress,
             value: "0x" + amount.toString(16),
+        };
+
+        const estimatedGas = await this.estimateGas(signer.network.rpcUrl, tx);
+        const payload = this.constructTransaction(signer, {
+            ...this.constructTxData(parameters, estimatedGas),
+            ...tx,
         });
 
         return {
@@ -141,8 +168,7 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
         const validatorSignatureBytes = hexToBytes(validatorSignature.replace(/^0x/, ""));
         const depositDataRootBytes32 = ethers.zeroPadValue(depositDataRoot, 32);
 
-        const payload = this.constructTransaction(signer, {
-            ...this.constructTxData(parameters),
+        const tx: PartialTransaction = {
             to: contractAddress,
             value: "0x" + amount.toString(16),
             data: contract.interface.encodeFunctionData(
@@ -154,6 +180,12 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
                     depositDataRootBytes32,
                 ],
             ),
+        };
+
+        const estimatedGas = await this.estimateGas(signer.network.rpcUrl, tx);
+        const payload = this.constructTransaction(signer, {
+            ...this.constructTxData(parameters, estimatedGas),
+            ...tx,
         });
 
         return {
