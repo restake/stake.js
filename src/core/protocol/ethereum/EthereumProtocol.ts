@@ -110,7 +110,7 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
             [ 25, 75 ],
         ]);
 
-        const history = feeHistory.baseFeePerGas.split(",");
+        const history = feeHistory.baseFeePerGas;
 
         return BigInt(history[1] ?? history[0]);
     }
