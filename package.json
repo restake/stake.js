@@ -1,6 +1,6 @@
 {
   "name": "@restake/stake.js",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Restake staking SDK",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
