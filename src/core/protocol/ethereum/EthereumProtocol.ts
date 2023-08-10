@@ -110,7 +110,9 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
             [ 25, 75 ],
         ]);
 
-        return BigInt(feeHistory.baseFeePerGas);
+        const history = feeHistory.baseFeePerGas.split(",");
+
+        return BigInt(history[1] ?? history[0]);
     }
 
     private async maxPriorityFeePerGas(endpoint: string): Promise<bigint> {
