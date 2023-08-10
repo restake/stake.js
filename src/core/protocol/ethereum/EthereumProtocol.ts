@@ -201,9 +201,11 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
         const validatorSignatureBytes = hexToBytes(validatorSignature.replace(/^0x/, ""));
         const depositDataRootBytes32 = ethers.zeroPadValue(depositDataRoot, 32);
 
+        const amountWei = amount * BigInt(1e9);
+
         const tx: PartialTransaction = {
             to: contractAddress,
-            value: "0x" + amount.toString(16),
+            value: "0x" + amountWei.toString(16),
             data: contract.interface.encodeFunctionData(
                 "deposit",
                 [
