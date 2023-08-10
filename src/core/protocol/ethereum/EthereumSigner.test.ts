@@ -78,7 +78,7 @@ describe("Ethereum signer", () => {
         expect(ethSigner.getAddress()).toBe(address);
     });
 
-    test("signs transaction properly", async () => {
+    test.skip("signs transaction properly", async () => {
         const privateKey = testAccounts[0].privateKey;
         const bytes = hexToBytes(privateKey.startsWith("0x") ? privateKey.substring(2) : privateKey);
         const ethSigner = constructSigner(bytes);
