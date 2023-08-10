@@ -12,7 +12,7 @@ const accountId = await readFile("./keys/fireblocks-account.txt", { encoding: "u
 const signerProvider = new FireblocksSignerProvider(apiKey, apiSecret);
 const signer: secp256k1Signer = await signerProvider.getSigner(accountId, {
     assetId: "ETH",
-    expectedAlgorithm: "MPC_EDDSA_ED25519",
+    expectedAlgorithm: "MPC_ECDSA_SECP256K1",
 });
 
 const ethereumNetwork = networks.mainnet;
