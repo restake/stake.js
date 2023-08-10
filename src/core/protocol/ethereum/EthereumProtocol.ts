@@ -1,5 +1,5 @@
 import { BlockFinality } from "./network.ts";
-import { EthereumBlockResponse, EthereumSigner } from "./EthereumSigner.ts";
+import { EthereumSigner } from "./EthereumSigner.ts";
 import { jsonrpc } from "../../utils/http.ts";
 import { SignedTransaction, Transaction } from "./EthereumTransaction.ts";
 import { TransactionBroadcaster } from "../../network/broadcaster.ts";
@@ -7,7 +7,7 @@ import { TransactionBroadcaster } from "../../network/broadcaster.ts";
 import { Common } from "@ethereumjs/common";
 import { Contract, ethers } from "ethers";
 import { hexToBytes } from "@noble/curves/abstract/utils";
-import { Transaction as EthTransaction, TxData } from "@ethereumjs/tx";
+import { FeeMarketEIP1559Transaction as EthTransaction, FeeMarketEIP1559TxData } from "@ethereumjs/tx";
 
 export type EthereumBroadcastResponse = string;
 
@@ -44,8 +44,8 @@ const depositContractAbi = [
 
 // TODO: better name
 type Parameters = {
-    ethBlock: EthereumBlockResponse;
-    gasPrice: bigint;
+    baseFeePerGas: bigint;
+    maxPriorityFeePerGas: bigint;
     nonce: bigint;
 };
 
@@ -68,12 +68,16 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
         block: BlockFinality | bigint,
     ): Promise<Parameters> {
         const senderAddress = signer.getAddress();
-        const [ethBlock, gasPrice] = await Promise.all([signer.fetchBlock(block), signer.fetchGasPrice()]);
+        const [ethBlock, baseFeePerGas, maxPriorityFeePerGas] = await Promise.all([
+            signer.fetchBlock(block),
+            this.feeHistory(signer.network.rpcUrl, 1, block),
+            this.maxPriorityFeePerGas(signer.network.rpcUrl), // TODO: move to signer
+        ]);
         const nonce = await signer.fetchNonce(senderAddress, typeof block === "bigint" ? block : BigInt(ethBlock.number));
 
         return {
-            ethBlock,
-            gasPrice,
+            baseFeePerGas,
+            maxPriorityFeePerGas,
             nonce,
         };
     }
@@ -94,17 +98,44 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
         return BigInt(estimatedGas);
     }
 
-    private constructTxData(parameters: Parameters, gasPrice?: bigint): TxData {
-        const { ethBlock, gasPrice: blockGasPrice, nonce } = parameters;
+    // Returns baseFeePerGas
+    private async feeHistory(
+        endpoint: string,
+        blockCount: number,
+        newestBlock: BlockFinality | bigint,
+    ): Promise<bigint> {
+        const feeHistory = await jsonrpc<{ baseFeePerGas: string }>(endpoint, "eth_feeHistory", [
+            blockCount,
+            newestBlock.toString(),
+            [ 25, 75 ],
+        ]);
+
+        return BigInt(feeHistory.baseFeePerGas);
+    }
+
+    private async maxPriorityFeePerGas(endpoint: string): Promise<bigint> {
+        const maxPriorityFeePerGas = await jsonrpc<string>(endpoint, "eth_maxPriorityFeePerGas", []);
+
+        return BigInt(maxPriorityFeePerGas);
+    }
+
+    private constructTxData(parameters: Parameters, gasLimit?: bigint): FeeMarketEIP1559TxData {
+        const { baseFeePerGas, maxPriorityFeePerGas, nonce } = parameters;
+        const maxFeePerGas = (baseFeePerGas * 2n) + maxPriorityFeePerGas;
+
+        // TODO: move this constant
+        const baseGasLimit = 21000;
 
         return {
             nonce: "0x" + nonce.toString(16),
-            gasPrice: "0x" + (gasPrice ?? blockGasPrice).toString(16),
-            gasLimit: ethBlock.gasLimit,
+            maxPriorityFeePerGas,
+            maxFeePerGas,
+            gasPrice: null,
+            gasLimit: gasLimit ?? baseGasLimit,
         };
     }
 
-    private constructTransaction(signer: EthereumSigner, txData: TxData): EthTransaction {
+    private constructTransaction(signer: EthereumSigner, txData: FeeMarketEIP1559TxData): EthTransaction {
         return EthTransaction.fromTxData(txData, {
             common: Common.custom({
                 name: signer.network.id,
@@ -128,9 +159,9 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
             value: "0x" + amount.toString(16),
         };
 
-        const estimatedGas = await this.estimateGas(signer.network.rpcUrl, tx);
+        const estimatedGasLimit = await this.estimateGas(signer.network.rpcUrl, tx);
         const payload = this.constructTransaction(signer, {
-            ...this.constructTxData(parameters, estimatedGas),
+            ...this.constructTxData(parameters, estimatedGasLimit),
             ...tx,
         });
 
@@ -182,9 +213,9 @@ export class EthereumProtocol implements TransactionBroadcaster<SignedTransactio
             ),
         };
 
-        const estimatedGas = await this.estimateGas(signer.network.rpcUrl, tx);
+        const estimatedGasLimit = await this.estimateGas(signer.network.rpcUrl, tx);
         const payload = this.constructTransaction(signer, {
-            ...this.constructTxData(parameters, estimatedGas),
+            ...this.constructTxData(parameters, estimatedGasLimit),
             ...tx,
         });
 

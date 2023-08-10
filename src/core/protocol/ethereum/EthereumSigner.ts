@@ -7,7 +7,7 @@ import { TransactionSigner } from "../../signer/TransactionSigner.ts";
 
 import { bytesToHex, hexToBytes } from "@noble/curves/abstract/utils";
 import { keccak_256 } from "@noble/hashes/sha3";
-import { Transaction as EthTransaction } from "@ethereumjs/tx";
+import { FeeMarketEIP1559Transaction as EthTransaction } from "@ethereumjs/tx";
 import { decompressSecp256k1PublicKey } from "../../utils/secp256k1.ts";
 
 export type EthereumBlockResponse = {
