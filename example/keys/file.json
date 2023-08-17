@@ -1,0 +1,8 @@
+[
+    {
+        "protocol": "near",
+        "keyType": "ed25519",
+        "accountId": "staking-sdk.testnet",
+        "privateKey": "FN0x7RVZ7ZCHMzCnd7T1rP8vHh9YV4rwsvsVQG8Rie0pk5k/LRuyjUKMH/xCl9N4bthNPzZtfQbOtGYeOZQ1og=="
+    }
+]
