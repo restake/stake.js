@@ -1,6 +1,6 @@
-import { FeeMarketEIP1559Transaction } from "@ethereumjs/tx";
+import { Transaction } from "ethers";
 import { ETHEREUM_NETWORKS } from "./constants";
 
 export type EthereumNetwork = typeof ETHEREUM_NETWORKS[keyof typeof ETHEREUM_NETWORKS];
-export type EthereumRawTransaction = Omit<FeeMarketEIP1559Transaction, "v" | "r" | "s">;
-export type EthereumSignedTransaction = FeeMarketEIP1559Transaction;
+export type EthereumRawTransaction = Omit<Transaction, "signature">;
+export type EthereumSignedTransaction =  Omit<Transaction, "signature"> & { signature: string };

@@ -11,5 +11,5 @@ export type SignedTransaction<P extends Protocol> = ProtocolTypeMapping[P]["sign
 export type Network<P extends Protocol> = ProtocolTypeMapping[P]["network"];
 export type NetworkConfig<P extends Protocol> = {
 	protocol: P,
-	network?: Network<P>
+	network: Network<P>
 }
