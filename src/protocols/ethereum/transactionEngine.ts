@@ -5,18 +5,7 @@ import { SignerWallet } from "../../wallets";
 import { PROTOCOL } from "../constants";
 import { DEFAULT_RPC_URLS, DEPOSIT_CONTRACT_ABI, DEPOSIT_CONTRACT_ADDRESS, ETHEREUM_NETWORK_CHAIN_IDS } from "./constants";
 import { EthereumNetwork, EthereumSignedTransaction } from "./types";
-
-type EthereumDepositData = {
-    pubkey: string;
-    withdrawal_credentials: string;
-    amount: bigint;
-    signature: string;
-    deposit_message_root: string;
-    deposit_data_root: string;
-    fork_version: string;
-    network_name: string;
-};
-
+import { EthereumDepositData } from "./types";
 
 export class EthereumTransactionEngine extends BaseTransactionEngine<Ethereum> {
     rpcUrl: URL;
