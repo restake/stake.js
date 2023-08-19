@@ -1,6 +1,6 @@
-import { PROTOCOL } from "./constants";
-import { EthereumRawTransaction, EthereumSignedTransaction, EthereumNetwork } from "./ethereum/types";
-import { NearProtocolRawTransaction, NearProtocolSignedTransaction, NearProtocolNetwork } from "./near-protocol/types";
+import { PROTOCOL } from "./constants.ts";
+import { EthereumRawTransaction, EthereumSignedTransaction, EthereumNetwork } from "./ethereum/types.ts";
+import { NearProtocolRawTransaction, NearProtocolSignedTransaction, NearProtocolNetwork } from "./near/types.ts";
 
 export type ProtocolTypeMapping = {
     [PROTOCOL.ETHEREUM]: {

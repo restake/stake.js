@@ -1,2 +1,2 @@
-export * from "./signerWallet";
-export * from "./ledgerWallet";
+export * from "./signerWallet.ts";
+export * from "./ledgerWallet.ts";

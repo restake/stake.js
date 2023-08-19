@@ -1,33 +1,37 @@
-import { SignerWallet } from "../wallets";
-import { Protocol, RawTransaction, SignedTransaction, NetworkConfig, Ethereum } from "../protocols";
+import { SignerWallet } from "../wallets/index.ts";
+import { Protocol, RawTransaction, SignedTransaction, NetworkConfig, Ethereum } from "../protocols/index.ts";
 import LedgerTransport from "@ledgerhq/hw-transport-node-hid";
 import EthereumLedgerApp, { ledgerService as ethereumLegerService } from "@ledgerhq/hw-app-eth";
 import NearLedgerApp from "@ledgerhq/hw-app-near";
-import { PROTOCOL } from "../protocols/constants";
+import { PROTOCOL } from "../protocols/constants.ts";
 import { Transaction } from "ethers";
 
-type LedgerApp = EthereumLedgerApp | NearLedgerApp;
+type LedgerApp = EthereumLedgerApp.default | NearLedgerApp.default;
 
 const AppMapping = {
-    [PROTOCOL.ETHEREUM]: EthereumLedgerApp,
-    [PROTOCOL.NEAR_PROTOCOL]: NearLedgerApp,
+    [PROTOCOL.ETHEREUM]: EthereumLedgerApp.default,
+    [PROTOCOL.NEAR_PROTOCOL]: NearLedgerApp.default,
 };
 
 export class LedgerWallet implements SignerWallet {
 
     private async getApp(network: NetworkConfig<Protocol>): Promise<LedgerApp> {
-        const devices = await LedgerTransport.list();
+        const devices = await LedgerTransport.default.list();
         if (!devices.length) {
             throw new Error("No Ledger device found!");
         }
 
-        const transport = await LedgerTransport.create();
+        const transport = await LedgerTransport.default.create();
         const app = new AppMapping[network.protocol](transport);
 
         return app;
     }
 
-    async signEthereum(app: EthereumLedgerApp, rawTx: RawTransaction<Ethereum>, path?: string): Promise<SignedTransaction<Ethereum>> {
+    async signEthereum(
+        app: EthereumLedgerApp.default,
+        rawTx: RawTransaction<Ethereum>,
+        path?: string
+    ): Promise<SignedTransaction<Ethereum>> {
         const serializedTx = rawTx.unsignedSerialized;
         const resolution = await ethereumLegerService.resolveTransaction(serializedTx, {}, {});
         const { v, r, s } = await app.signTransaction(
@@ -60,7 +64,7 @@ export class LedgerWallet implements SignerWallet {
         const app = await this.getApp(network);
 
         if (network.protocol === PROTOCOL.ETHEREUM) {
-            signedTx = await this.signEthereum(app as EthereumLedgerApp, rawTx as RawTransaction<Ethereum>, accountId);
+            signedTx = await this.signEthereum(app as EthereumLedgerApp.default, rawTx as RawTransaction<Ethereum>, accountId);
         } else {
             throw new Error(`Ledger signing not supported for ${network.protocol}`);
         }

@@ -1,3 +1,4 @@
-export * from "./constants";
-export * from "./types";
-export * from "./ethereum";
+export * from "./constants.ts";
+export * from "./types.ts";
+
+export * from "./ethereum/index.ts";

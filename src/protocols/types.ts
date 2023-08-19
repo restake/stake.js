@@ -1,5 +1,5 @@
-import { PROTOCOL } from "./constants";
-import { ProtocolTypeMapping } from "./typesMapping";
+import { PROTOCOL } from "./constants.ts";
+import { ProtocolTypeMapping } from "./typesMapping.ts";
 
 export type Protocol = keyof ProtocolTypeMapping;
 
@@ -10,6 +10,6 @@ export type RawTransaction<P extends Protocol> = ProtocolTypeMapping[P]["rawTran
 export type SignedTransaction<P extends Protocol> = ProtocolTypeMapping[P]["signedTransaction"];
 export type Network<P extends Protocol> = ProtocolTypeMapping[P]["network"];
 export type NetworkConfig<P extends Protocol> = {
-	protocol: P,
-	network: Network<P>
-}
+    protocol: P,
+    network: Network<P>
+};

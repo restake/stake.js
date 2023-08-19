@@ -12,30 +12,6 @@
       "default": "./dist/esm/index.js",
       "require": "./dist/cjs/index.js",
       "types": "./dist/esm/index.d.ts"
-    },
-    "./protocol/avalanche": {
-      "import": "./dist/esm/protocol/avalanche/index.js",
-      "default": "./dist/esm/protocol/avalanche/index.js",
-      "require": "./dist/cjs/protocol/avalanche/index.js",
-      "types": "./dist/esm/protocol/avalanche/index.d.ts"
-    },
-    "./protocol/ethereum": {
-      "import": "./dist/esm/protocol/ethereum/index.js",
-      "default": "./dist/esm/protocol/ethereum/index.js",
-      "require": "./dist/cjs/protocol/ethereum/index.js",
-      "types": "./dist/esm/protocol/ethereum/index.d.ts"
-    },
-    "./protocol/near": {
-      "import": "./dist/esm/protocol/near/index.js",
-      "default": "./dist/esm/protocol/near/index.js",
-      "require": "./dist/cjs/protocol/near/index.js",
-      "types": "./dist/esm/protocol/near/index.d.ts"
-    },
-    "./wallet/filesystem": {
-      "import": "./dist/esm/wallet/filesystem/index.js",
-      "default": "./dist/esm/wallet/filesystem/index.js",
-      "require": "./dist/cjs/wallet/filesystem/index.js",
-      "types": "./dist/esm/wallet/filesystem/index.d.ts"
     }
   },
   "scripts": {

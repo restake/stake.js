@@ -1,22 +1,22 @@
-import { NetworkConfig, Protocol, RawTransaction, SignedTransaction } from "../protocols";
-import { SignerWallet } from "../wallets";
+import { NetworkConfig, Protocol, RawTransaction, SignedTransaction } from "../protocols/index.ts";
+import { SignerWallet } from "../wallets/index.ts";
 
 interface TransactionEngine<P extends Protocol> {
-	rpcUrl: URL;
-	networkConfig: NetworkConfig<P>;
-	sign(wallet: SignerWallet, rawTx: RawTransaction<P>): SignedTransaction<P>;
-	broadcast(signedTx: SignedTransaction<P>): string;
+    rpcUrl: URL;
+    networkConfig: NetworkConfig<P>;
+    sign(wallet: SignerWallet, rawTx: RawTransaction<P>): Promise<SignedTransaction<P>>;
+    broadcast(signedTx: SignedTransaction<P>): Promise<string>;
 }
 
 export abstract class BaseTransactionEngine<P extends Protocol> implements TransactionEngine<P> {
     abstract rpcUrl: URL;
     abstract networkConfig: NetworkConfig<P>;
 
-    sign(wallet: SignerWallet, rawTx: RawTransaction<P>): SignedTransaction<P> {
+    async sign(wallet: SignerWallet, rawTx: RawTransaction<P>): Promise<SignedTransaction<P>> {
         const signedTx = wallet.sign(rawTx, this.networkConfig) as SignedTransaction<P>;
 
         return signedTx;
     }
 
-	abstract broadcast(signedTx: SignedTransaction<P>): string;
+    abstract broadcast(signedTx: SignedTransaction<P>): Promise<string>;
 }

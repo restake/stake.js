@@ -1,3 +1,2 @@
-export * from "./protocols";
-export * from "./services";
-export * from "./wallets";
+export * from "./protocols/index.ts";
+export * from "./wallets/index.ts";

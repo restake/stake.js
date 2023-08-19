@@ -1,9 +1,10 @@
 import { Transaction } from "ethers";
-import { ETHEREUM_NETWORKS } from "./constants";
+import { ETHEREUM_NETWORKS } from "./constants.ts";
+import { Signature } from "ethers";
 
 export type EthereumNetwork = typeof ETHEREUM_NETWORKS[keyof typeof ETHEREUM_NETWORKS];
 export type EthereumRawTransaction = Omit<Transaction, "signature">;
-export type EthereumSignedTransaction =  Omit<Transaction, "signature"> & { signature: string };
+export type EthereumSignedTransaction =  Omit<Transaction, "signature"> & { signature: Signature };
 
 export type EthereumDepositData = {
     pubkey: string;

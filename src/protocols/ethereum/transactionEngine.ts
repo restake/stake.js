@@ -1,11 +1,10 @@
 import { Interface, JsonRpcProvider, Transaction } from "ethers";
-import { Ethereum, NetworkConfig, RawTransaction } from "..";
-import { BaseTransactionEngine } from "../../transactions";
-import { SignerWallet } from "../../wallets";
-import { PROTOCOL } from "../constants";
-import { DEFAULT_RPC_URLS, DEPOSIT_CONTRACT_ABI, DEPOSIT_CONTRACT_ADDRESS, ETHEREUM_NETWORK_CHAIN_IDS } from "./constants";
-import { EthereumNetwork, EthereumSignedTransaction } from "./types";
-import { EthereumDepositData } from "./types";
+import { Ethereum, NetworkConfig, RawTransaction } from "../index.ts";
+import { BaseTransactionEngine } from "../../transactions/index.ts";
+import { SignerWallet } from "../../wallets/index.ts";
+import { PROTOCOL } from "../constants.ts";
+import { DEFAULT_RPC_URLS, DEPOSIT_CONTRACT_ABI, DEPOSIT_CONTRACT_ADDRESS, ETHEREUM_NETWORK_CHAIN_IDS } from "./constants.ts";
+import { EthereumNetwork, EthereumSignedTransaction, EthereumDepositData } from "./types.ts";
 
 export class EthereumTransactionEngine extends BaseTransactionEngine<Ethereum> {
     rpcUrl: URL;

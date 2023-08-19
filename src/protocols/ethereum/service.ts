@@ -1,7 +1,7 @@
-import { ProtocolService } from "../../services";
-import { SignerWallet } from "../../wallets";
-import { EthereumTransactionEngine } from "./transactionEngine";
-import { EthereumDepositData, EthereumNetwork } from "./types";
+import { ProtocolService } from "../../services/index.ts";
+import { SignerWallet } from "../../wallets/index.ts";
+import { EthereumTransactionEngine } from "./transactionEngine.ts";
+import { EthereumDepositData, EthereumNetwork } from "./types.ts";
 
 export class EthereumService extends ProtocolService<EthereumTransactionEngine> {
     tx: EthereumTransactionEngine;
