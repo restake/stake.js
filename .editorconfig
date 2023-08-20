@@ -14,12 +14,9 @@ indent_size = 2
 [*.nix]
 indent_size = 2
 
-<<<<<<< HEAD
 [package.json]
 indent_size = 2
 
-=======
->>>>>>> b0cd9af (Initial commit)
 [*.md]
 max_line_length = 0
 trim_trailing_whitespace = false

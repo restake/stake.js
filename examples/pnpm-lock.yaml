@@ -1,9 +1,8 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
 
-dependencies:
-  '@restake/stake.js':
-    specifier: ../
-    version: link:..
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
 
 devDependencies:
   ts-node:

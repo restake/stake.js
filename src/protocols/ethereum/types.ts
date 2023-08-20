@@ -6,13 +6,17 @@ export type EthereumNetwork = typeof ETHEREUM_NETWORKS[keyof typeof ETHEREUM_NET
 export type EthereumRawTransaction = Omit<Transaction, "signature">;
 export type EthereumSignedTransaction =  Omit<Transaction, "signature"> & { signature: Signature };
 
-export type EthereumDepositData = {
-    pubkey: string;
-    withdrawal_credentials: string;
-    amount: bigint;
-    signature: string;
-    deposit_message_root: string;
-    deposit_data_root: string;
-    fork_version: string;
-    network_name: string;
-};
+import { z } from "zod";
+
+export const EthereumDepositData = z.object({
+    pubkey: z.coerce.string(),
+    withdrawal_credentials: z.coerce.string(),
+    amount: z.coerce.bigint(),
+    signature: z.coerce.string(),
+    deposit_message_root: z.coerce.string(),
+    deposit_data_root: z.coerce.string(),
+    fork_version: z.coerce.string(),
+    network_name: z.coerce.string(),
+});
+
+export type EthereumDepositData = z.infer<typeof EthereumDepositData>;

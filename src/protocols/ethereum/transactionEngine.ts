@@ -16,15 +16,15 @@ export class EthereumTransactionEngine extends BaseTransactionEngine<Ethereum> {
         this.rpcUrl = rpcUrl || DEFAULT_RPC_URLS[network];
     }
 
-    private async fetchGasLimitEstimate(transaction: RawTransaction<Ethereum>): Promise<bigint> {
-        const { to, value, data } = transaction;
+    private async fetchGasLimitEstimate(to: string, data: string): Promise<bigint> {
+
         const response = await fetch(this.rpcUrl.toString(), {
             method: "POST",
             body: JSON.stringify({
                 jsonrpc: "2.0",
                 id: 1,
                 method: "eth_estimateGas",
-                params: [{ to, value, data }],
+                params: [{ to, data }],
             }),
         });
 
@@ -37,10 +37,10 @@ export class EthereumTransactionEngine extends BaseTransactionEngine<Ethereum> {
         const iface = new Interface(DEPOSIT_CONTRACT_ABI);
 
         const encodedData = iface.encodeFunctionData("deposit", [
-            depositData.pubkey,
-            depositData.withdrawal_credentials,
-            depositData.signature,
-            depositData.deposit_data_root,
+            "0x" + depositData.pubkey,
+            "0x" + depositData.withdrawal_credentials,
+            "0x" + depositData.signature,
+            "0x" + depositData.deposit_data_root,
         ]);
 
         return encodedData;
@@ -51,22 +51,20 @@ export class EthereumTransactionEngine extends BaseTransactionEngine<Ethereum> {
         const jsonRpcProvider = new JsonRpcProvider(this.rpcUrl.toString());
         const nonce = await jsonRpcProvider.getTransactionCount(wallet.getAddress(this.networkConfig));
         const feeData = await jsonRpcProvider.getFeeData();
+        const to = DEPOSIT_CONTRACT_ADDRESS[this.networkConfig.network];
         const data = this.encodeDepositData(depositData);
+        const value = depositData.amount;
 
-        const partialRawTx: RawTransaction<Ethereum> = Transaction.from({
-            type: 2,
-            nonce: nonce,
-            to: DEPOSIT_CONTRACT_ADDRESS[this.networkConfig.network],
-            value: depositData.amount * (10n ** 9n),
-            data: data,
-        });
-
-        const gasLimitEstimate = await this.fetchGasLimitEstimate(partialRawTx);
+        const gasLimitEstimate = await this.fetchGasLimitEstimate(to, data);
         const maxPriorityFeePerGas = feeData["maxPriorityFeePerGas"];
         const maxFeePerGas = feeData["maxFeePerGas"];
 
         const rawTx: RawTransaction<Ethereum> = Transaction.from({
-            ...partialRawTx,
+            type: 2,
+            nonce,
+            to,
+            data,
+            value,
             gasLimit: gasLimitEstimate,
             maxPriorityFeePerGas,
             maxFeePerGas,

@@ -162,7 +162,4 @@ tramp
 !.env.example
 
 # Project specific files
-<<<<<<< HEAD
 /docs
-=======
->>>>>>> b0cd9af (Initial commit)

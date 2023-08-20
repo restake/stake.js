@@ -15,16 +15,20 @@ const AppMapping = {
 
 export class LedgerWallet implements SignerWallet {
 
+    app?: LedgerApp;
+
     private async getApp(network: NetworkConfig<Protocol>): Promise<LedgerApp> {
-        const devices = await LedgerTransport.default.list();
-        if (!devices.length) {
-            throw new Error("No Ledger device found!");
+        if (!this.app) {
+            const devices = await LedgerTransport.default.list();
+            if (!devices.length) {
+                throw new Error("No Ledger device found!");
+            }
+
+            const transport = await LedgerTransport.default.create();
+            this.app = new AppMapping[network.protocol](transport);
         }
 
-        const transport = await LedgerTransport.default.create();
-        const app = new AppMapping[network.protocol](transport);
-
-        return app;
+        return this.app;
     }
 
     async signEthereum(
@@ -32,7 +36,7 @@ export class LedgerWallet implements SignerWallet {
         rawTx: RawTransaction<Ethereum>,
         path?: string
     ): Promise<SignedTransaction<Ethereum>> {
-        const serializedTx = rawTx.unsignedSerialized;
+        const serializedTx = rawTx.unsignedSerialized.slice(2);
         const resolution = await ethereumLegerService.resolveTransaction(serializedTx, {}, {});
         const { v, r, s } = await app.signTransaction(
             path || "44'/60'/0'/0/0",
@@ -41,7 +45,7 @@ export class LedgerWallet implements SignerWallet {
         );
 
         const signedTx = Transaction.from({
-            ...rawTx,
+            ...rawTx.toJSON(),
             signature: {
                 v: "0x" + v,
                 r: "0x" + r,
