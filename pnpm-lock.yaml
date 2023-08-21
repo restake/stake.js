@@ -14,6 +14,12 @@ dependencies:
   '@ledgerhq/hw-transport-node-hid':
     specifier: ^6.27.21
     version: 6.27.21
+  '@types/bn.js':
+    specifier: ^5.1.1
+    version: 5.1.1
+  bn.js:
+    specifier: ^5.2.1
+    version: 5.2.1
   ethers:
     specifier: ^6.7.1
     version: 6.7.1
@@ -1651,6 +1657,12 @@ packages:
     dependencies:
       '@babel/types': 7.21.5
     dev: true
+
+  /@types/bn.js@5.1.1:
+    resolution: {integrity: sha512-qNrYbZqMx0uJAfKnKclPh+dTwK33KfLHYqtyODwd5HnXOjnkhc4qgn3BrK6RWyGZm5+sIFE7Q7Vz6QQtJB7w7g==}
+    dependencies:
+      '@types/node': 20.5.1
+    dev: false
 
   /@types/graceful-fs@4.1.6:
     resolution: {integrity: sha512-Sig0SNORX9fdW+bQuTEovKj3uHcUL6LQKbCrrqb1X7J6/ReAbhCXRAhc+SMejhLELFj2QcyuxmUooZ4bt5ReSw==}

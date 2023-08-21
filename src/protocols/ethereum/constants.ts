@@ -8,17 +8,17 @@ export const ETHEREUM_NETWORK_CHAIN_IDS = {
     [ETHEREUM_NETWORKS.GOERLI]: 5,
 } as const;
 
-export const DEFAULT_RPC_URLS = {
+export const ETHEREUM_DEFAULT_RPC_URLS = {
     [ETHEREUM_NETWORKS.MAINNET]: new URL("https://rpc.ankr.com/eth"),
     [ETHEREUM_NETWORKS.GOERLI]: new URL("https://rpc.ankr.com/eth_goerli"),
 } as const;
 
-export const DEPOSIT_CONTRACT_ADDRESS = {
+export const ETHEREUM_DEPOSIT_CONTRACT_ADDRESS = {
     [ETHEREUM_NETWORKS.MAINNET]: "0x00000000219ab540356cBB839Cbe05303d7705Fa",
     [ETHEREUM_NETWORKS.GOERLI]: "0x00000000219ab540356cBB839Cbe05303d7705Fa",
 } as const;
 
-export const DEPOSIT_CONTRACT_ABI = `
+export const ETHEREUM_DEPOSIT_CONTRACT_ABI = `
 [
   {
     "inputs": [],

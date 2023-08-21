@@ -8,6 +8,8 @@ import { Transaction } from "ethers";
 
 type LedgerApp = EthereumLedgerApp.default | NearLedgerApp.default;
 
+const DEFAULT_ETHEREUM_PATH = "44'/60'/0'/0/0";
+
 const AppMapping = {
     [PROTOCOL.ETHEREUM]: EthereumLedgerApp.default,
     [PROTOCOL.NEAR_PROTOCOL]: NearLedgerApp.default,
@@ -58,7 +60,7 @@ export class LedgerWallet implements SignerWallet {
 
     async getAddress<P extends Protocol>(network: NetworkConfig<P>, accountId?: string): Promise<string> {
         const app = await this.getApp(network);
-        const address = await app.getAddress(accountId || "44'/60'/0'/0/0");
+        const address = await app.getAddress(accountId || DEFAULT_ETHEREUM_PATH);
 
         return address.address;
     }

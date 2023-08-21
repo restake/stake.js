@@ -41,6 +41,8 @@
     "@ledgerhq/hw-app-eth": "^6.34.3",
     "@ledgerhq/hw-app-near": "^6.27.14",
     "@ledgerhq/hw-transport-node-hid": "^6.27.21",
+    "@types/bn.js": "^5.1.1",
+    "bn.js": "^5.2.1",
     "ethers": "^6.7.1",
     "near-api-js": "2.1.4",
     "zod": "^3.22.2"
