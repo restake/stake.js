@@ -11,24 +11,41 @@ export class NearProtocolService extends ProtocolService<NearProtocolTransaction
         this.tx = new NearProtocolTransactionEngine(network, rpcUrl);
     }
 
-    async stake(wallet: SignerWallet, validator: string, amount: number): Promise<string> {
-        const rawTx = await this.tx.buildStakeTx(wallet, validator, amount);
+    async stake(
+        wallet: SignerWallet,
+        validator: string,
+        amount: number,
+        accountId?: string,
+        selector?: string,
+    ): Promise<string> {
+        const rawTx = await this.tx.buildStakeTx(wallet, validator, amount, accountId, selector);
         const signedTx = await this.tx.sign(wallet, rawTx);
         const txId = await this.tx.broadcast(signedTx);
 
         return txId;
     }
 
-    async withdraw(wallet: SignerWallet, validator: string, amount: number | "all"): Promise<string> {
-        const rawTx = await this.tx.buildWithdrawTx(wallet, validator, amount);
+    async withdraw(
+        wallet: SignerWallet,
+        validator: string,
+        amount: number | "all",
+        accountId?: string,
+        selector?: string,
+    ): Promise<string> {
+        const rawTx = await this.tx.buildWithdrawTx(wallet, validator, amount, accountId, selector);
         const signedTx = await this.tx.sign(wallet, rawTx);
         const txId = await this.tx.broadcast(signedTx);
 
         return txId;
     }
 
-    async unstake(wallet: SignerWallet, validator: string, amount: number | "all"): Promise<string> {
-        const rawTx = await this.tx.buildUnstakeTx(wallet, validator, amount);
+    async unstake(
+        wallet: SignerWallet,
+        validator: string,
+        amount: number | "all",
+        accountId?: string,
+        selector?: string): Promise<string> {
+        const rawTx = await this.tx.buildUnstakeTx(wallet, validator, amount, accountId, selector);
         const signedTx = await this.tx.sign(wallet, rawTx);
         const txId = await this.tx.broadcast(signedTx);
 

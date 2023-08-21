@@ -9,7 +9,7 @@ import BN from "bn.js";
 import * as nearAPI from "near-api-js";
 import { Action, functionCall } from "near-api-js/lib/transaction.js";
 import { PublicKey } from "near-api-js/lib/utils/index.js";
-import { AccessKeyInfoView, FinalExecutionOutcome } from "near-api-js/lib/providers/provider.js";
+import { AccessKeyInfoView } from "near-api-js/lib/providers/provider.js";
 import { Account, connect, Near } from "near-api-js";
 
 const ZERO_BN = new BN(0);
@@ -96,13 +96,23 @@ export class NearProtocolTransactionEngine extends BaseTransactionEngine<NearPro
         method: NearStakingMethods,
         validator: string,
         amount?: number,
+        accountId?: string,
+        selector?: string,
     ): Promise<RawTransaction<NearProtocol>> {
         const near: Near = await this.getNear();
-        const accountId = await wallet.getAddress(this.networkConfig);
+
+        if (!accountId) {
+            accountId = await wallet.getAddress(this.networkConfig, selector);
+        }
+
+        const publicKeyString = await wallet.getPublicKey(this.networkConfig, selector);
+
         const account: Account = await near.account(accountId);
         const accessKeys: AccessKeyInfoView[] = await account.getAccessKeys();
         const fullAccessKey: AccessKeyInfoView | undefined = accessKeys.find(
-            (accessKey) => accessKey.access_key.permission === "FullAccess");
+            (accessKey) =>
+                (accessKey.public_key === publicKeyString) &&
+                (accessKey.access_key.permission === "FullAccess"));
 
         if(!fullAccessKey) {
             throw new Error(`Could not find Full Access Key for account [ ${accountId} ]`);
@@ -123,26 +133,44 @@ export class NearProtocolTransactionEngine extends BaseTransactionEngine<NearPro
         return rawTx;
     }
 
-    async buildStakeTx(wallet: SignerWallet, validator: string, amount: number): Promise<RawTransaction<NearProtocol>> {
-        return await this.buildTransaction(wallet, NearStakingMethods.stake, validator, amount);
+    async buildStakeTx(
+        wallet: SignerWallet,
+        validator: string,
+        amount: number,
+        accountId?: string,
+        selector?: string,
+    ): Promise<RawTransaction<NearProtocol>> {
+        return await this.buildTransaction(wallet, NearStakingMethods.stake, validator, amount, accountId, selector);
     }
 
-    async buildUnstakeTx(wallet: SignerWallet, validator: string, amount: number | "all"): Promise<RawTransaction<NearProtocol>> {
+    async buildUnstakeTx(
+        wallet: SignerWallet,
+        validator: string,
+        amount: number | "all",
+        accountId?: string,
+        selector?: string,
+    ): Promise<RawTransaction<NearProtocol>> {
         const method = amount === "all" ? NearStakingMethods.unstakeAll : NearStakingMethods.unstake;
 
-        return await this.buildTransaction(wallet, method, validator, amount === "all" ? undefined : amount);
+        return await this.buildTransaction(wallet, method, validator, amount === "all" ? undefined : amount, accountId, selector);
     }
 
-    async buildWithdrawTx(wallet: SignerWallet, validator: string, amount: number | "all"): Promise<RawTransaction<NearProtocol>> {
+    async buildWithdrawTx(
+        wallet: SignerWallet,
+        validator: string,
+        amount: number | "all",
+        accountId?: string,
+        selector?: string,
+    ): Promise<RawTransaction<NearProtocol>> {
         const method = amount === "all" ? NearStakingMethods.withdrawAll : NearStakingMethods.withdraw;
 
-        return await this.buildTransaction(wallet, method, validator, amount === "all" ? undefined : amount);
+        return await this.buildTransaction(wallet, method, validator, amount === "all" ? undefined : amount, accountId, selector);
     }
 
     async broadcast(signedTx: SignedTransaction<NearProtocol>): Promise<string> {
         try {
-            const near: Near = await this.getNear();
-            const result: FinalExecutionOutcome = await near.connection.provider.sendTransaction(signedTx);
+            const near = await this.getNear();
+            const result = await near.connection.provider.sendTransaction(signedTx);
 
             return result.transaction.hash;
         } catch(error) {

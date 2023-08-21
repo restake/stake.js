@@ -51,9 +51,9 @@ export class EthereumTransactionEngine extends BaseTransactionEngine<Ethereum> {
         return encodedData;
     }
 
-    async buildStakeTx(wallet: SignerWallet, depositData: EthereumDepositData): Promise<RawTransaction<Ethereum>> {
+    async buildStakeTx(wallet: SignerWallet, depositData: EthereumDepositData, selector?: string): Promise<RawTransaction<Ethereum>> {
         const jsonRpcProvider = new JsonRpcProvider(this.rpcUrl.toString());
-        const nonce = await jsonRpcProvider.getTransactionCount(wallet.getAddress(this.networkConfig));
+        const nonce = await jsonRpcProvider.getTransactionCount(wallet.getAddress(this.networkConfig), selector);
         const feeData = await jsonRpcProvider.getFeeData();
         const to = ETHEREUM_DEPOSIT_CONTRACT_ADDRESS[this.networkConfig.network];
         const data = this.encodeDepositData(depositData);

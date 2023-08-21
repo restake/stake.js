@@ -11,8 +11,8 @@ export class EthereumService extends ProtocolService<EthereumTransactionEngine> 
         this.tx = new EthereumTransactionEngine(network, rpcUrl);
     }
 
-    async stake(wallet: SignerWallet, depositData: EthereumDepositData): Promise<string> {
-        const rawTx = await this.tx.buildStakeTx(wallet, depositData);
+    async stake(wallet: SignerWallet, depositData: EthereumDepositData, selector?: string): Promise<string> {
+        const rawTx = await this.tx.buildStakeTx(wallet, depositData, selector);
         const signedTx = await this.tx.sign(wallet, rawTx);
         const txId = await this.tx.broadcast(signedTx);
 

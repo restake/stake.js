@@ -1,18 +1,22 @@
 import { SignerWallet } from "../wallets/index.ts";
-import { Protocol, RawTransaction, SignedTransaction, NetworkConfig, Ethereum } from "../protocols/index.ts";
+import { Protocol, RawTransaction, SignedTransaction, NetworkConfig, Ethereum, NearProtocol } from "../protocols/index.ts";
 import LedgerTransport from "@ledgerhq/hw-transport-node-hid";
 import EthereumLedgerApp, { ledgerService as ethereumLegerService } from "@ledgerhq/hw-app-eth";
 import NearLedgerApp from "@ledgerhq/hw-app-near";
 import { PROTOCOL } from "../protocols/constants.ts";
 import { Transaction } from "ethers";
+import * as nearApi from "near-api-js";
 
 type LedgerApp = EthereumLedgerApp.default | NearLedgerApp.default;
 
-const DEFAULT_ETHEREUM_PATH = "44'/60'/0'/0/0";
-
-const AppMapping = {
+const appMapping = {
     [PROTOCOL.ETHEREUM]: EthereumLedgerApp.default,
     [PROTOCOL.NEAR_PROTOCOL]: NearLedgerApp.default,
+};
+
+const pathMapping = {
+    [PROTOCOL.ETHEREUM]: "44'/60'/0'/0/0",
+    [PROTOCOL.NEAR_PROTOCOL]: "44'/397'/0'/0'/0'",
 };
 
 export class LedgerWallet implements SignerWallet {
@@ -27,7 +31,7 @@ export class LedgerWallet implements SignerWallet {
             }
 
             const transport = await LedgerTransport.default.create();
-            this.app = new AppMapping[network.protocol](transport);
+            this.app = new appMapping[network.protocol](transport);
         }
 
         return this.app;
@@ -41,7 +45,7 @@ export class LedgerWallet implements SignerWallet {
         const serializedTx = rawTx.unsignedSerialized.slice(2);
         const resolution = await ethereumLegerService.resolveTransaction(serializedTx, {}, {});
         const { v, r, s } = await app.signTransaction(
-            path || "44'/60'/0'/0/0",
+            path || pathMapping[PROTOCOL.ETHEREUM],
             serializedTx,
             resolution,
         );
@@ -58,20 +62,57 @@ export class LedgerWallet implements SignerWallet {
         return signedTx;
     }
 
-    async getAddress<P extends Protocol>(network: NetworkConfig<P>, accountId?: string): Promise<string> {
-        const app = await this.getApp(network);
-        const address = await app.getAddress(accountId || DEFAULT_ETHEREUM_PATH);
+    async signNearProtocol(
+        app: NearLedgerApp.default,
+        rawTx: RawTransaction<NearProtocol>,
+        path?: string,
+    ): Promise<SignedTransaction<NearProtocol>> {
+        const signature = await app.signTransaction(rawTx.encode(), path || pathMapping[PROTOCOL.NEAR_PROTOCOL]);
+        const signedTx = new nearApi.transactions.SignedTransaction({
+            transaction: rawTx,
+            signature: new nearApi.transactions.Signature({
+                keyType: rawTx.publicKey.keyType,
+                data: signature,
+            }),
+        });
 
-        return address.address;
+        return signedTx;
     }
 
-    async sign<P extends Protocol>(rawTx: RawTransaction<P>, network: NetworkConfig<P>, accountId?: string): Promise<SignedTransaction<P>> {
+    async getPublicKey<P extends Protocol>(network: NetworkConfig<P>, selector?: string): Promise<string> {
+        const app = await this.getApp(network);
+        const result = await app.getAddress(selector || pathMapping[network.protocol]);
+
+        if (!result.publicKey) {
+            throw new Error("No public key returned!");
+        }
+
+        return result.publicKey;
+    }
+
+    async getAddress<P extends Protocol>(network: NetworkConfig<P>, selector?: string): Promise<string> {
+        const app = await this.getApp(network);
+        const result = await app.getAddress(selector || pathMapping[network.protocol]);
+
+        if (!result.address) {
+            throw new Error("No address returned!");
+        }
+
+        return result.address;
+    }
+
+    async sign<P extends Protocol>(rawTx: RawTransaction<P>, network: NetworkConfig<P>, selector?: string): Promise<SignedTransaction<P>> {
         let signedTx: SignedTransaction<P>;
         const app = await this.getApp(network);
 
-        if (network.protocol === PROTOCOL.ETHEREUM) {
-            signedTx = await this.signEthereum(app as EthereumLedgerApp.default, rawTx as RawTransaction<Ethereum>, accountId);
-        } else {
+        switch (network.protocol) {
+        case PROTOCOL.ETHEREUM:
+            signedTx = await this.signEthereum(app as EthereumLedgerApp.default, rawTx as RawTransaction<Ethereum>, selector);
+            break;
+        case PROTOCOL.NEAR_PROTOCOL:
+            signedTx = await this.signNearProtocol(app as NearLedgerApp.default, rawTx as RawTransaction<NearProtocol>, selector);
+            break;
+        default:
             throw new Error(`Ledger signing not supported for ${network.protocol}`);
         }
 
