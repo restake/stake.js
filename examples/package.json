@@ -4,8 +4,7 @@
   "description": "Stake.js examples",
   "main": "index.js",
   "scripts": {
-    "ts-node": "ts-node --esm",
-    "test": "ts-node --esm src/index.ts"
+    "ts-node": "ts-node --esm"
   },
   "author": "Restake AG <social@restake.net>",
   "license": "MIT",
