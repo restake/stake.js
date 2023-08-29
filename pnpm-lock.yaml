@@ -1,72 +1,255 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
 
 settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-dependencies:
-  '@ledgerhq/hw-app-eth':
-    specifier: ^6.34.3
-    version: 6.34.3
-  '@ledgerhq/hw-app-near':
-    specifier: ^6.27.14
-    version: 6.27.14
-  '@ledgerhq/hw-transport-node-hid':
-    specifier: ^6.27.21
-    version: 6.27.21
-  '@types/bn.js':
-    specifier: ^5.1.1
-    version: 5.1.1
-  bn.js:
-    specifier: ^5.2.1
-    version: 5.2.1
-  ethers:
-    specifier: ^6.7.1
-    version: 6.7.1
-  fireblocks-sdk:
-    specifier: ^5.4.0
-    version: 5.4.0
-  js-sha256:
-    specifier: ^0.9.0
-    version: 0.9.0
-  near-api-js:
-    specifier: 2.1.4
-    version: 2.1.4
-  zod:
-    specifier: ^3.22.2
-    version: 3.22.2
+importers:
 
-devDependencies:
-  '@jest/globals':
-    specifier: 29.6.2
-    version: 29.6.2
-  '@types/node':
-    specifier: 20.5.1
-    version: 20.5.1
-  '@typescript-eslint/eslint-plugin':
-    specifier: ^6.4.0
-    version: 6.4.0(@typescript-eslint/parser@6.4.0)(eslint@8.47.0)(typescript@5.1.6)
-  '@typescript-eslint/parser':
-    specifier: ^6.4.0
-    version: 6.4.0(eslint@8.47.0)(typescript@5.1.6)
-  eslint:
-    specifier: ^8.47.0
-    version: 8.47.0
-  jest:
-    specifier: 29.6.2
-    version: 29.6.2(@types/node@20.5.1)(ts-node@10.9.1)
-  ts-jest:
-    specifier: 29.1.1
-    version: 29.1.1(@babel/core@7.21.8)(esbuild@0.18.20)(jest@29.6.2)(typescript@5.1.6)
-  ts-node:
-    specifier: 10.9.1
-    version: 10.9.1(@types/node@20.5.1)(typescript@5.1.6)
-  tsup:
-    specifier: ^7.2.0
-    version: 7.2.0(ts-node@10.9.1)(typescript@5.1.6)
-  typescript:
-    specifier: 5.1.6
-    version: 5.1.6
+  .: {}
+
+  examples/ethereum-ledger:
+    dependencies:
+      '@restake/stakejs-ethereum':
+        specifier: workspace:*
+        version: link:../../packages/protocols/ethereum
+      '@restake/stakejs-ledger-node':
+        specifier: workspace:*
+        version: link:../../packages/wallets/ledger/node
+    devDependencies:
+      '@types/node':
+        specifier: 20.5.1
+        version: 20.5.1
+      ts-node:
+        specifier: 10.9.1
+        version: 10.9.1(@types/node@20.5.1)(typescript@5.1.6)
+
+  examples/near-protocol-fireblocks:
+    dependencies:
+      '@restake/stakejs-fireblocks':
+        specifier: workspace:*
+        version: link:../../packages/wallets/fireblocks
+      '@restake/stakejs-near-protocol':
+        specifier: workspace:*
+        version: link:../../packages/protocols/near-protocol
+    devDependencies:
+      '@types/node':
+        specifier: 20.5.1
+        version: 20.5.1
+      ts-node:
+        specifier: 10.9.1
+        version: 10.9.1(@types/node@20.5.1)(typescript@5.1.6)
+
+  packages/core:
+    devDependencies:
+      '@jest/globals':
+        specifier: 29.6.2
+        version: 29.6.2
+      '@types/node':
+        specifier: 20.5.1
+        version: 20.5.1
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.4.0
+        version: 6.4.0(@typescript-eslint/parser@6.4.0)(eslint@8.47.0)(typescript@5.1.6)
+      '@typescript-eslint/parser':
+        specifier: ^6.4.0
+        version: 6.4.0(eslint@8.47.0)(typescript@5.1.6)
+      eslint:
+        specifier: ^8.47.0
+        version: 8.47.0
+      jest:
+        specifier: 29.6.2
+        version: 29.6.2(@types/node@20.5.1)(ts-node@10.9.1)
+      ts-jest:
+        specifier: 29.1.1
+        version: 29.1.1(@babel/core@7.21.8)(esbuild@0.18.20)(jest@29.6.2)(typescript@5.1.6)
+      ts-node:
+        specifier: 10.9.1
+        version: 10.9.1(@types/node@20.5.1)(typescript@5.1.6)
+      tsup:
+        specifier: ^7.2.0
+        version: 7.2.0(ts-node@10.9.1)(typescript@5.1.6)
+      typescript:
+        specifier: 5.1.6
+        version: 5.1.6
+
+  packages/protocols/ethereum:
+    dependencies:
+      '@restake/stakejs-core':
+        specifier: workspace:*
+        version: link:../../core
+      ethers:
+        specifier: ^6.7.1
+        version: 6.7.1
+      zod:
+        specifier: ^3.22.2
+        version: 3.22.2
+    devDependencies:
+      '@jest/globals':
+        specifier: 29.6.2
+        version: 29.6.2
+      '@types/node':
+        specifier: 20.5.1
+        version: 20.5.1
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.4.0
+        version: 6.4.0(@typescript-eslint/parser@6.4.0)(eslint@8.47.0)(typescript@5.1.6)
+      '@typescript-eslint/parser':
+        specifier: ^6.4.0
+        version: 6.4.0(eslint@8.47.0)(typescript@5.1.6)
+      eslint:
+        specifier: ^8.47.0
+        version: 8.47.0
+      jest:
+        specifier: 29.6.2
+        version: 29.6.2(@types/node@20.5.1)(ts-node@10.9.1)
+      ts-jest:
+        specifier: 29.1.1
+        version: 29.1.1(@babel/core@7.21.8)(esbuild@0.18.20)(jest@29.6.2)(typescript@5.1.6)
+      ts-node:
+        specifier: 10.9.1
+        version: 10.9.1(@types/node@20.5.1)(typescript@5.1.6)
+      tsup:
+        specifier: ^7.2.0
+        version: 7.2.0(ts-node@10.9.1)(typescript@5.1.6)
+      typescript:
+        specifier: 5.1.6
+        version: 5.1.6
+
+  packages/protocols/near-protocol:
+    dependencies:
+      '@restake/stakejs-core':
+        specifier: workspace:*
+        version: link:../../core
+      bn.js:
+        specifier: ^5.2.1
+        version: 5.2.1
+      js-sha256:
+        specifier: ^0.9.0
+        version: 0.9.0
+      near-api-js:
+        specifier: 2.1.4
+        version: 2.1.4
+    devDependencies:
+      '@jest/globals':
+        specifier: 29.6.2
+        version: 29.6.2
+      '@types/bn.js':
+        specifier: ^5.1.1
+        version: 5.1.1
+      '@types/node':
+        specifier: 20.5.1
+        version: 20.5.1
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.4.0
+        version: 6.4.0(@typescript-eslint/parser@6.4.0)(eslint@8.47.0)(typescript@5.1.6)
+      '@typescript-eslint/parser':
+        specifier: ^6.4.0
+        version: 6.4.0(eslint@8.47.0)(typescript@5.1.6)
+      eslint:
+        specifier: ^8.47.0
+        version: 8.47.0
+      jest:
+        specifier: 29.6.2
+        version: 29.6.2(@types/node@20.5.1)(ts-node@10.9.1)
+      ts-jest:
+        specifier: 29.1.1
+        version: 29.1.1(@babel/core@7.21.8)(esbuild@0.18.20)(jest@29.6.2)(typescript@5.1.6)
+      ts-node:
+        specifier: 10.9.1
+        version: 10.9.1(@types/node@20.5.1)(typescript@5.1.6)
+      tsup:
+        specifier: ^7.2.0
+        version: 7.2.0(ts-node@10.9.1)(typescript@5.1.6)
+      typescript:
+        specifier: 5.1.6
+        version: 5.1.6
+
+  packages/wallets/fireblocks:
+    dependencies:
+      '@restake/stakejs-core':
+        specifier: workspace:*
+        version: link:../../core
+      fireblocks-sdk:
+        specifier: ^5.4.0
+        version: 5.4.0
+      js-sha256:
+        specifier: ^0.9.0
+        version: 0.9.0
+    devDependencies:
+      '@jest/globals':
+        specifier: 29.6.2
+        version: 29.6.2
+      '@types/node':
+        specifier: 20.5.1
+        version: 20.5.1
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.4.0
+        version: 6.4.0(@typescript-eslint/parser@6.4.0)(eslint@8.47.0)(typescript@5.1.6)
+      '@typescript-eslint/parser':
+        specifier: ^6.4.0
+        version: 6.4.0(eslint@8.47.0)(typescript@5.1.6)
+      eslint:
+        specifier: ^8.47.0
+        version: 8.47.0
+      jest:
+        specifier: 29.6.2
+        version: 29.6.2(@types/node@20.5.1)(ts-node@10.9.1)
+      ts-jest:
+        specifier: 29.1.1
+        version: 29.1.1(@babel/core@7.21.8)(esbuild@0.18.20)(jest@29.6.2)(typescript@5.1.6)
+      ts-node:
+        specifier: 10.9.1
+        version: 10.9.1(@types/node@20.5.1)(typescript@5.1.6)
+      tsup:
+        specifier: ^7.2.0
+        version: 7.2.0(ts-node@10.9.1)(typescript@5.1.6)
+      typescript:
+        specifier: 5.1.6
+        version: 5.1.6
+
+  packages/wallets/ledger/node:
+    dependencies:
+      '@ledgerhq/hw-app-eth':
+        specifier: ^6.34.3
+        version: 6.34.3
+      '@ledgerhq/hw-transport-node-hid':
+        specifier: ^6.27.21
+        version: 6.27.21
+      '@restake/stakejs-core':
+        specifier: workspace:*
+        version: link:../../../core
+    devDependencies:
+      '@jest/globals':
+        specifier: 29.6.2
+        version: 29.6.2
+      '@types/node':
+        specifier: 20.5.1
+        version: 20.5.1
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.4.0
+        version: 6.4.0(@typescript-eslint/parser@6.4.0)(eslint@8.47.0)(typescript@5.1.6)
+      '@typescript-eslint/parser':
+        specifier: ^6.4.0
+        version: 6.4.0(eslint@8.47.0)(typescript@5.1.6)
+      eslint:
+        specifier: ^8.47.0
+        version: 8.47.0
+      jest:
+        specifier: 29.6.2
+        version: 29.6.2(@types/node@20.5.1)(ts-node@10.9.1)
+      ts-jest:
+        specifier: 29.1.1
+        version: 29.1.1(@babel/core@7.21.8)(esbuild@0.18.20)(jest@29.6.2)(typescript@5.1.6)
+      ts-node:
+        specifier: 10.9.1
+        version: 10.9.1(@types/node@20.5.1)(typescript@5.1.6)
+      tsup:
+        specifier: ^7.2.0
+        version: 7.2.0(ts-node@10.9.1)(typescript@5.1.6)
+      typescript:
+        specifier: 5.1.6
+        version: 5.1.6
 
 packages:
 
@@ -635,11 +818,6 @@ packages:
       eslint-visitor-keys: 3.4.3
     dev: true
 
-  /@eslint-community/regexpp@4.5.1:
-    resolution: {integrity: sha512-Z5ba73P98O1KUYCCJTUeVpja9RcGoMdncZ6T49FCUl2lN38JtCJ+3WgIDBv0AuY4WChU5PmtJmOCTlN6FZTFKQ==}
-    engines: {node: ^12.0.0 || ^14.0.0 || >=16.0.0}
-    dev: true
-
   /@eslint-community/regexpp@4.6.2:
     resolution: {integrity: sha512-pPTNuaAG3QMH+buKyBIGJs3g/S5y0caxw0ygM3YyE6yJFySwiGGSzA+mM3KJ8QQvzeLh3blwgSonkFjgQdxzMw==}
     engines: {node: ^12.0.0 || ^14.0.0 || >=16.0.0}
@@ -1161,13 +1339,6 @@ packages:
       - supports-color
     dev: true
 
-  /@jest/schemas@29.4.3:
-    resolution: {integrity: sha512-VLYKXQmtmuEz6IxJsrZwzG9NvtkQsWNnWMsKxqWNu3+CnfzJQhp0WDDKWLVV9hLKr0l3SLLFRqcYHjhtyuDVxg==}
-    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
-    dependencies:
-      '@sinclair/typebox': 0.25.24
-    dev: true
-
   /@jest/schemas@29.6.0:
     resolution: {integrity: sha512-rxLjXyJBTL4LQeJW3aKo0M/+GkCOXsO+8i9Iu7eDb6KwtP65ayoDsitrdPBtujxQ88k4wI2FNYfa6TOGwSn6cQ==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
@@ -1225,18 +1396,6 @@ packages:
       write-file-atomic: 4.0.2
     transitivePeerDependencies:
       - supports-color
-    dev: true
-
-  /@jest/types@29.5.0:
-    resolution: {integrity: sha512-qbu7kN6czmVRc3xWFQcAN03RAUamgppVUdXrvl1Wr3jlNF93o9mJbGcDWrwGB6ht44u7efB1qCFgVQmca24Uog==}
-    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
-    dependencies:
-      '@jest/schemas': 29.4.3
-      '@types/istanbul-lib-coverage': 2.0.4
-      '@types/istanbul-reports': 3.0.1
-      '@types/node': 20.5.1
-      '@types/yargs': 17.0.24
-      chalk: 4.1.2
     dev: true
 
   /@jest/types@29.6.1:
@@ -1309,7 +1468,7 @@ packages:
       '@ledgerhq/errors': 6.14.0
       '@ledgerhq/logs': 6.10.1
       rxjs: 6.6.7
-      semver: 7.5.1
+      semver: 7.5.4
     dev: false
 
   /@ledgerhq/domain-service@1.1.8:
@@ -1319,7 +1478,7 @@ packages:
       '@ledgerhq/errors': 6.14.0
       '@ledgerhq/logs': 6.10.1
       '@ledgerhq/types-live': 6.38.1
-      axios: 1.4.0
+      axios: 1.5.0
       eip55: 2.1.1
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
@@ -1358,22 +1517,12 @@ packages:
       '@ledgerhq/hw-transport-mocker': 6.27.19
       '@ledgerhq/logs': 6.10.1
       '@ledgerhq/types-live': 6.38.1
-      axios: 1.4.0
-      bignumber.js: 9.1.1
+      axios: 1.5.0
+      bignumber.js: 9.1.2
     transitivePeerDependencies:
       - bufferutil
       - debug
       - utf-8-validate
-    dev: false
-
-  /@ledgerhq/hw-app-near@6.27.14:
-    resolution: {integrity: sha512-lJW444ZwfDLEoTRw9nP3+NvMOLWnYy6izskNZwUYmn3Sv6o0pRYl42kOl063czSbQOHakQlJu9EmjSXAFz3+dA==}
-    dependencies:
-      '@ledgerhq/errors': 6.14.0
-      '@ledgerhq/hw-transport': 6.28.8
-      near-api-js: 0.44.2
-    transitivePeerDependencies:
-      - encoding
     dev: false
 
   /@ledgerhq/hw-transport-mocker@6.27.19:
@@ -1450,7 +1599,7 @@ packages:
   /@ledgerhq/types-live@6.38.1:
     resolution: {integrity: sha512-XdUB0+YWp8y0m2uSmk+uLnxWNrLJ6/O/V8DUalrzFa46ttOUBzVfHg8mAJgJRnGxZnx1FvFA0Xs2RsurRGE+PA==}
     dependencies:
-      bignumber.js: 9.1.1
+      bignumber.js: 9.1.2
       rxjs: 6.6.7
     dev: false
 
@@ -1517,7 +1666,7 @@ packages:
       borsh: 0.7.0
       http-errors: 1.8.1
     optionalDependencies:
-      node-fetch: 2.6.11
+      node-fetch: 2.7.0
     transitivePeerDependencies:
       - encoding
     dev: false
@@ -1573,18 +1722,18 @@ packages:
       - encoding
     dev: false
 
-  /@noble/curves@1.1.0:
-    resolution: {integrity: sha512-091oBExgENk/kGj3AZmtBDMpxQPDtxQABR2B9lb1JbVTs6ytdzZNwvhxQ4MWasRNEzlbEH8jCWFCwhF/Obj5AA==}
+  /@noble/curves@1.2.0:
+    resolution: {integrity: sha512-oYclrNgRaM9SsBUBVbb8M6DTV7ZHRTKugureoYEncY5c65HOmRzvSiTE3y5CYaPYJA/GVkrhXEoF0M3Ya9PMnw==}
     dependencies:
-      '@noble/hashes': 1.3.1
+      '@noble/hashes': 1.3.2
     dev: false
 
   /@noble/hashes@1.1.2:
     resolution: {integrity: sha512-KYRCASVTv6aeUi1tsF8/vpyR7zpfs3FUzy2Jqm+MU+LmUKhQ0y2FpfwqkCcxSg2ua4GALJd8k2R76WxwZGbQpA==}
     dev: false
 
-  /@noble/hashes@1.3.1:
-    resolution: {integrity: sha512-EbqwksQwz9xDRGfDST86whPBgM65E0OH/pCgqW0GBVzO22bNE+NuIbeTb714+IfSjU3aRk47EUvXIb5bTsenKA==}
+  /@noble/hashes@1.3.2:
+    resolution: {integrity: sha512-MVC8EAQp7MvEcm30KWENFjgR+Mkmf+D189XJTkFIlwohU5hcBbn1ZkKq7KVTi2Hme3PMGF390DaL52beVrIihQ==}
     engines: {node: '>= 16'}
     dev: false
 
@@ -1618,7 +1767,7 @@ packages:
     engines: {node: '>=14'}
     dependencies:
       '@ethersproject/bytes': 5.7.0
-      '@noble/curves': 1.1.0
+      '@noble/curves': 1.2.0
       '@stablelib/ed25519': 1.0.3
       axios: 0.27.2(debug@4.3.4)
       axios-oauth-client: 1.5.0
@@ -1637,10 +1786,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: false
-
-  /@sinclair/typebox@0.25.24:
-    resolution: {integrity: sha512-XJfwUVUKDHF5ugKwIcxEgc9k8b7HbznCp6eUfWgu710hMPNIO4aw4/zB5RogDQz8nd6gyCDpU9O/m6qYEWY6yQ==}
-    dev: true
 
   /@sinclair/typebox@0.27.8:
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
@@ -1826,7 +1971,7 @@ packages:
     resolution: {integrity: sha512-qNrYbZqMx0uJAfKnKclPh+dTwK33KfLHYqtyODwd5HnXOjnkhc4qgn3BrK6RWyGZm5+sIFE7Q7Vz6QQtJB7w7g==}
     dependencies:
       '@types/node': 20.5.1
-    dev: false
+    dev: true
 
   /@types/graceful-fs@4.1.6:
     resolution: {integrity: sha512-Sig0SNORX9fdW+bQuTEovKj3uHcUL6LQKbCrrqb1X7J6/ReAbhCXRAhc+SMejhLELFj2QcyuxmUooZ4bt5ReSw==}
@@ -1850,13 +1995,8 @@ packages:
       '@types/istanbul-lib-report': 3.0.0
     dev: true
 
-  /@types/json-schema@7.0.11:
-    resolution: {integrity: sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==}
-    dev: false
-
   /@types/json-schema@7.0.12:
     resolution: {integrity: sha512-Hr5Jfhc9eYOQNPYO5WLDq/n4jqijdHNlDXjuAQkkt+mWdQR+XJToOHrsD4cPaMXpn6KO7y2+wM8AZEs8VpBLVA==}
-    dev: true
 
   /@types/node@18.15.13:
     resolution: {integrity: sha512-N+0kuo9KgrUQ1Sn/ifDXsvg0TTleP7rIy4zOBGECxAljqvqfqpTfzx0Q1NUedOixRMBfe2Whhb056a42cWs26Q==}
@@ -1898,7 +2038,7 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@eslint-community/regexpp': 4.5.1
+      '@eslint-community/regexpp': 4.6.2
       '@typescript-eslint/parser': 6.4.0(eslint@8.47.0)(typescript@5.1.6)
       '@typescript-eslint/scope-manager': 6.4.0
       '@typescript-eslint/type-utils': 6.4.0(eslint@8.47.0)(typescript@5.1.6)
@@ -2015,7 +2155,7 @@ packages:
     engines: {node: ^16.0.0 || >=18.0.0}
     dependencies:
       '@typescript-eslint/types': 6.4.0
-      eslint-visitor-keys: 3.4.1
+      eslint-visitor-keys: 3.4.3
     dev: true
 
   /acorn-jsx@5.3.2(acorn@8.10.0):
@@ -2033,12 +2173,6 @@ packages:
 
   /acorn@8.10.0:
     resolution: {integrity: sha512-F0SAmZ8iUtS//m8DmCTA0jlh6TDKkHQyK6xc6V4KDTyZKA9dnvX9/3sRTVQrWm79glUAZbnmmNcdYwUIHWVybw==}
-    engines: {node: '>=0.4.0'}
-    hasBin: true
-    dev: true
-
-  /acorn@8.8.2:
-    resolution: {integrity: sha512-xjIYgE8HBrkpd/sJqOGNspf8uHG+NOHGOw6a/Urj8taM2EXfdNAH2oFcPeIFfsv3+kz/mJrS5VuMqbNLjCa2vw==}
     engines: {node: '>=0.4.0'}
     hasBin: true
     dev: true
@@ -2176,8 +2310,8 @@ packages:
       - debug
     dev: false
 
-  /axios@1.4.0:
-    resolution: {integrity: sha512-S4XCWMEmzvo64T9GfvQDOXgYRDJ/wsSZc7Jvdgx5u1sd0JwsuPLqb3SYmusag+edF6ziyMensPVqLTSc1PiSEA==}
+  /axios@1.5.0:
+    resolution: {integrity: sha512-D4DdjDo5CY50Qms0qGQTTw6Q44jl7zRwY7bthds06pUGfChBCTcQs+N743eFWGEd6pRTMd6A+I87aWyFV5wiZQ==}
     dependencies:
       follow-redirects: 1.15.2(debug@4.3.4)
       form-data: 4.0.0
@@ -2289,8 +2423,8 @@ packages:
     resolution: {integrity: sha512-LcknSilhIGatDAsY1ak2I8VtGaHNhgMSYVxFrGLXv+xLHytaKZKcaUJJUE7qmBr7h33o5YQwP55pMI0xmkpJwg==}
     dev: false
 
-  /bignumber.js@9.1.1:
-    resolution: {integrity: sha512-pHm4LsMJ6lzgNGVfZHjMoO8sdoRhOzOH4MLmY65Jg70bpxCKu5iOHNJyfF6OyvYw7t8Fpf35RuzUyqnQsj8Vig==}
+  /bignumber.js@9.1.2:
+    resolution: {integrity: sha512-2/mKyZH9K85bzOEfhXDBFZTGd1CTs+5IHpeFQo9luiBG7hghdC851Pj2WAhb6E3R6b9tZj/XKhbg4fum+Kepug==}
     dev: false
 
   /binary-extensions@2.2.0:
@@ -2316,20 +2450,8 @@ packages:
     resolution: {integrity: sha512-c98Bf3tPniI+scsdk237ku1Dc3ujXQTSgyiPUDEOe7tRkhrqridvh8klBv0HCEso1OLOYcHuCv/cS6DNxKH+ZA==}
     dev: false
 
-  /bn.js@5.2.0:
-    resolution: {integrity: sha512-D7iWRBvnZE8ecXiLj/9wbxH7Tk79fAh8IHaTNq1RWRixsS02W+5qS+iE9yq6RYl0asXx5tw0bLhmT5pIfbSquw==}
-    dev: false
-
   /bn.js@5.2.1:
     resolution: {integrity: sha512-eXRvHzWyYPBuB4NBy0cmYQjGitUrtqwbvlzP3G6VFnNRbsZQIxQ10PbKKHt8gZ/HW/D/747aDl+QkDqg3KQLMQ==}
-    dev: false
-
-  /borsh@0.6.0:
-    resolution: {integrity: sha512-sl5k89ViqsThXQpYa9XDtz1sBl3l1lI313cFUY1HKr+wvMILnb+58xpkqTNrYbelh99dY7K8usxoCusQmqix9Q==}
-    dependencies:
-      bn.js: 5.2.1
-      bs58: 4.0.1
-      text-encoding-utf-8: 1.0.2
     dev: false
 
   /borsh@0.7.0:
@@ -2827,11 +2949,6 @@ packages:
     dependencies:
       esrecurse: 4.3.0
       estraverse: 5.3.0
-    dev: true
-
-  /eslint-visitor-keys@3.4.1:
-    resolution: {integrity: sha512-pZnmmLwYzf+kWaM/Qgrvpen51upAktaaiI01nsJD/Yr3lMOdNtq0cxkrrg16w64VtisN6okbs7Q8AfGqj4c9fA==}
-    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
   /eslint-visitor-keys@3.4.3:
@@ -3834,18 +3951,6 @@ packages:
       - supports-color
     dev: true
 
-  /jest-util@29.5.0:
-    resolution: {integrity: sha512-RYMgG/MTadOr5t8KdhejfvUU82MxsCu5MF6KuDUHl+NuwzUt+Sm6jJWxTJVrDR1j5M/gJVCPKQEpWXY+yIQ6lQ==}
-    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
-    dependencies:
-      '@jest/types': 29.5.0
-      '@types/node': 20.5.1
-      chalk: 4.1.2
-      ci-info: 3.8.0
-      graceful-fs: 4.2.11
-      picomatch: 2.3.1
-    dev: true
-
   /jest-util@29.6.2:
     resolution: {integrity: sha512-3eX1qb6L88lJNCFlEADKOkjpXJQyZRiavX1INZ4tRnrBVr2COd3RgcTLyUiEXMNBlDU/cgYq6taUS0fExrWW4w==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
@@ -4005,7 +4110,7 @@ packages:
     requiresBuild: true
     dependencies:
       node-addon-api: 2.0.2
-      node-gyp-build: 4.6.0
+      node-gyp-build: 4.6.1
       readable-stream: 3.6.2
     dev: false
 
@@ -4224,25 +4329,7 @@ packages:
   /near-abi@0.1.1:
     resolution: {integrity: sha512-RVDI8O+KVxRpC3KycJ1bpfVj9Zv+xvq9PlW1yIFl46GhrnLw83/72HqHGjGDjQ8DtltkcpSjY9X3YIGZ+1QyzQ==}
     dependencies:
-      '@types/json-schema': 7.0.11
-    dev: false
-
-  /near-api-js@0.44.2:
-    resolution: {integrity: sha512-eMnc4V+geggapEUa3nU2p8HSHn/njtloI4P2mceHQWO8vDE1NGpnAw8FuTBrLmXSgIv9m6oocgFc9t3VNf5zwg==}
-    dependencies:
-      bn.js: 5.2.0
-      borsh: 0.6.0
-      bs58: 4.0.1
-      depd: 2.0.0
-      error-polyfill: 0.1.3
-      http-errors: 1.8.1
-      js-sha256: 0.9.0
-      mustache: 4.2.0
-      node-fetch: 2.6.11
-      text-encoding-utf-8: 1.0.2
-      tweetnacl: 1.0.3
-    transitivePeerDependencies:
-      - encoding
+      '@types/json-schema': 7.0.12
     dev: false
 
   /near-api-js@2.1.4:
@@ -4267,7 +4354,7 @@ packages:
       error-polyfill: 0.1.3
       http-errors: 1.8.1
       near-abi: 0.1.1
-      node-fetch: 2.6.11
+      node-fetch: 2.7.0
       tweetnacl: 1.0.3
     transitivePeerDependencies:
       - encoding
@@ -4277,7 +4364,7 @@ packages:
     resolution: {integrity: sha512-2s6B2CWZM//kPgwnuI0KrYwNjfdByE25zvAaEpq9IH4zcNsarH8Ihu/UuX6XMPEogDAxkuUFeZn60pXNHAqn3A==}
     engines: {node: '>=10'}
     dependencies:
-      semver: 7.5.1
+      semver: 7.5.4
     dev: false
 
   /node-addon-api@2.0.2:
@@ -4297,8 +4384,8 @@ packages:
     engines: {node: '>=10.5.0'}
     dev: false
 
-  /node-fetch@2.6.11:
-    resolution: {integrity: sha512-4I6pdBY1EthSqDmJkiNk3JIT8cswwR9nfeW/cPdUagJYEQG7R95WRH74wpz7ma8Gh/9dI9FP+OU+0E4FvtA55w==}
+  /node-fetch@2.7.0:
+    resolution: {integrity: sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==}
     engines: {node: 4.x || >=6.0.0}
     peerDependencies:
       encoding: ^0.1.0
@@ -4318,8 +4405,8 @@ packages:
       formdata-polyfill: 4.0.10
     dev: false
 
-  /node-gyp-build@4.6.0:
-    resolution: {integrity: sha512-NTZVKn9IylLwUzaKjkas1e4u2DLNcV4rdYagA4PWdPwW87Bi7z+BznyKSRwS/761tV/lzCGXplWsiaMjLqP2zQ==}
+  /node-gyp-build@4.6.1:
+    resolution: {integrity: sha512-24vnklJmyRS8ViBNI8KbtK/r/DmXQMRiOMXTNz2nrTnAYUwjmEEbnnpB/+kt+yWRv73bPsSPRFddrcIbAxSiMQ==}
     hasBin: true
     dev: false
 
@@ -4732,14 +4819,6 @@ packages:
     hasBin: true
     dev: true
 
-  /semver@7.5.1:
-    resolution: {integrity: sha512-Wvss5ivl8TMRZXXESstBA4uR5iXgEN/VC5/sOcuXdVLzcdkz4HWetIoRfG5gb5X+ij/G9rw9YoGn3QoQ8OCSpw==}
-    engines: {node: '>=10'}
-    hasBin: true
-    dependencies:
-      lru-cache: 6.0.0
-    dev: false
-
   /semver@7.5.4:
     resolution: {integrity: sha512-1bCSESV6Pv+i21Hvpxp3Dx+pSD8lIPt8uVjRrxAUt/nbswYc+tK6Y2btiULjd4+fnq15PX+nqQDC7Oft7WkwcA==}
     engines: {node: '>=10'}
@@ -5056,7 +5135,7 @@ packages:
       esbuild: 0.18.20
       fast-json-stable-stringify: 2.1.0
       jest: 29.6.2(@types/node@20.5.1)(ts-node@10.9.1)
-      jest-util: 29.5.0
+      jest-util: 29.6.2
       json5: 2.2.3
       lodash.memoize: 4.1.2
       make-error: 1.3.6
@@ -5085,7 +5164,7 @@ packages:
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
       '@types/node': 20.5.1
-      acorn: 8.8.2
+      acorn: 8.10.0
       acorn-walk: 8.2.0
       arg: 4.1.3
       create-require: 1.1.1
@@ -5215,7 +5294,7 @@ packages:
     dependencies:
       '@types/w3c-web-usb': 1.0.6
       node-addon-api: 6.1.0
-      node-gyp-build: 4.6.0
+      node-gyp-build: 4.6.1
     dev: false
 
   /util-deprecate@1.0.2:
