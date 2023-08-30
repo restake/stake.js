@@ -1,7 +1,6 @@
 import BN from "bn.js";
 
 import * as nearApi from "near-api-js";
-import { Action, functionCall } from "near-api-js/lib/transaction.js";
 import { PublicKey } from "near-api-js/lib/utils/index.js";
 import { AccessKeyInfoView } from "near-api-js/lib/providers/provider.js";
 import { Account, connect, Near } from "near-api-js";
@@ -18,7 +17,9 @@ const ZERO_BN = new BN(0);
 const MAX_GAS_BN = new BN(300e12);
 
 enum NearStakingMethods {
-    stake = "deposit_and_stake",
+    deposit = "deposit",
+    stake = "stake",
+    depositAndStake = "deposit_and_stake",
     unstake = "unstake",
     withdraw = "withdraw",
     unstakeAll =  "unstake_all",
@@ -60,30 +61,32 @@ export class NearProtocolTransactionEngine implements TransactionEngine<NearProt
         return this.near as Near;
     }
 
-    private buildAction(method: NearStakingMethods, amount?: number): Action {
-        let action: Action;
+    private buildAction(method: NearStakingMethods, amount?: number): nearApi.transactions.Action {
+        let action: nearApi.transactions.Action;
 
         switch (method) {
-        case NearStakingMethods.stake:
+        case NearStakingMethods.deposit:
+        case NearStakingMethods.depositAndStake:
             if (!amount) {
                 throw new Error("You need to specify an amount to stake.");
             } else {
-                action = functionCall(method, {}, MAX_GAS_BN, new BN(toYocto(amount)));
+                action = nearApi.transactions.functionCall(method, {}, MAX_GAS_BN, new BN(toYocto(amount)));
             }
             break;
+        case NearStakingMethods.stake:
         case NearStakingMethods.unstake :
         case NearStakingMethods.withdraw:
             if (typeof amount === "undefined") {
                 throw new Error(`You need to specify an amount to ${method}.`);
             } else {
-                action = functionCall(
+                action = nearApi.transactions.functionCall(
                     method,
                     { amount: toYocto(amount) }, MAX_GAS_BN, ZERO_BN);
             }
             break;
         case NearStakingMethods.unstakeAll:
         case NearStakingMethods.withdrawAll:
-            action = functionCall(method, {}, MAX_GAS_BN, ZERO_BN);
+            action = nearApi.transactions.functionCall(method, {}, MAX_GAS_BN, ZERO_BN);
             break;
         default:
             throw new Error(`Unknwon method ${method}.`);
@@ -127,7 +130,7 @@ export class NearProtocolTransactionEngine implements TransactionEngine<NearProt
         const publicKey = PublicKey.fromString(accessKey.public_key);
         const nonce = accessKey?.access_key.nonce.add(new BN(1));
 
-        const actions: Array<Action> = [this.buildAction(method, amount)];
+        const actions: Array<nearApi.transactions.Action> = [this.buildAction(method, amount)];
         const queryAccessKey = await near.connection.provider.query(`access_key/${ signerId }/${ publicKey.toString() }`, "");
         const recentBlockHash = nearApi.utils.serialize.base_decode(queryAccessKey.block_hash);
 
@@ -138,6 +141,26 @@ export class NearProtocolTransactionEngine implements TransactionEngine<NearProt
         const rawTx = new NearProtocolRawTransaction(nearApiRawTx);
 
         return rawTx;
+    }
+
+    async buildDepositTx(
+        wallet: SignerWallet,
+        validator: string,
+        amount: number,
+        accountId?: string,
+        selector?: string,
+    ): Promise<NearProtocolRawTransaction> {
+        return await this.buildTransaction(wallet, NearStakingMethods.deposit, validator, amount, accountId, selector);
+    }
+
+    async buildDepositAndStakeTx(
+        wallet: SignerWallet,
+        validator: string,
+        amount: number,
+        accountId?: string,
+        selector?: string,
+    ): Promise<NearProtocolRawTransaction> {
+        return await this.buildTransaction(wallet, NearStakingMethods.depositAndStake, validator, amount, accountId, selector);
     }
 
     async buildStakeTx(
