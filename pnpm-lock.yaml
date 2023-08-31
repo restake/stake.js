@@ -32,6 +32,9 @@ importers:
       '@restake/stakejs-near-protocol':
         specifier: workspace:*
         version: link:../../packages/protocols/near-protocol
+      dotenv:
+        specifier: ^16.3.1
+        version: 16.3.1
     devDependencies:
       '@types/node':
         specifier: 20.5.1

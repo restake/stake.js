@@ -1,37 +1,18 @@
-# stake.js examples
+# Stake.js Near/Fireblocks example
 
-```shell
-$ pnpm ts-node src/ethereum/core/fireblocks.ts
-$ pnpm ts-node src/near/highlevel/filesystem.ts
+Before running this example, you need to provide:
+- `secrets/api-key.txt` - The API key of a Fireblocks API User that is authorized to access the Vault.
+- `secrets/secret-key.txt` - The secret key of a Fireblocks API User that is authorized to access the Vault (PEM file, starting with `-----BEGIN PRIVATE KEY-----`).
+- A Fireblocks Vault ID in the environment variable `FIREBLOCKS_VAULT_ID` (e.g. in `.env` file).
+
+Then install dependencies:
+
+```bash
+pnpm install
 ```
 
-See [src/](src/) for specific examples
+And run the example:
 
-
-## Getting started with Fireblocks wallet examples
-
-You need to fill in following files:
-- `keys/fireblocks-account.txt` - Vault account ID obtained from Fireblocks console (`https://console.fireblocks.io/v2/accounts/vault/${number}`)
-- `keys/fireblocks-api-key.txt` - Fireblocks API key
-- `keys/fireblocks-secret.pem` - Fireblocks API secret (PEM file, starting with `-----BEGIN PRIVATE KEY-----`)
-
-## Getting started with filesystem wallet examples
-
-You need to fill in `keys/key.json` with following structure:
-
-```json
-[
-    {
-        "protocol": "near",
-        "keyType": "ed25519",
-        "privateKey": "hex encoded ed25519 private key",
-        "accountId": null, // or e.g. "restake.near"
-    },
-    {
-        "protocol": "ethereum",
-        "keyType": "secp256k1",
-        "privateKey": "hex encoded secp256k1 private key",
-        "accountId": null, // can be omitted, irrelevant for Ethereum
-    }
-]
+```bash
+pnpm run start
 ```

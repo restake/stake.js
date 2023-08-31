@@ -10,8 +10,9 @@
   "license": "MIT",
   "type": "module",
   "dependencies": {
+    "@restake/stakejs-fireblocks": "workspace:*",
     "@restake/stakejs-near-protocol": "workspace:*",
-    "@restake/stakejs-fireblocks": "workspace:*"
+    "dotenv": "^16.3.1"
   },
   "devDependencies": {
     "@types/node": "20.5.1",

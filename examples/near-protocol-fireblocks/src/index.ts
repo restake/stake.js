@@ -1,12 +1,13 @@
 import * as fs from "fs";
+import "dotenv/config";
 import { NearProtocolService } from "@restake/stakejs-near-protocol";
 import { FireblocksWallet } from "@restake/stakejs-fireblocks";
 
 const near = new NearProtocolService({ name: "mainnet" });
 
 const apiKey = fs.readFileSync("./secrets/api-key.txt", "utf8").trim();
-const apiSecret = fs.readFileSync("./secrets/api-secret.txt", "utf8");
-const vaultId = "8";
+const apiSecret = fs.readFileSync("./secrets/api-secret.txt", "utf8").trim();
+const vaultId = process.env["VAULT_ID"] || "1";
 
 const wallet = new FireblocksWallet(apiKey, apiSecret, vaultId);
 
