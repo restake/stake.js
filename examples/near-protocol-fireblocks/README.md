@@ -1,4 +1,4 @@
-# Stake.js Near/Fireblocks example
+# Stake.js examples | Near / Fireblocks
 
 Before running this example, you need to provide:
 - `secrets/api-key.txt` - The API key of a Fireblocks API User that is authorized to access the Vault.

@@ -2,7 +2,7 @@
 
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/restake/stake.js/tree/master.svg?style=shield&circle-token=8de591d088f23c001c417fdc7228ddb6e688878d)](https://dl.circleci.com/status-badge/redirect/gh/restake/stake.js/tree/master)
 
-`stake.js` is a library designed to simplify the integration of staking functionalities into your applications. This library is blockchain-agnostic, providing a unified interface for staking operations across various blockchains.
+`stake.js` is a library designed to simplify the integration of staking functionalities into your applications. This library is blockchain-agnostic, providing a unified interface for staking operations across various netowrks. It allows you to build, sign and broadcast staking transactions without having to worry about the underlying blockchain APIs.
 
 ## Dependencies
 
@@ -29,6 +29,9 @@ npm install @restake/stakejs-ethereum
 
 ## Usage
 
+Below is a simple example of how to use `stake.js` to stake ETH tokens using a Ledger device.
+For more examples, check out the [examples](./examples) folder.
+
 ```js
 import * as fs from "fs";
 import { EthereumDepositData, EthereumService } from "@restake/stakejs-ethereum";
@@ -49,7 +52,7 @@ console.log(txId);
 - Ethereum
 - NEAR Protocol
 
-In the pipeline:
+Coming soon:
 - Sui
 - Solana
 - Avalanche

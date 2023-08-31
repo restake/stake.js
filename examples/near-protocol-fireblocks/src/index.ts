@@ -7,7 +7,7 @@ const near = new NearProtocolService({ name: "mainnet" });
 
 const apiKey = fs.readFileSync("./secrets/api-key.txt", "utf8").trim();
 const apiSecret = fs.readFileSync("./secrets/api-secret.txt", "utf8").trim();
-const vaultId = process.env["VAULT_ID"] || "1";
+const vaultId = process.env["FIREBLOCKS_VAULT_ID"] || "1";
 
 const wallet = new FireblocksWallet(apiKey, apiSecret, vaultId);
 
