@@ -1,7 +1,7 @@
 {
   "name": "@restake/stake.js-ethereum",
   "version": "1.0.0",
-  "description": "Staking SDK core package",
+  "description": "Ethereum sub-package for stake.js",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "type": "module",

@@ -1,7 +1,7 @@
 {
   "name": "@restake/stake.js-fireblocks",
   "version": "1.0.0",
-  "description": "Staking SDK core package",
+  "description": "Fireblocks wallet sub-package for stake.js",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "type": "module",

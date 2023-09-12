@@ -1,7 +1,7 @@
 {
   "name": "@restake/stake.js-near-protocol",
   "version": "1.0.0",
-  "description": "Staking SDK core package",
+  "description": "NEAR Protocol sub-package for stake.js",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "type": "module",
