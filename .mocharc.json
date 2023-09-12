@@ -1,0 +1,6 @@
+{
+    "no-warnings": true,
+    "loader": "ts-node/esm",
+    "extension": ["ts"],
+    "spec": ["src/**/*.test.ts"]
+}

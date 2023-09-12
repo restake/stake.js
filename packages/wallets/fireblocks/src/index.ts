@@ -1,4 +1,4 @@
-import { PROTOCOL, NetworkConfig, Signature, SignerWallet, RawTransaction, Protocol } from "@restake/stakejs-core";
+import { PROTOCOL, NetworkConfig, Signature, SignerWallet, RawTransaction, Protocol } from "@restake/stake.js-core";
 import { FireblocksSDK, PeerType, TransactionOperation, TransactionStatus } from "fireblocks-sdk";
 
 

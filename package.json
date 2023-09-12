@@ -9,9 +9,25 @@
     "node": ">=18.17.0"
   },
   "scripts": {
-    "lint-all": "pnpm run -r --no-bail lint",
-    "build-all": "pnpm run -r --no-bail build",
-    "test-all": "pnpm run -r --no-bail test"
+    "build:all": "pnpm run -r --no-bail build",
+    "lint:all": "pnpm run -r --no-bail lint",
+    "packages:sync": "syncpack fix-mismatches",
+    "test:all": "pnpm run -r --no-bail test"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.6",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^20.5.1",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "@typescript-eslint/parser": "^6.4.0",
+    "c8": "^8.0.1",
+    "chai": "^4.3.8",
+    "eslint": "^8.47.0",
+    "mocha": "^10.2.0",
+    "syncpack": "^11.2.1",
+    "ts-node": "^10.9.1",
+    "tsup": "^7.2.0",
+    "typescript": "^5.1.6"
   },
   "author": "Restake AG <social@restake.net>",
   "license": "MIT"

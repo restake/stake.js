@@ -1,4 +1,4 @@
-import { ProtocolService, SignerWallet } from "@restake/stakejs-core";
+import { ProtocolService, SignerWallet } from "@restake/stake.js-core";
 import { EthereumTransactionEngine } from "./transactionEngine.ts";
 import { EthereumDepositData, EthereumNetwork } from "./types.ts";
 

@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import "dotenv/config";
-import { NearProtocolService } from "@restake/stakejs-near-protocol";
-import { FireblocksWallet } from "@restake/stakejs-fireblocks";
+import { NearProtocolService } from "@restake/stake.js-near-protocol";
+import { FireblocksWallet } from "@restake/stake.js-fireblocks";
 
 const near = new NearProtocolService({ name: "mainnet" });
 
