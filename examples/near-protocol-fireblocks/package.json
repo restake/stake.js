@@ -1,5 +1,5 @@
 {
-  "name": "@restake/stakejs-examples-near-protocol-fireblocks",
+  "name": "@restake/stake.js-examples-near-protocol-fireblocks",
   "version": "1.0.0",
   "description": "Stake.js example for Near Protocol and Fireblocks",
   "main": "index.js",
@@ -10,8 +10,8 @@
   "license": "MIT",
   "type": "module",
   "dependencies": {
-    "@restake/stakejs-fireblocks": "workspace:*",
-    "@restake/stakejs-near-protocol": "workspace:*",
+    "@restake/stake.js-fireblocks": "workspace:*",
+    "@restake/stake.js-near-protocol": "workspace:*",
     "dotenv": "^16.3.1"
   },
   "devDependencies": {

@@ -1,5 +1,5 @@
 {
-  "name": "@restake/stakejs-ethereum",
+  "name": "@restake/stake.js-ethereum",
   "version": "1.0.0",
   "description": "Staking SDK core package",
   "main": "dist/index.cjs",
@@ -40,6 +40,6 @@
   "dependencies": {
     "ethers": "^6.7.1",
     "zod": "^3.22.2",
-    "@restake/stakejs-core": "workspace:*"
+    "@restake/stake.js-core": "workspace:*"
   }
 }

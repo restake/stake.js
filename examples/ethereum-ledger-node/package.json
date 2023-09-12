@@ -1,5 +1,5 @@
 {
-  "name": "@restake/stakejs-examples-ethereum-ledger-node",
+  "name": "@restake/stake.js-examples-ethereum-ledger-node",
   "version": "1.0.0",
   "description": "Stake.js example for Ethereum with Ledger (Node.js)",
   "main": "index.js",
@@ -10,8 +10,8 @@
   "license": "MIT",
   "type": "module",
   "dependencies": {
-    "@restake/stakejs-ethereum": "workspace:*",
-    "@restake/stakejs-ledger-node": "workspace:*"
+    "@restake/stake.js-ethereum": "workspace:*",
+    "@restake/stake.js-ledger-node": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "20.5.1",

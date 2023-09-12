@@ -1,5 +1,5 @@
 {
-  "name": "@restake/stakejs-ledger-node",
+  "name": "@restake/stake.js-ledger-node",
   "version": "1.0.0",
   "description": "Staking SDK core package",
   "main": "dist/index.cjs",
@@ -40,6 +40,6 @@
   "dependencies": {
     "@ledgerhq/hw-app-eth": "^6.34.3",
     "@ledgerhq/hw-transport-node-hid": "^6.27.21",
-    "@restake/stakejs-core": "workspace:*"
+    "@restake/stake.js-core": "workspace:*"
   }
 }

@@ -1,6 +1,6 @@
 import * as fs from "fs";
-import { EthereumDepositData, EthereumService } from "@restake/stakejs-ethereum";
-import { LedgerNodeWallet } from "@restake/stakejs-ledger-node";
+import { EthereumDepositData, EthereumService } from "@restake/stake.js-ethereum";
+import { LedgerNodeWallet } from "@restake/stake.js-ledger-node";
 
 const ethereum = new EthereumService({ name: "goerli" });
 

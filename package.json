@@ -1,7 +1,8 @@
 {
   "name": "@restake/stake.js",
   "version": "1.0.0",
-  "description": "Staking SDK monorepo",
+  "description": "Monorepo for the stake.js library",
+  "homepage": "https://github.com/restake/stake.js",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "engines": {

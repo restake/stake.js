@@ -1,4 +1,4 @@
-# Stake.js
+# stake.js
 
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/restake/stake.js/tree/master.svg?style=shield&circle-token=8de591d088f23c001c417fdc7228ddb6e688878d)](https://dl.circleci.com/status-badge/redirect/gh/restake/stake.js/tree/master)
 
@@ -14,17 +14,17 @@ To install `stake.js` in your project, run one of the following commands:
 
 If you're using **pnpm**:
 ```sh
-pnpm add @restake/stakejs-ethereum
+pnpm add @restake/stake.js-ethereum
 ```
 
 If you're using **yarn**:
 ```sh
-yarn add @restake/stakejs-ethereum
+yarn add @restake/stake.js-ethereum
 ```
 
 If you're using **npm**:
 ```sh
-npm install @restake/stakejs-ethereum
+npm install @restake/stake.js-ethereum
 ```
 
 ## Usage
@@ -34,8 +34,8 @@ For more examples, check out the [examples](./examples) folder.
 
 ```js
 import * as fs from "fs";
-import { EthereumDepositData, EthereumService } from "@restake/stakejs-ethereum";
-import { LedgerNodeWallet } from "@restake/stakejs-ledger-node";
+import { EthereumDepositData, EthereumService } from "@restake/stake.js-ethereum";
+import { LedgerNodeWallet } from "@restake/stake.js-ledger-node";
 
 const ethereum = new EthereumService({ name: "goerli" });
 
@@ -74,7 +74,7 @@ We also aim to keep the library as lightweight as possible. `Stake.js` is split 
 
 ## Reporting Issues
 
-If you encounter any issues while using stake.js, please report them on our GitHub issues page. When reporting an issue, please provide as much context as possible to help us understand and reproduce the problem. 
+If you encounter any issues while using stake.js, please report them on our GitHub issues page. When reporting an issue, please provide as much context as possible to help us understand and reproduce the problem.
 
 Restake takes security very seriously. Should you discover a vulnerability, please **DO NOT** submit a public PR. Instead, send your report privately to security@restake.net.
 
