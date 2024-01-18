@@ -8,9 +8,9 @@
     "node": ">=18.15.0"
   },
   "scripts": {
-    "lint-all": "pnpm run -r --no-bail lint",
-    "build-all": "pnpm run -r --no-bail build",
-    "test-all": "pnpm run -r --no-bail test"
+    "lint:all": "pnpm run -r --no-bail lint",
+    "build:all": "pnpm run -r --no-bail build",
+    "test:all": "pnpm run -r --no-bail test"
   },
   "author": "Restake AG <social@restake.net>",
   "license": "MIT"

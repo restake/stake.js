@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -8,7 +8,7 @@ importers:
 
   .: {}
 
-  examples/ethereum-ledger:
+  examples/ethereum-ledger-node:
     dependencies:
       '@restake/stakejs-ethereum':
         specifier: workspace:*
