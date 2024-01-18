@@ -1,15 +1,15 @@
-module.exports = {
-    extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
-    parser: "@typescript-eslint/parser",
-    plugins: ["@typescript-eslint"],
-    root: true,
-    env: {
-        es2022: true,
-        node: true,
+{
+    "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+    "parser": "@typescript-eslint/parser",
+    "plugins": ["@typescript-eslint"],
+    "root": true,
+    "env": {
+        "es2022": true,
+        "node": true
     },
-    rules: {
+    "rules": {
         "indent": ["error", 4, {
-            "MemberExpression": 1,
+            "MemberExpression": 1
         }],
         "quotes": ["error", "double"],
         "semi": ["error", "always"],
@@ -21,21 +21,21 @@ module.exports = {
         "space-before-function-paren": ["error", {
             "anonymous": "always",
             "asyncArrow": "always",
-            "named": "never",
+            "named": "never"
         }],
         "capitalized-comments": ["error", "always", {
             "line": {
-                "ignorePattern": "pragma|ignored",
+                "ignorePattern": "pragma|ignored"
             },
             "block": {
                 "ignoreInlineComments": true,
-                "ignorePattern": "ignored",
-            },
+                "ignorePattern": "ignored"
+            }
         }],
         "@typescript-eslint/no-unused-vars": ["error", {
-            "argsIgnorePattern": "^_",
+            "argsIgnorePattern": "^_"
         }],
         "@typescript-eslint/no-explicit-any": "error",
-        "@typescript-eslint/no-inferrable-types": "off",
-    },
-};
+        "@typescript-eslint/no-inferrable-types": "off"
+    }
+}
