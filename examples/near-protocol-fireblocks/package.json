@@ -6,7 +6,7 @@
   "scripts": {
     "start": "ts-node --esm src/index.ts"
   },
-  "author": "Restake AG <social@restake.net>",
+  "author": "Restake AG <contact@restake.net>",
   "license": "MIT",
   "type": "module",
   "dependencies": {
