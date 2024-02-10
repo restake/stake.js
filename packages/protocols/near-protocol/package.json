@@ -1,6 +1,6 @@
 {
-  "name": "@restake/stakejs-near-protocol",
-  "version": "1.0.0",
+  "name": "@restake/stake.js-near-protocol",
+  "version": "0.0.1",
   "description": "Staking SDK core package",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
@@ -39,7 +39,7 @@
     "typescript": "5.1.6"
   },
   "dependencies": {
-    "@restake/stakejs-core": "workspace:*",
+    "@restake/stake.js-core": "workspace:*",
     "bn.js": "^5.2.1",
     "js-sha256": "^0.9.0",
     "near-api-js": "2.1.4"

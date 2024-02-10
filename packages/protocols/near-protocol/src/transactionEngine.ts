@@ -11,7 +11,7 @@ import {
     NearProtocolSignedTransaction,
 } from "./types.ts";
 import { NEAR_PROTOCOL_DEFAULT_RPC_URLS } from "./constants.ts";
-import { SignerWallet, TransactionEngine, NearProtocol } from "@restake/stakejs-core";
+import { SignerWallet, TransactionEngine, NearProtocol } from "@restake/stake.js-core";
 
 const ZERO_BN = new BN(0);
 const MAX_GAS_BN = new BN(300e12);

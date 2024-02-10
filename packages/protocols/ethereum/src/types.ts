@@ -1,7 +1,7 @@
 import { ETHEREUM_NETWORKS } from "./constants.ts";
 import { z } from "zod";
 import { Transaction, getBytes } from "ethers";
-import { Network, NetworkConfig, PROTOCOL, Ethereum, RawTransaction, Signature, SignedTransaction } from "@restake/stakejs-core";
+import { Network, NetworkConfig, PROTOCOL, Ethereum, RawTransaction, Signature, SignedTransaction } from "@restake/stake.js-core";
 import { TransactionLike } from "ethers";
 
 export const EthereumDepositData = z.object({

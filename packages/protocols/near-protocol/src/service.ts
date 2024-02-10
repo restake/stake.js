@@ -1,4 +1,4 @@
-import { ProtocolService, SignerWallet } from "@restake/stakejs-core";
+import { ProtocolService, SignerWallet } from "@restake/stake.js-core";
 import { NearProtocolTransactionEngine } from "./transactionEngine.ts";
 import { NearProtocolNetwork } from "./types.ts";
 

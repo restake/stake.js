@@ -7,7 +7,7 @@ import {
     RawTransaction,
     PROTOCOL,
     Signature,
-} from "@restake/stakejs-core";
+} from "@restake/stake.js-core";
 
 type LedgerApp = typeof EthereumLedgerApp.default;
 
