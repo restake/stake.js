@@ -1,11 +1,11 @@
-import { NetworkConfig, Signature, SignerWallet, RawTransaction, Protocol, PROTOCOL, NearProtocol } from "@restake/stakejs-core";
+import { NetworkConfig, Signature, SignerWallet, RawTransaction, Protocol, PROTOCOL, NearProtocol } from "@restake/stake.js-core";
 import { WalletSelector } from "@near-wallet-selector/core";
 
 export class NearSelectorWallet implements SignerWallet {
-    selector: WalletSelector;
+    walletSelector;
 
-    constructor(selector: WalletSelector) {
-        this.selector = selector;
+    constructor(walletSelector: WalletSelector) {
+        this.walletSelector = walletSelector;
     }
 
     async getAddress<P extends Protocol>(networkConfig: NetworkConfig<P>, selector?: string): Promise<string> {
@@ -13,7 +13,8 @@ export class NearSelectorWallet implements SignerWallet {
             throw new Error("NearSelectorWallet only supports Near Protocol.");
         }
 
-        const account = this.selector.wallet.getAccounts(parseInt(selector || "0"));
+        const accounts = await this.walletSelector.wallet.getAccounts();
+        const account = accounts.find((account: { accountId: string }) => account.accountId === selector);
 
         return account.accountId || account.publicKey;
     }
@@ -23,7 +24,8 @@ export class NearSelectorWallet implements SignerWallet {
             throw new Error("NearSelectorWallet only supports Near Protocol.");
         }
 
-        const account = this.selector.wallet.getAccounts(parseInt(selector || "0"));
+        const accounts = await this.walletSelector.wallet.getAccounts();
+        const account = accounts.find((account: { accountId: string }) => account.accountId === selector);
 
         return account.publicKey;
     }
@@ -35,6 +37,6 @@ export class NearSelectorWallet implements SignerWallet {
     async signAndBroadcast(
         rawTx: RawTransaction<NearProtocol>,
     ): Promise<void> {
-        this.selector.wallet.signAndSendTransactions({ transactions: [rawTx] });
+        this.walletSelector.wallet.signAndSendTransactions({ transactions: [rawTx] });
     }
 }

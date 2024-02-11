@@ -38,7 +38,7 @@
     "typescript": "5.1.6"
   },
   "dependencies": {
-    "@near-wallet-selector/core": "^8.9.2",
-    "@restake/stakejs-core": "workspace:*"
+    "@near-wallet-selector/core": "^8.9.4",
+    "@restake/stake.js-core": "workspace:*"
   }
 }
