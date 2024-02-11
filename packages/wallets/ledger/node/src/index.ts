@@ -81,9 +81,8 @@ export class LedgerNodeWallet implements SignerWallet {
         return result.publicKey;
     }
 
-    async getAddress(network: NetworkConfig<Protocol>, selector?: string): Promise<string> {
+    async getAddress<P extends Protocol>(network: NetworkConfig<P>, selector?: string): Promise<string> {
         const app = await this.getApp(network);
-
         const result = await app.getAddress(selector || pathMapping.get(network.protocol) || "");
 
         if (!result.address) {
