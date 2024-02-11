@@ -1,5 +1,5 @@
 {
-  "name": "@restake/stakejs-fireblocks",
+  "name": "@restake/stake.js-fireblocks",
   "version": "1.0.0",
   "description": "Staking SDK package for Fireblocks wallet",
   "main": "dist/index.cjs",
@@ -23,7 +23,7 @@
     "build": "tsup",
     "build:doc": "typedoc"
   },
-  "author": "Restake AG <social@restake.net>",
+  "author": "Restake AG <contact@restake.net>",
   "license": "MIT",
   "devDependencies": {
     "@jest/globals": "29.6.2",

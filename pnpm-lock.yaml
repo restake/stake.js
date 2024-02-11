@@ -227,6 +227,9 @@ importers:
       '@restake/stake.js-core':
         specifier: workspace:*
         version: link:../../core
+      '@restake/stake.js-near-protocol':
+        specifier: workspace:*
+        version: link:../../protocols/near-protocol
     devDependencies:
       '@jest/globals':
         specifier: 29.6.2

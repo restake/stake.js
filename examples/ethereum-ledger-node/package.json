@@ -10,8 +10,8 @@
   "license": "MIT",
   "type": "module",
   "dependencies": {
-    "@restake/stakejs-ethereum": "workspace:*",
-    "@restake/stakejs-ledger-node": "workspace:*"
+    "@restake/stake.js-ethereum": "workspace:*",
+    "@restake/stake.js-ledger-node": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "20.5.1",

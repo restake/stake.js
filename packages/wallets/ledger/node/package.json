@@ -1,5 +1,5 @@
 {
-  "name": "@restake/stakejs-ledger-node",
+  "name": "@restake/stake.js-ledger-node",
   "version": "1.0.0",
   "description": "Staking SDK core package",
   "main": "dist/index.cjs",
@@ -23,7 +23,7 @@
     "build": "tsup",
     "build:doc": "typedoc"
   },
-  "author": "Restake AG <social@restake.net>",
+  "author": "Restake AG <contact@restake.net>",
   "license": "MIT",
   "devDependencies": {
     "@jest/globals": "29.6.2",
