@@ -1,6 +1,6 @@
 {
   "name": "@restake/stake.js-near-selector",
-  "version": "0.0.1-dev",
+  "version": "0.0.2-dev",
   "description": "Staking SDK package for Near wallet selector",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
