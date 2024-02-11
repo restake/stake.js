@@ -40,6 +40,6 @@
   "dependencies": {
     "fireblocks-sdk": "^5.4.0",
     "js-sha256": "^0.9.0",
-    "@restake/stakejs-core": "workspace:*"
+    "@restake/stake.js-core": "workspace:*"
   }
 }

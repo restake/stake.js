@@ -1,7 +1,7 @@
 {
-  "name": "@restake/stakejs-core",
-  "version": "1.0.0",
-  "description": "Staking SDK core package",
+  "name": "@restake/stake.js-core",
+  "version": "0.0.1-dev",
+  "description": "Stake.js core module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "type": "module",

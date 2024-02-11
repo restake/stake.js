@@ -40,6 +40,6 @@
   "dependencies": {
     "ethers": "^6.7.1",
     "zod": "^3.22.2",
-    "@restake/stakejs-core": "workspace:*"
+    "@restake/stake.js-core": "workspace:*"
   }
 }

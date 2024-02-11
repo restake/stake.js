@@ -1,4 +1,4 @@
-import { Network, NetworkConfig, PROTOCOL, NearProtocol, RawTransaction, SignedTransaction, Signature } from "@restake/stakejs-core";
+import { Network, NetworkConfig, PROTOCOL, NearProtocol, RawTransaction, SignedTransaction, Signature } from "@restake/stake.js-core";
 import { NEAR_PROTOCOL_NETWORKS } from "./constants.ts";
 import * as nearApi from "near-api-js";
 import { sha256 } from "js-sha256";

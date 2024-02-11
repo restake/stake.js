@@ -1,5 +1,5 @@
 import { Interface, JsonRpcProvider } from "ethers";
-import { TransactionEngine, PROTOCOL, Ethereum, SignerWallet } from "@restake/stakejs-core";
+import { TransactionEngine, PROTOCOL, Ethereum, SignerWallet } from "@restake/stake.js-core";
 import {
     ETHEREUM_DEFAULT_RPC_URLS,
     ETHEREUM_DEPOSIT_CONTRACT_ABI,

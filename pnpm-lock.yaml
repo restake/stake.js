@@ -8,72 +8,6 @@ importers:
 
   .: {}
 
-  examples/ethereum-ledger-node:
-    dependencies:
-      '@restake/stakejs-ethereum':
-        specifier: workspace:*
-        version: link:../../packages/protocols/ethereum
-      '@restake/stakejs-ledger-node':
-        specifier: workspace:*
-        version: link:../../packages/wallets/ledger/node
-    devDependencies:
-      '@types/node':
-        specifier: 20.5.1
-        version: 20.5.1
-      ts-node:
-        specifier: 10.9.1
-        version: 10.9.1(@types/node@20.5.1)(typescript@5.1.6)
-
-  examples/near-protocol-fireblocks:
-    dependencies:
-      '@restake/stakejs-fireblocks':
-        specifier: workspace:*
-        version: link:../../packages/wallets/fireblocks
-      '@restake/stakejs-near-protocol':
-        specifier: workspace:*
-        version: link:../../packages/protocols/near-protocol
-      dotenv:
-        specifier: ^16.3.1
-        version: 16.3.1
-    devDependencies:
-      '@types/node':
-        specifier: 20.5.1
-        version: 20.5.1
-      ts-node:
-        specifier: 10.9.1
-        version: 10.9.1(@types/node@20.5.1)(typescript@5.1.6)
-
-  examples/near-protocol-near-selector:
-    dependencies:
-      '@near-wallet-selector/core':
-        specifier: ^8.9.2
-        version: 8.9.3(near-api-js@2.1.4)
-      '@near-wallet-selector/meteor-wallet':
-        specifier: ^8.9.3
-        version: 8.9.3(near-api-js@2.1.4)
-      '@near-wallet-selector/modal-ui-js':
-        specifier: ^8.9.3
-        version: 8.9.3(near-api-js@2.1.4)
-      '@restake/stakejs-near-protocol':
-        specifier: workspace:*
-        version: link:../../packages/protocols/near-protocol
-      '@restake/stakejs-near-selector':
-        specifier: workspace:*
-        version: link:../../packages/wallets/near-selector
-      dotenv:
-        specifier: ^16.3.1
-        version: 16.3.1
-      jspm:
-        specifier: ^3.2.0
-        version: 3.2.0
-    devDependencies:
-      '@types/node':
-        specifier: 20.5.1
-        version: 20.5.1
-      ts-node:
-        specifier: 10.9.1
-        version: 10.9.1(@types/node@20.5.1)(typescript@5.1.6)
-
   packages/core:
     devDependencies:
       '@jest/globals':
@@ -109,7 +43,7 @@ importers:
 
   packages/protocols/ethereum:
     dependencies:
-      '@restake/stakejs-core':
+      '@restake/stake.js-core':
         specifier: workspace:*
         version: link:../../core
       ethers:
@@ -152,7 +86,7 @@ importers:
 
   packages/protocols/near-protocol:
     dependencies:
-      '@restake/stakejs-core':
+      '@restake/stake.js-core':
         specifier: workspace:*
         version: link:../../core
       bn.js:
@@ -201,7 +135,7 @@ importers:
 
   packages/wallets/fireblocks:
     dependencies:
-      '@restake/stakejs-core':
+      '@restake/stake.js-core':
         specifier: workspace:*
         version: link:../../core
       fireblocks-sdk:
@@ -250,7 +184,7 @@ importers:
       '@ledgerhq/hw-transport-node-hid':
         specifier: ^6.27.21
         version: 6.27.21
-      '@restake/stakejs-core':
+      '@restake/stake.js-core':
         specifier: workspace:*
         version: link:../../../core
     devDependencies:
