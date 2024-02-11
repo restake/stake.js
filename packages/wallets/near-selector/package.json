@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "@near-wallet-selector/core": "^8.9.4",
-    "@restake/stake.js-core": "workspace:*"
+    "@restake/stake.js-core": "workspace:*",
+    "@restake/stake.js-near-protocol": "workspace:*"
   }
 }
